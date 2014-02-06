@@ -1,0 +1,4 @@
+Messages:
+- if the message is public, the user_viewer field will be empty.
+- if the user_viewer field contains a username, the conversation is private
+  between user_op and user_viewer.
