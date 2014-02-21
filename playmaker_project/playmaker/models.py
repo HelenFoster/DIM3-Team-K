@@ -40,6 +40,8 @@ class Offer(models.Model):
     session = models.ForeignKey('Session', unique=False, blank=False, null=False, on_delete=models.CASCADE, )
     guest = models.ForeignKey('Member', unique=False, blank=False, null=False, on_delete=models.CASCADE, )
 
+    class Meta:
+        unique_together = (('session', 'guest'),)
     def __unicode__(self):
         return unicode(self.id)
 
