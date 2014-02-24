@@ -15,7 +15,7 @@ def add_sport(sport):
 
 def add_sports(sports):
     for sport in sports:
-        add_city(sport)
+        add_sport(sport)
 
 def add_member(username, email, firstname, lastname):
     print "Member: " + username
@@ -30,12 +30,12 @@ def add_session(sport, hostplayer, guestplayer, date, time, city, location, pric
     if guestplayer is not None:
         guestplayer = Member.objects.get(guestplayer).username
     Session.objects.get_or_create(
-        sport = Sport.objects.get(sport).sport,
-        hostplayer = Member.objects.get(hostplayer).username,
+        sport = Sport.objects.get(sport=sport).sport,
+        hostplayer = Member.objects.get(username=hostplayer).username,
         guestplayer = guestplayer,
         date = parse(date),
         time = parse(time),
-        city = City.objects.get(city).city,
+        city = City.objects.get(city=city).city,
         location = location,
         price = price,
         details = details,
@@ -43,8 +43,8 @@ def add_session(sport, hostplayer, guestplayer, date, time, city, location, pric
 
 def add_offer(session, guest):
     Session.objects.get_or_create(
-        session = Session.objects.get(session).id,
-        guest = Member.objects.get(guest).username,
+        session = Session.objects.get(id=session).id,
+        guest = Member.objects.get(username=guest).username,
     )
 
 def add_message(session, user_op, user_viewer, date, time, message):
