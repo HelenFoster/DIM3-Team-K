@@ -3,7 +3,7 @@ from dateutil.parser import parse
 
 def add_city(city):
     print "City: " + city
-    City.objects.get_or_create(city = city)
+    City.objects.get_or_create(city=city)
 
 def add_cities(cities):
     for city in cities:
@@ -11,7 +11,7 @@ def add_cities(cities):
 
 def add_sport(sport):
     print "Sport: " + sport
-    Sport.objects.get_or_create(sport = sport)
+    Sport.objects.get_or_create(sport=sport)
 
 def add_sports(sports):
     for sport in sports:
@@ -28,38 +28,41 @@ def add_member(username, email, firstname, lastname):
 
 def add_session(sport, hostplayer, guestplayer, date, time, city, location, price, details):
     if guestplayer is not None:
-        guestplayer = Member.objects.get(guestplayer).username
+        guestplayer = Member.objects.get(username=guestplayer)
     Session.objects.get_or_create(
-        sport = Sport.objects.get(sport=sport).sport,
-        hostplayer = Member.objects.get(username=hostplayer).username,
+        sport = Sport.objects.get(sport=sport),
+        hostplayer = Member.objects.get(username=hostplayer),
         guestplayer = guestplayer,
         date = parse(date),
         time = parse(time),
-        city = City.objects.get(city=city).city,
+        city = City.objects.get(city=city),
         location = location,
         price = price,
         details = details,
     )
 
 def add_offer(session, guest):
-    Session.objects.get_or_create(
-        session = Session.objects.get(id=session).id,
-        guest = Member.objects.get(username=guest).username,
+    Offer.objects.get_or_create(
+        session = Session.objects.get(id=session),
+        guest = Member.objects.get(username=guest),
     )
 
 def add_message(session, user_op, user_viewer, date, time, message):
+    if user_viewer is not None:
+        user_viewer = Member.objects.get(username=user_viewer)
     Message.objects.get_or_create(
-        session = Session.objects.get(session).id,
-        user_op = Member.objects.get(user_op).username,
-        user_viewer = Member.objects.get(user_viewer).username,
-        date = date,
-        time = time,
+        session = Session.objects.get(id=session),
+        user_op = Member.objects.get(username=user_op),
+        user_viewer = user_viewer,
+        date = parse(date),
+        time = parse(time),
         message = message,
     )
 
 def populate():
     add_cities(["Glasgow", "Edinburgh", "London", "Aberdeen", "Carlisle", "Leeds", "York", "Manchester", "Birmingham", "Essex", "Southampton", "Norwich", "Doncaster", ])
     add_sports(["Squash", "Tennis", "Chess", "Badminton", "Pool", ])
+    
     # Members.
     add_member("jack", "jack@jones.com", "Jack", "Jones")
     add_member("john", "john@doe.com", "John", "Doe")
@@ -73,7 +76,7 @@ def populate():
     # Sessions.
     add_session("Squash", "vlad", None, "2014-03-01", "18:45", "Glasgow", "Stevenson Court 2", 0.65, "Bring your own racquet!")
 
-    # Offer.
+    # Offers.
     add_offer(1, "john")
     add_offer(1, "martynas")
     add_offer(1, "tomasz")
