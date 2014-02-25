@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PlayMaker: Sessions by Sport</title>
+    </head>
+
+    <body>
+        <h1>Sessions by Sport: {{ sport }}</h1>
+
+        {% if sessions %}
+            <table>
+                <tr>
+                    <th>id</th>
+                    <th>Host</th>
+                    <th>City</th>
+                    <th>Location</th>
+                </tr>
+                {% for session in sessions %}
+                <tr>
+                    <td>{{ session.id }}</td>
+                    <td>{{ session.hostplayer }}</td>
+                    <td>{{ session.city }}</td>
+                    <td>{{ session.location }}</td>
+                </tr>
+                {% endfor %}
+            <table>
+        {% else %}
+            <strong>There are no sessions present.</strong>
+        {% endif %}
+
+    </body>
+</html>

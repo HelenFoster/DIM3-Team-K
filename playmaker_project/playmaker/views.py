@@ -51,6 +51,9 @@ def view_session_by_id(request, session_id):
 
 @csrf_exempt
 def view_sessions_by_sport(request, session_sport):
+    print session_sport
     context = RequestContext(request)
-    context_dict = {'your_key': 'your_value'}
-    return render_to_response('index.html', context_dict, context)
+    session_list = Session.objects.filter(sport=session_sport)
+    print len(session_list)
+    context_dict = {'sport': session_sport, 'sessions': session_list}
+    return render_to_response('sessionsBySport.html', context_dict, context)
