@@ -7,7 +7,7 @@ from django.db import models
 # Foreign keys default their relationship to the primary key.
 
 class City(models.Model):
-    city = models.CharField(primary_key=True, max_length=64, blank=False, )
+    city = models.CharField(primary_key=True, max_length=64, blank=False, db_column="city", )
 
     class Meta:
         verbose_name_plural = 'Cities'
@@ -15,30 +15,30 @@ class City(models.Model):
         return unicode(self.city)
 
 class Member(models.Model):
-    username = models.CharField(primary_key=True, max_length=64, blank=False, )
-    email = models.EmailField(max_length=64, unique=True, blank=False, null=False, )
-    firstname = models.CharField(max_length=64, unique=False, blank=False, null=False, )
-    lastname = models.CharField(max_length=64, unique=False, blank=False, null=False, )
+    username = models.CharField(primary_key=True, max_length=64, blank=False, db_column="username", )
+    email = models.EmailField(max_length=64, unique=True, blank=False, null=False, db_column="email", )
+    firstname = models.CharField(max_length=64, unique=False, blank=False, null=False, db_column="firstname", )
+    lastname = models.CharField(max_length=64, unique=False, blank=False, null=False, db_column="lastname", )
 
     def __unicode__(self):
         return unicode(self.username)
 
 class Message(models.Model):
     # id = AutoField(primary_key=True) added automatically.
-    session = models.ForeignKey('Session', unique=False, blank=False, null=False, on_delete=models.CASCADE, )
-    user_op = models.ForeignKey('Member', unique=False, blank=False, null=False, on_delete=models.CASCADE, related_name='member_op', )
-    user_viewer = models.ForeignKey('Member', unique=False, blank=True, null=True, on_delete=models.CASCADE, related_name='member_viewer', )
-    date = models.DateField(blank=False, null=False, )
-    time = models.TimeField(blank=False, null=False, )
-    message = models.TextField(unique=False, blank=True, null=False, )
+    session = models.ForeignKey('Session', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="session", )
+    user_op = models.ForeignKey('Member', unique=False, blank=False, null=False, on_delete=models.CASCADE, related_name='member_op', db_column="user_op", )
+    user_viewer = models.ForeignKey('Member', unique=False, blank=True, null=True, on_delete=models.CASCADE, related_name='member_viewer', db_column="user_viewer", )
+    date = models.DateField(blank=False, null=False, db_column="date", )
+    time = models.TimeField(blank=False, null=False, db_column="time", )
+    message = models.TextField(unique=False, blank=True, null=False, db_column="message", )
 
     def __unicode__(self):
         return unicode(self.id)
 
 class Offer(models.Model):
     # id = AutoField(primary_key=True) added automatically.
-    session = models.ForeignKey('Session', unique=False, blank=False, null=False, on_delete=models.CASCADE, )
-    guest = models.ForeignKey('Member', unique=False, blank=False, null=False, on_delete=models.CASCADE, )
+    session = models.ForeignKey('Session', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="session", )
+    guest = models.ForeignKey('Member', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="guest", )
 
     class Meta:
         unique_together = (('session', 'guest'),)
@@ -47,21 +47,21 @@ class Offer(models.Model):
 
 class Session(models.Model):
     # id = AutoField(primary_key=True) added automatically.
-    sport = models.ForeignKey('Sport', unique=False, blank=False, null=False, on_delete=models.CASCADE, )
-    hostplayer = models.ForeignKey('Member', unique=False, blank=False, null=False, on_delete=models.CASCADE, related_name='member_host', )
-    guestplayer = models.ForeignKey('Member', unique=False, blank=True, null=True, on_delete=models.CASCADE, related_name='member_guest', )
-    date = models.DateField(blank=False, null=False, )
-    time = models.TimeField(blank=False, null=False, )
-    city = models.ForeignKey('City', unique=False, blank=False, null=False, on_delete=models.CASCADE, )
-    location = models.CharField(max_length=64, unique=False, blank=False, null=False, )
-    price = models.FloatField(unique=False, blank=False, null=False, default=0, )
-    details = models.TextField(unique=False, blank=True, null=False, )
+    sport = models.ForeignKey('Sport', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="sport", )
+    hostplayer = models.ForeignKey('Member', unique=False, blank=False, null=False, on_delete=models.CASCADE, related_name='member_host', db_column="hostplayer", )
+    guestplayer = models.ForeignKey('Member', unique=False, blank=True, null=True, on_delete=models.CASCADE, related_name='member_guest', db_column="guestplayer", )
+    date = models.DateField(blank=False, null=False, db_column="date", )
+    time = models.TimeField(blank=False, null=False, db_column="time", )
+    city = models.ForeignKey('City', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="city", )
+    location = models.CharField(max_length=64, unique=False, blank=False, null=False, db_column="location", )
+    price = models.FloatField(unique=False, blank=False, null=False, default=0, db_column="price", )
+    details = models.TextField(unique=False, blank=True, null=False, db_column="details", )
 
     def __unicode__(self):
         return unicode(self.id)
 
 class Sport(models.Model):
-    sport = models.CharField(primary_key=True, max_length=64, blank=False, )
+    sport = models.CharField(primary_key=True, max_length=64, blank=False, db_column="sport", )
 
     def __unicode__(self):
         return unicode(self.sport)
