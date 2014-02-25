@@ -1,0 +1,270 @@
+/*
+ *	Website styles
+ *
+ *	Colour scheme is located in img/colour-scheme.png
+ *	#82AA30 - green
+ *	#1499D2 - blue
+ *	#4D6684 - dark blue
+ *	#3D3D3D - dark grey
+ *	#E84701 - orange
+ *	#ECECEC - light grey
+ */
+
+/*	
+ *	General stuff
+ * 
+ */
+
+body {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+a, a:visited, a:hover {
+	text-decoration: none;
+	color: white;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-size: 56px;
+	font-weight: 100;
+	padding-top: 15px;
+	color: black;
+	text-align: center;
+}
+
+/*	
+ *	Header
+ * 
+ */
+
+ .header {
+ 	height: 40px;
+ 	background-color: #336699;
+ 	color: #fff;
+ }
+
+ .logo-wrap { 	
+ }
+
+ #logo {
+ 	width: 160px;
+ 	height: 40px;
+ 	vertical-align: middle;
+ 	background: url('../img/dim_logo_small.png') no-repeat center center;
+ 	background-size: cover;
+ }
+
+ .menu-wrap { 	
+	/*height: 50px;*/
+	/*vertical-align: middle;*/
+ }
+
+ #top-nav ul {
+
+ }
+
+ #top-nav ul li {
+ 	text-transform: uppercase;
+ 	float: left;
+ 	display: inline;
+ 	margin-left:20px;
+	text-indent: -5px;
+	font-weight: 300;
+	margin-right: 15px;
+ }
+
+
+
+ .cta-wrap {
+ }
+
+ #cta {
+ 	text-align: right;
+ }
+
+#cta a {
+	width: 40%;
+	margin-top:4px;
+	margin-left: 0px;
+}
+
+/*	
+ *	Splash
+ *
+ */
+
+.splash {
+	width: 100%;
+	min-width: 1000px;
+	height: 576px;
+	background: url('http://img2.wsimg.com/fos/hp/rebrand/img/sb/domains.jpg') no-repeat top center;
+	background-size: cover;
+	color: #fff;
+}
+
+.splash span {
+	display: block;
+
+}
+
+.splash-heading {
+	font-size: 56px;
+	font-weight: 100;
+	padding-top: 145px;
+	color: white;
+	text-align: center;
+}
+
+.splash-description {
+	font-size: 20px;
+	font-weight: 100;
+	color: white;
+	text-align: center;
+}
+
+.city-chooser {
+	margin: 0 auto;
+	text-align: center;
+}
+
+.city-chooser input {
+	margin-top:50px;
+	width:35%;
+	height: 50px;
+	padding-left: 15px;
+}
+
+.city-chooser button {
+	height: 50px;
+	width: 100px;
+	margin-top:-3px;	
+}
+
+.promo {
+	min-height: 500px;
+	width: 60%;
+	margin: 0 auto;
+}
+
+.promo ul {
+	margin: 0 auto;
+}
+
+
+.promo span {
+	display: block;
+}
+
+.promo-heading {
+	font-size: 56px;
+	font-weight: 100;
+	padding-top: 15px;
+	color: black;
+	text-align: center;
+}
+
+.promo-subheading {
+	font-size: 40px;
+	font-weight: 100;
+	padding-top: 15px;
+	color: black;
+	text-align: center;
+}
+
+.promo-steps {
+	display:table-row;
+}
+
+
+.promo-step {	
+	display: table-cell;
+	list-style-type: none;	
+	float: left;
+	min-width: 100px;
+	min-height: 100px;
+	line-height: 100px; /* same as height */
+	margin: 25px;
+	background-color: #336699;
+	color: white;
+	text-align: center;
+	vertical-align: middle;
+	-webkit-border-radius: 100px;
+	-moz-border-radius: 100px;
+	border-radius:100px;	
+}
+
+/*	
+ *	Sidebar
+ *
+ */
+
+ .sidebar-wrap {
+ 	border-left: 1px solid #ececec;
+ 	background-color: #f7fbfd;
+ 	padding-top:25px;
+ }
+
+ .sidebar-heading {
+ 	font-size: 18px;
+ 	font-weight: 200; 	
+ 	display: block;
+ 	margin-bottom: 15px;
+ }
+
+ .sidebar-wrap ul {
+ 	padding: 0;
+ 	font-size: 14px;
+ 	color: #848484;
+ }
+
+ .sidebar-wrap li {
+ 	list-style-type: none;
+ 	line-height: 36px;
+ }
+
+ .sidebar-wrap p {
+ 	color: #848484;
+ 	line-height: 24px;	
+ }
+
+/*	
+ *	Content 
+ *
+ */
+
+ .content-wrap {
+ }
+
+
+/*
+ *	More icons at:;
+ *	http://www.flaticon.com/categories/sports/
+ *
+*/
+
+
+.menu-icon {
+
+}
+
+.basketball-icon {
+	background: url('../img/basketball.png') no-repeat center center;
+	width:36px; 
+	height:36px;
+	float: left;
+	background-size: cover;
+	margin-right: 10px;
+}
+
+/*	
+ *	Footer
+ *
+ */
+
+ .footer-wrap {
+ 	background-color: #336699;
+ 	bottom: 0;
+ 	color: #fff;
+ 	text-align: center;
+ 	display:block;
+ }
