@@ -3,6 +3,7 @@ import views
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
+    url(r'^' + '$', views.mainpage, name='mainpage'),
     url(r'^' + 'login/$', views.login, name='login'),
     url(r'^' + 'register/$', views.register, name='register'),
     url(r'^' + 'bookings/$', views.bookings, name='bookings'),

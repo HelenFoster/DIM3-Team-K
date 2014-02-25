@@ -1,11 +1,28 @@
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.http import HttpResponse
 from models import *
 
 
 # Create your views here.
+@csrf_exempt
+def mainpage(request):
+    context = RequestContext(request)
+    # Show the city selection page if not authenticated.
+    #if not request.user.is_authenticated():
+    #Load the animals to the dictionary.
+    cities = []
+    all_cities = City.objects.all().order_by('city')
+    for city in all_cities:
+        print city.city
+        cities.append([
+            city.city
+        ])
+    context_dict = {'cities': cities, }
+    return render_to_response('mainpage.html', context_dict, context)
+
 
 @csrf_exempt
 def login(request):
