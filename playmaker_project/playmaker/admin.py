@@ -8,12 +8,6 @@ class CityAdmin(admin.ModelAdmin):
 
 admin.site.register(City, CityAdmin)
 
-class MemberAdmin(admin.ModelAdmin):
-    list_display = ['username', 'email', 'firstname', 'lastname', ]
-    search_fields = ['username', 'email', 'firstname', 'lastname', ]
-
-admin.site.register(Member, MemberAdmin)
-
 class MessageAdmin(admin.ModelAdmin):
     list_display = ['session', 'user_op', 'user_viewer', 'date', 'time', 'message', ]
     search_fields = ['session', 'user_op', 'user_viewer', ]
