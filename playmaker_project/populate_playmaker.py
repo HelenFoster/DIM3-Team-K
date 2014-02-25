@@ -17,21 +17,19 @@ def add_sports(sports):
     for sport in sports:
         add_sport(sport)
 
-def add_member(username, email, firstname, lastname):
-    print "Member: " + username
-    Member.objects.get_or_create(
-        username = username,
-        email = email,
-        firstname = firstname,
-        lastname = lastname,
-    )
+def add_user(username, email, firstname, lastname):
+    print "User: " + username
+    user = User.objects.create_user(username, email, password=username)
+    user.first_name = firstname
+    user.last_name = lastname
+    user.save()
 
 def add_session(sport, hostplayer, guestplayer, date, time, city, location, price, details):
     if guestplayer is not None:
-        guestplayer = Member.objects.get(username=guestplayer)
+        guestplayer = User.objects.get(username=guestplayer)
     Session.objects.get_or_create(
         sport = Sport.objects.get(sport=sport),
-        hostplayer = Member.objects.get(username=hostplayer),
+        hostplayer = User.objects.get(username=hostplayer),
         guestplayer = guestplayer,
         date = parse(date),
         time = parse(time),
@@ -44,15 +42,15 @@ def add_session(sport, hostplayer, guestplayer, date, time, city, location, pric
 def add_offer(session, guest):
     Offer.objects.get_or_create(
         session = Session.objects.get(id=session),
-        guest = Member.objects.get(username=guest),
+        guest = User.objects.get(username=guest),
     )
 
 def add_message(session, user_op, user_viewer, date, time, message):
     if user_viewer is not None:
-        user_viewer = Member.objects.get(username=user_viewer)
+        user_viewer = User.objects.get(username=user_viewer)
     Message.objects.get_or_create(
         session = Session.objects.get(id=session),
-        user_op = Member.objects.get(username=user_op),
+        user_op = User.objects.get(username=user_op),
         user_viewer = user_viewer,
         date = parse(date),
         time = parse(time),
@@ -63,15 +61,15 @@ def populate():
     add_cities(["Glasgow", "Edinburgh", "London", "Aberdeen", "Carlisle", "Leeds", "York", "Manchester", "Birmingham", "Essex", "Southampton", "Norwich", "Doncaster", ])
     add_sports(["Squash", "Tennis", "Chess", "Badminton", "Pool", ])
     
-    # Members.
-    add_member("jack", "jack@jones.com", "Jack", "Jones")
-    add_member("john", "john@doe.com", "John", "Doe")
-    add_member("leif", "leif@azzopardi.com", "Leif", "Azzopardi")
-    add_member("martynas", "martynas@buivys.com", "Martynas", "Buivys")
-    add_member("raluca", "raluca@criste.com", "Raluca", "Criste")
-    add_member("helen", "helen@foster.com", "Helen", "Foster")
-    add_member("tomasz", "tomasz@sadowski.com", "Tomasz", "Sadowski")
-    add_member("vlad", "vlad@schnakovszki.com", "Vlad", "Schnakovszki")
+    # Users.
+    add_user("jack", "jack@jones.com", "Jack", "Jones")
+    add_user("john", "john@doe.com", "John", "Doe")
+    add_user("leif", "leif@azzopardi.com", "Leif", "Azzopardi")
+    add_user("martynas", "martynas@buivys.com", "Martynas", "Buivys")
+    add_user("raluca", "raluca@criste.com", "Raluca", "Criste")
+    add_user("helen", "helen@foster.com", "Helen", "Foster")
+    add_user("tomasz", "tomasz@sadowski.com", "Tomasz", "Sadowski")
+    add_user("vlad", "vlad@schnakovszki.com", "Vlad", "Schnakovszki")
 
     # Sessions.
     add_session("Squash", "vlad", None, "2014-03-01", "18:45", "Glasgow", "Stevenson Court 2", 0.65, "Bring your own racquet!")
@@ -92,5 +90,6 @@ def populate():
 if __name__ ==  '__main__':
     print "Starting PlayMaker population script..."
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'playmaker_project.settings')
+    from django.contrib.auth.models import User
     from playmaker.models import *
     populate()
