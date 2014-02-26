@@ -56,3 +56,7 @@ class Sport(models.Model):
 
     def __unicode__(self):
         return unicode(self.sport)
+
+class  UserPreferredCities(models.Model):
+    user = models.ForeignKey(User, unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="user", )
+    city = models.ForeignKey('City', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="city", )

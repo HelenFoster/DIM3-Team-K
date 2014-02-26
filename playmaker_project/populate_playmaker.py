@@ -24,9 +24,17 @@ def add_user(username, email, firstname, lastname):
     user.last_name = lastname
     user.save()
 
+def add_superuser(username, email, firstname, lastname):
+    print "Super user: " + username
+    user = User.objects.create_superuser(username, email, password=username)
+    user.first_name = firstname
+    user.last_name = lastname
+    user.save()
+
 def add_session(sport, hostplayer, guestplayer, date, time, city, location, price, details):
     if guestplayer is not None:
         guestplayer = User.objects.get(username=guestplayer)
+
     Session.objects.get_or_create(
         sport = Sport.objects.get(sport=sport),
         hostplayer = User.objects.get(username=hostplayer),
@@ -37,6 +45,12 @@ def add_session(sport, hostplayer, guestplayer, date, time, city, location, pric
         location = location,
         price = price,
         details = details,
+    )
+
+def add_user_preferred_city(user, city):
+    UserPreferredCities.objects.get_or_create(
+        user = User.objects.get(username = user),
+        city = City.objects.get(city = city),
     )
 
 def add_offer(session, guest):
@@ -60,7 +74,10 @@ def add_message(session, user_op, user_viewer, date, time, message):
 def populate():
     add_cities(["Glasgow", "Edinburgh", "London", "Aberdeen", "Carlisle", "Leeds", "York", "Manchester", "Birmingham", "Essex", "Southampton", "Norwich", "Doncaster", ])
     add_sports(["Squash", "Tennis", "Chess", "Badminton", "Pool", ])
-    
+
+    # Superusers.
+    add_superuser("admin", "admin@playmaker.com", "Admin", "Nimda")
+
     # Users.
     add_user("jack", "jack@jones.com", "Jack", "Jones")
     add_user("john", "john@doe.com", "John", "Doe")
@@ -70,6 +87,13 @@ def populate():
     add_user("helen", "helen@foster.com", "Helen", "Foster")
     add_user("tomasz", "tomasz@sadowski.com", "Tomasz", "Sadowski")
     add_user("vlad", "vlad@schnakovszki.com", "Vlad", "Schnakovszki")
+
+    # Add favorite cities.
+    add_user_preferred_city("jack", "London")
+    add_user_preferred_city("john", "Aberdeen")
+    add_user_preferred_city("leif", "Glasgow")
+    add_user_preferred_city("helen", "Glasgow")
+    add_user_preferred_city("vlad", "Glasgow")
 
     # Sessions.
     add_session("Squash", "vlad", None, "2014-03-01", "18:45", "Glasgow", "Stevenson Court 2", 0.65, "Bring your own racquet!")

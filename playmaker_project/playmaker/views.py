@@ -11,15 +11,15 @@ from models import *
 def mainpage(request):
     context = RequestContext(request)
     # Show the city selection page if not authenticated.
-    #if not request.user.is_authenticated():
-    #Load the animals to the dictionary.
+    # if not request.user.is_authenticated():
+    # Load the animals to the dictionary.
     cities = []
     all_cities = City.objects.all().order_by('city')
     for city in all_cities:
         print city.city
-        cities.append([
+        cities.append(
             city.city
-        ])
+        )
     context_dict = {'cities': cities, }
     return render_to_response('mainpage.html', context_dict, context)
 
