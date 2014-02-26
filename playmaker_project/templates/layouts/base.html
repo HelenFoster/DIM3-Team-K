@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{% block page_title %}Home{% endblock %} | PlayMaker</title>
+  
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="{% block page_description %}Find an opponent for your favourite sport with PlayMaker{% endblock %}">
+
+	<!-- COMMON INCLUDES -->
+		{% include 'partials/includes.html' %}
+	<!-- END: COMMON INCLUDES -->
+
+	<!-- EXTRA LIBRARIES -->
+	<!-- to be used on individual pages -->
+		{% block extra_libraries %}{% endblock %}
+	<!-- END: EXTRA LIBRARIES -->
+</head>
+<body>
+	<div class="container-full">
+		
+		<div class="row clearfix">		
+			<div class="col-md-12 column header">
+				<!-- HEADER -->
+					{% include 'partials/header.html' %}
+				<!-- END: HEADER -->
+			</div>
+		</div>
+		
+		<div class="row clearfix">
+
+			<div class="col-md-10 column content-wrap uneven-heights">
+				<!-- CONTENT -->
+
+				<!-- END: CONTENT -->
+			</div>
+			
+			<div class="col-md-2 column sidebar-wrap uneven-heights">
+				<!-- SIDEBAR -->
+					{% include 'partials/sidebar.html' %}
+				<!-- END: SIDEBAR -->
+			</div>
+
+		</div>
+
+		<div class="row clearfix">
+			
+			<div class="col-md-12 column footer-wrap">
+				<!-- FOOTER -->
+					{% include 'partials/footer.html' %}
+				<!-- END: FOOTER -->
+			</div>
+
+		</div>
+	</div> 
+</body>
+</html>
