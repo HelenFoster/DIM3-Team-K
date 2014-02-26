@@ -1,8 +1,8 @@
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponse
+from django.contrib.auth import authenticate
+from django.http import HttpResponseRedirect
 from models import *
 
 
@@ -24,11 +24,34 @@ def mainpage(request):
     return render_to_response('mainpage.html', context_dict, context)
 
 
-@csrf_exempt
+# To be called when the user clicks the login button.
+# Will attempt to authenticate the user.
+# If the credentials are valid, redirect to the main page, where the user should now see the activities.
+# If the credentials are invalid, render the login_failed page with the proper failure reason.
+@csrf_protect
 def login(request):
     context = RequestContext(request)
-    context_dict = {'your_key': 'your_value'}
-    return render_to_response('login.html', context_dict, context)
+    failure_reason = 'OK'
+    # Only accept POST requests.
+    if request.POST:
+        # Extract the username and password from the request.
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                # Valid user, credentials stored, go to main page.
+                login(request, user)
+                return HttpResponseRedirect('mainpage.html', context)
+            else:
+                failure_reason = 'Your account is disabled!'
+        else:
+            failure_reason = 'Invalid credentials!'
+    else:
+        failure_reason = 'Invalid request method!'
+    # Add the failure_reason and render the login_failed page.
+    context_dict = {'result': failure_reason}
+    return render_to_response('login_failed.html', context_dict, context, )
 
 @csrf_exempt
 def register(request):
