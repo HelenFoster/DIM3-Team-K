@@ -3,6 +3,50 @@
 {% block page_description %}Viewing sessions listed on PlayMaker.{% endblock %}
 {% block extra_libraries %}{% endblock %}
 {% block content %}
-View sessions (stub) - what's this for?
+    <h1>Sessions I created:</h1>
+     {% if sessions %}
+            <table>
+                <tr>
+                    <th>id</th>
+                    <th>Host</th>
+                    <th>City</th>
+                    <th>Location</th>
+                </tr>
+                {% for session in sessionsICreated %}
+                <tr>
+                    <td>{{ session.id }}</td>
+                    <td>{{ session.hostplayer }}</td>
+                    <td>{{ session.city }}</td>
+                    <td>{{ session.location }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <strong>There are no sessions present.</strong>
+        {% endif %}
+
+
+    <h1>Sessions I applied for:</h1>
+         {% if sessions %}
+            <table>
+                <tr>
+                    <th>id</th>
+                    <th>Host</th>
+                    <th>City</th>
+                    <th>Location</th>
+                </tr>
+                {% for session in sessionsIApplied %}
+                <tr>
+                    <td>{{ session.id }}</td>
+                    <td>{{ session.hostplayer }}</td>
+                    <td>{{ session.city }}</td>
+                    <td>{{ session.location }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <strong>There are no sessions present.</strong>
+        {% endif %}
+
 {% endblock %}
 

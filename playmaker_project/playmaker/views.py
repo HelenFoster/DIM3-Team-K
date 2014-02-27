@@ -80,7 +80,10 @@ def user_profile(request, username):
 @csrf_exempt
 def view_sessions(request):
     context = RequestContext(request)
-    context_dict = {'your_key': 'your_value'}
+    username = request.user.username
+    sessionsCreated = Session.objects.filter(hostplayer=User.objects.get(username=username))
+    sessionsApplied = Session.objects.filter(guestplayer=User.objects.get(username=username))
+    context_dict = {'sessionsICreated': sessionsCreated, 'sessionsIApplied': sessionsApplied}
     return render_to_response('view_sessions.html', context_dict, context)
 
 @csrf_exempt
