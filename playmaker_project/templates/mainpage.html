@@ -183,6 +183,8 @@
             $( "#combobox" ).combobox();
             // Put the button within the dynamically generated select
             $( ".custom-combobox" ).append($("<button type='button' class='btn btn-large btn-success'>GO</button>"));
+            // Focus on the input box on page load
+            $( ".custom-combobox-input").focus();
         });
     </script>
 {% endblock %}
