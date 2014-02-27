@@ -12,6 +12,7 @@
                     <th>Host</th>
                     <th>City</th>
                     <th>Location</th>
+                    <th>Offers</th>
                 </tr>
                 {% for session in sessions %}
                 <tr>
@@ -19,9 +20,10 @@
                     <td>{{ session.hostplayer }}</td>
                     <td>{{ session.city }}</td>
                     <td>{{ session.location }}</td>
+                    <td>{{ session.num_offers }}</td>
                 </tr>
                 {% endfor %}
-            <table>
+            </table>
         {% else %}
             <strong>There are no sessions present.</strong>
         {% endif %}
