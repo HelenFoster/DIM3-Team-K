@@ -2,7 +2,7 @@
 <ul>
 
         {% for sport in sports %}
-            <li><span class="{{ sport }}-icon"></span>{{ sport }}</li>
+            <li><span class="{{ sport|lower }}-icon"></span>{{ sport }}</li>
         {% endfor %}
 </ul>
 <span class="sidebar-heading">Filters</span>
