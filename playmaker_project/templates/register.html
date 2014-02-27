@@ -1,7 +1,66 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/base_full_width.html' %}
 {% block page_title %}Register on PlayMaker{% endblock %}
 {% block page_description %}Create an account on PlayMaker and find an opponent for your favourite type of sport.{% endblock %}
 {% block extra_libraries %}{% endblock %}
 {% block content %}
-Register (stub)
+
+    <div class="row clearfix">
+        <div class="col-md-12 column splash">
+            <div class="splash-left">
+                <span class="splash-heading">Create an account</span>
+                <span class="splash-description">...it takes just a few seconds...</span>
+            </div>
+            <div class="splash-right">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            <input class="form-control" type="text" placeholder="Username" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            <input class="form-control" type="text" placeholder="E-mail" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" placeholder="First Name" />
+                        </div>
+
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" placeholder="Last Name" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            <select class="form-control">
+                                <option value="">Please select...</option>
+                                {% for city in cities %}
+                                    <option value="{{ city }}">{{ city }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" placeholder="Password" />
+                        </div>
+
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" placeholder="Password (again)" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            <button type="button" class="btn btn-large btn-success btn-block">Success</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
 {% endblock %}

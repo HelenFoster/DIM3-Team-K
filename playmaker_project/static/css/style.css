@@ -122,6 +122,17 @@ h6 {
 	color: #fff;
 }
 
+.splash-left {
+    float:left;
+    width:50%;
+}
+
+.splash-right {
+    float:left;
+    width:50%;
+    padding-top:145px;
+}
+
 .splash span {
 	display: block;
 
