@@ -31,11 +31,12 @@ def add_superuser(username, email, firstname, lastname):
     user.last_name = lastname
     user.save()
 
-def add_session(sport, hostplayer, guestplayer, date, time, city, location, price, details):
+def add_session(id, sport, hostplayer, guestplayer, date, time, city, location, price, details):
+    print "Session [%d]: %s, %s %s" % (id, hostplayer, date, time)
     if guestplayer is not None:
         guestplayer = User.objects.get(username=guestplayer)
-
     Session.objects.get_or_create(
+        id = id,
         sport = Sport.objects.get(sport=sport),
         hostplayer = User.objects.get(username=hostplayer),
         guestplayer = guestplayer,
@@ -48,30 +49,42 @@ def add_session(sport, hostplayer, guestplayer, date, time, city, location, pric
     )
 
 def add_user_preferred_city(user, city):
-    UserPreferredCities.objects.get_or_create(
+    prefCity = UserPreferredCities.objects.get_or_create(
         user = User.objects.get(username = user),
         city = City.objects.get(city = city),
-    )
+    )[0]
+    print "Preferred city [%d]: %s, %s" % (prefCity.id, user, city)
 
 def add_offer(session, guest):
-    Offer.objects.get_or_create(
+    offer = Offer.objects.get_or_create(
         session = Session.objects.get(id=session),
         guest = User.objects.get(username=guest),
-    )
+    )[0]
+    print "Offer [%d]: %d, %s" % (offer.id, session, guest)
 
 def add_message(session, user_op, user_viewer, date, time, message):
     if user_viewer is not None:
         user_viewer = User.objects.get(username=user_viewer)
-    Message.objects.get_or_create(
+    msg = Message.objects.get_or_create(
         session = Session.objects.get(id=session),
         user_op = User.objects.get(username=user_op),
         user_viewer = user_viewer,
         date = parse(date),
         time = parse(time),
         message = message,
-    )
+    )[0]
+    print "Message [%d]: %s" % (msg.id, message)
 
 def populate():
+    #Delete all rows, so we don't need to delete the database and rerun syncdb unless we changed the models.
+    Message.objects.all().delete()
+    Offer.objects.all().delete()
+    UserPreferredCities.objects.all().delete()
+    Session.objects.all().delete()
+    Sport.objects.all().delete()
+    City.objects.all().delete()
+    User.objects.all().delete()
+
     add_cities(["Glasgow", "Edinburgh", "London", "Aberdeen", "Carlisle", "Leeds", "York", "Manchester", "Birmingham", "Essex", "Southampton", "Norwich", "Doncaster", ])
     add_sports(["Squash", "Tennis", "Chess", "Badminton", "Pool", ])
 
@@ -96,12 +109,17 @@ def populate():
     add_user_preferred_city("vlad", "Glasgow")
 
     # Sessions.
-    add_session("Squash", "vlad", None, "2014-03-01", "18:45", "Glasgow", "Stevenson Court 2", 0.65, "Bring your own racquet!")
+    #add_session(id, sport, hostplayer, guestplayer, date, time, city, location, price, details)
+    add_session(1, "Squash", "vlad", None, "2014-03-01", "18:45", "Glasgow", "Stevenson Court 2", 0.65, "Bring your own racquet!")
+    add_session(2, "Tennis", "tomasz", None, "2014-03-02", "19:00", "Glasgow", "Stevenson Court 2", 0.65, "")
+    add_session(3, "Tennis", "helen", None, "2014-03-03", "19:30", "Glasgow", "Stevenson Court 2", 0.65, "")
 
     # Offers.
     add_offer(1, "john")
     add_offer(1, "martynas")
     add_offer(1, "tomasz")
+    add_offer(2, "jack")
+    add_offer(2, "leif")
 
     # Messages.
     add_message(1, "john", None, "2014-02-19", "18:21", "Hey mate, can you do 20:00?")
