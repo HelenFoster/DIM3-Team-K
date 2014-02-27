@@ -1,4 +1,6 @@
+.idea
 playmaker_project/.idea/
 playmaker_project/playmaker_db.sqlite3
+*.DS_Store
 *.pyc
 *~
