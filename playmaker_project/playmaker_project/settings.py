@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'playmaker',
-    'django.contrib.admin',
 )
 
 MIDDLEWARE_CLASSES = (
