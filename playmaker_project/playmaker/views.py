@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth import authenticate
 from django.http import HttpResponseRedirect
+from django.db.models import Count
 from models import *
 
 
@@ -96,7 +97,7 @@ def view_session_by_id(request, session_id):
 def view_sessions_by_sport(request, session_sport):
     print session_sport
     context = RequestContext(request)
-    session_list = Session.objects.filter(sport=session_sport)
+    session_list = Session.objects.filter(sport=session_sport).annotate(num_offers=Count('offer'))
     print len(session_list)
     context_dict = {'sport': session_sport, 'sessions': session_list}
     return render_to_response('view_sessions_by_sport.html', context_dict, context)
