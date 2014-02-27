@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% block page_title %}View Sessions by Sport{% endblock %}
+{% block page_title %}View Sessions by Sport: {{ sport }}{% endblock %}
 {% block page_description %}View all sessions by sport on PlayMaker.{% endblock %}
 {% block extra_libraries %}{% endblock %}
 {% block content %}
@@ -10,16 +10,22 @@
                 <tr>
                     <th>id</th>
                     <th>Host</th>
+                    <th>Date</th>
+                    <th>Time</th>
                     <th>City</th>
                     <th>Location</th>
+                    <th>Price</th>
                     <th>Offers</th>
                 </tr>
                 {% for session in sessions %}
                 <tr>
                     <td>{{ session.id }}</td>
                     <td>{{ session.hostplayer }}</td>
+                    <td>{{ session.date }}</td>
+                    <td>{{ session.time }}</td>
                     <td>{{ session.city }}</td>
                     <td>{{ session.location }}</td>
+                    <td>{{ session.price }}</td>
                     <td>{{ session.num_offers }}</td>
                 </tr>
                 {% endfor %}
