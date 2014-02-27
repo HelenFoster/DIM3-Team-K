@@ -21,7 +21,7 @@ def mainpage(request):
             city.city
         )
     context_dict = {'cities': cities, }
-    return render_to_response('demo.html', context_dict, context)
+    return render_to_response('mainpage.html', context_dict, context)
 
 
 # To be called when the user clicks the login button.

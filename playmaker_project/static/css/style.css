@@ -157,7 +157,9 @@ h6 {
 .city-chooser button {
 	height: 50px;
 	width: 100px;
-	margin-top:-3px;	
+	margin-top:-2px;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
 }
 
 .promo {

@@ -1,10 +1,224 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/base_full_width.html' %}
 {% block page_title %}Choose your city{% endblock %}
 {% block page_description %}PlayMaker is an online match making system. Choose your city to get started.{% endblock %}
-{% block extra_libraries %}{% endblock %}
+{% block extra_libraries %}
+    <!-- jQuery UI Autocomplete integration on this page -->
+    <style>
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+        }
+        .custom-combobox-toggle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+            /* support: IE7 */
+            *height: 1.7em;
+            *top: 0.1em;
+        }
+        .custom-combobox-input {
+            margin: 0;
+            padding: 0.3em;
+        }
+
+        .city-chooser select {
+            height: 50px;
+            padding-left: 15px;
+            background-color: white;
+            width: 35%;
+            margin: 50px auto 0 auto;
+            text-align: center;
+            display: block;
+            float: left;
+        }
+
+        .ui-state-default {
+            background: white;
+            border: none;
+        }
+
+    </style>
+    <script>
+        (function( $ ) {
+            $.widget( "custom.combobox", {
+                _create: function() {
+                    this.wrapper = $( "<span>" )
+                            .addClass( "custom-combobox" )
+                            .insertAfter( this.element );
+
+                    this.element.hide();
+                    this._createAutocomplete();
+                    this._createShowAllButton();
+                },
+
+
+                _createAutocomplete: function() {
+                    var selected = this.element.children( ":selected" ),
+                            value = selected.val() ? selected.text() : "";
+
+                    this.input = $( "<input>" )
+                            .appendTo( this.wrapper )
+                            .val( value )
+                            .attr( "title", "" )
+                            .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
+                            .autocomplete({
+                                delay: 0,
+                                minLength: 0,
+                                source: $.proxy( this, "_source" )
+                            })
+                            .tooltip({
+                                tooltipClass: "ui-state-highlight"
+                            })
+                            .mousedown(function() {
+                                $(this).autocomplete( "search", "" );
+                            });
+
+                    this._on( this.input, {
+                        autocompleteselect: function( event, ui ) {
+                            ui.item.option.selected = true;
+                            this._trigger( "select", event, {
+                                item: ui.item.option
+                            });
+                        },
+
+                        autocompletechange: "_removeIfInvalid"
+                    });
+                },
+
+                _createShowAllButton: function() {
+                    /*
+                     var input = this.input,
+                     wasOpen = false;
+
+                     $( "<a>" )
+                     .attr( "tabIndex", -1 )
+                     .attr( "title", "Show All Items" )
+                     .tooltip()
+                     .appendTo( this.wrapper )
+                     .button({
+                     icons: {
+                     primary: "ui-icon-triangle-1-s"
+                     },
+                     text: false
+                     })
+                     .removeClass( "ui-corner-all" )
+                     .addClass( "custom-combobox-toggle ui-corner-right" )
+                     .mousedown(function() {
+                     wasOpen = input.autocomplete( "widget" ).is( ":visible" );
+                     })
+                     .click(function() {
+                     input.focus();
+
+                     // Close if already visible
+                     if ( wasOpen ) {
+                     return;
+                     }
+
+                     // Pass empty string as value to search for, displaying all results
+                     input.autocomplete( "search", "" );
+                     });
+                     */
+                },
+
+                _source: function( request, response ) {
+                    var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+                    response( this.element.children( "option" ).map(function() {
+                        var text = $( this ).text();
+                        if ( this.value && ( !request.term || matcher.test(text) ) )
+                            return {
+                                label: text,
+                                value: text,
+                                option: this
+                            };
+                    }) );
+                },
+
+                _removeIfInvalid: function( event, ui ) {
+
+                    // Selected an item, nothing to do
+                    if ( ui.item ) {
+                        return;
+                    }
+
+                    // Search for a match (case-insensitive)
+                    var value = this.input.val(),
+                            valueLowerCase = value.toLowerCase(),
+                            valid = false;
+                    this.element.children( "option" ).each(function() {
+                        if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+                            this.selected = valid = true;
+                            return false;
+                        }
+                    });
+
+                    // Found a match, nothing to do
+                    if ( valid ) {
+                        return;
+                    }
+
+                    // Remove invalid value
+                    this.input
+                            .val( "" )
+                            .attr( "title", value + " didn't match any item" )
+                            .tooltip( "open" );
+                    this.element.val( "" );
+                    this._delay(function() {
+                        this.input.tooltip( "close" ).attr( "title", "" );
+                    }, 2500 );
+                    this.input.data( "ui-autocomplete" ).term = "";
+                },
+
+                _destroy: function() {
+                    this.wrapper.remove();
+                    this.element.show();
+                }
+            });
+        })( jQuery );
+
+        $(function() {
+
+            // Set up autocomplete combobox
+            $( "#combobox" ).combobox();
+            // Put the button within the dynamically generated select
+            $( ".custom-combobox" ).append($("<button type='button' class='btn btn-large btn-success'>GO</button>"));
+        });
+    </script>
+{% endblock %}
 {% block content %}
-    <h1>Cities:</h1>
-    {% for city in cities %}
-        {{ city }} <br>
-    {% endfor %}
+
+    <div class="row clearfix">
+        <div class="col-md-12 column splash">
+            <span class="splash-heading">Welcome to PlayMaker</span>
+            <span class="splash-description">Choose your city so we can tailor the results to your location</span>
+            <div class="city-chooser">
+                <!--<input type="text" placeholder="Start typing..." /><button type="button" class="btn btn-large btn-success">GO</button>-->
+                <div class="ui-widget">
+                    <select id="combobox">
+                        <option value="">Start typing...</option>
+                        {% for city in cities %}
+                            <option value="{{ city }}">{{ city }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-12 column promo">
+
+            <span class="promo-heading">PlayMaker for Dummies</span>
+            <!--<span class="promo-subheading">PlayMaker for Dummies</span>-->
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            <ul class="promo-steps">
+                <li class="promo-step">Step 1</li>
+                <li class="promo-step">Step 2</li>
+                <li class="promo-step">Step 3</li>
+                <li class="promo-step">Step 4</li>
+            </ul>
+        </div>
+    </div>
 {% endblock %}
