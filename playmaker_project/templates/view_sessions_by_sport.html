@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>PlayMaker: Sessions by Sport</title>
-    </head>
-
-    <body>
+{% extends 'layouts/base.html' %}
+{% block page_title %}Title{% endblock %}
+{% block page_description %}Description{% endblock %}
+{% block extra_libraries %}{% endblock %}
+{% block content %}
         <h1>Sessions by Sport: {{ sport }}</h1>
 
         {% if sessions %}
@@ -27,6 +25,4 @@
         {% else %}
             <strong>There are no sessions present.</strong>
         {% endif %}
-
-    </body>
-</html>
+{% endblock %}

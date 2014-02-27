@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    {% csrf_token %}
-    <title></title>
-</head>
-<body>
+{% extends 'layouts/base.html' %}
+{% block page_title %}Title{% endblock %}
+{% block page_description %}Description{% endblock %}
+{% block extra_libraries %}{% endblock %}
+{% block content %}
     <h1>Cities:</h1>
     {% for city in cities %}
         {{ city }} <br>
     {% endfor %}
-</body>
-</html>
+{% endblock %}

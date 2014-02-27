@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    {% csrf_token %}
-    <title>Login failed</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'layouts/base.html' %}
+{% block page_title %}Title{% endblock %}
+{% block page_description %}Description{% endblock %}
+{% block extra_libraries %}{% endblock %}
+{% block content %}
+Login failed
+{% endblock %}
