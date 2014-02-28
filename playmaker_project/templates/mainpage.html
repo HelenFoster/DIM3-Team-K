@@ -2,6 +2,10 @@
 {% block page_title %}Choose your city{% endblock %}
 {% block page_description %}PlayMaker is an online match making system. Choose your city to get started.{% endblock %}
 {% block extra_libraries %}
+
+    <!-- Include jQuery UI -->
+    <script type="text/javascript" src="{% static "js/jquery-ui.min.js" %}"></script>
+
     <!-- jQuery UI Autocomplete integration on this page -->
     <style>
         .custom-combobox {
