@@ -2,10 +2,12 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth import authenticate
-from django.http import HttpResponseRedirect
+from django.http import *
 from django.db.models import Count
 from models import *
 from forms import RegistrationForm
+from forms import AddMessageToSessionForm
+from django.contrib.auth import authenticate
 
 
 # Create your views here.
@@ -83,8 +85,22 @@ def bookings(request):
 @csrf_exempt
 def preferences(request):
     context = RequestContext(request)
-    context_dict = {'your_key': 'your_value'}
-    return render_to_response('preferences.html', context_dict, context)
+    if request.GET:
+        if request.user.is_authenticated():
+            username = User.objects.get(username=request.user)
+            email = User.objects.get(email=request.email)
+            first_name = User.objects.get(first_name=request.first_name)
+            last_name = User.object.get(last_name=request.last_name)
+            city = UserPreferredCities.objects.get(username=username).city
+            context_dict = {'username': username, 'email': email, 'first_name': first_name, 'last_name': last_name,
+                            'city': city}
+            return render_to_response('preferences.html', context_dict, context)
+        #if not authenticated, go to login page
+        else:
+            return HttpResponseRedirect('login.html')
+
+    return HttpResponse(status=405)
+
 
 @csrf_exempt
 def user_profile(request, username):
@@ -115,4 +131,24 @@ def view_sessions_by_sport(request, session_sport):
     context_dict = {'sport': session_sport, 'sports': sports, 'sessions': sessions}
     return render_to_response('view_sessions_by_sport.html', context_dict, context)
 
-
+@csrf_exempt
+def add_message_to_session(request):
+    context = RequestContext(request)
+    #    only accept POST requests
+    if request.POST:
+       #    create form object
+        form = AddMessageToSessionForm(request.POST)
+        #   if form is valid
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponse(status=200)
+        else:
+            #   print the problems to the terminal
+            print form.errors
+            #   return 405 response
+            return HttpResponse(status=405)
+    failure_reason = 'Unable to register!'
+    #   add the reason of the failure
+    context_dict = {'result': failure_reason}
+    #   return http response
+    return HttpResponseNotModified

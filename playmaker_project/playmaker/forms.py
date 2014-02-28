@@ -1,26 +1,55 @@
 import re
 from django import forms
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ValidationError
  
 class RegistrationForm(forms.Form):
  
-    username = forms.RegexField(regex=r'^\w+$', widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label=_("Username"), error_messages={ 'invalid': _("This value must contain only letters, numbers and underscores.") })
-    email = forms.EmailField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label=_("Email address"))
-    first_name = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label=_("First name"))
-    first_name = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label=_("Last name"))
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs=dict(required=True, max_length=64, render_value=False)), label=_("Password"))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs=dict(required=True, max_length=64, render_value=False)), label=_("Password (type again)"))
+    username = forms.RegexField(regex=r'./_', widget=forms.TextInput(attrs=dict(required=True, max_length=64)),
+                                error_messages={'invalid': "This value must contain only letters, numbers"
+                                " and underscores."})
+    email = forms.EmailField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
+    first_name = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
+    last_name = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
+    password = forms.CharField(widget=forms.PasswordInput(attrs=dict(required=True, max_length=64, render_value=False)))
 
     def clean_username(self):
         try:
-            user = User.objects.get(username__iexact=self.cleaned_data['username'])
+            User.objects.get(username__iexact=self.cleaned_data['username'])
         except User.DoesNotExist:
             return self.cleaned_data['username']
-        raise forms.ValidationError(_("The username already exists. Please try another one."))
- 
-    def clean(self):
-        if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
-            if self.cleaned_data['password1'] != self.cleaned_data['password2']:
-                raise forms.ValidationError(_("The two password fields did not match."))
+        raise forms.ValidationError("The username already exists. Please try another one.")
+
+class AddMessageToSessionForm(forms.Form):
+    #id = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label=_("id"))
+    session = forms.IntegerField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="session")
+    user_op = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="user_op")
+    user_viewer = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="user_viewer")
+    message = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="message")
+
+    def validate_user(self):
+        if 'user_op' == 'user_viewer':
+            raise forms.ValidationError("The host and bidder are the same.")
         return self.cleaned_data
+
+    def validate_message(self):
+        if 'message'.__eq__(self, None):
+            raise forms.ValidationError("Empty message. Try again. ")
+        return self.cleaned_data
+
+    def validate_session(self):
+        if 'session'.__eq__(self, None):
+            raise forms.ValidationError("Empty session. Try again. ")
+        return self.cleaned_data
+
+
+
+
+
+
+
+
+
+
+
+
