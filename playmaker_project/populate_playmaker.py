@@ -17,19 +17,29 @@ def add_sports(sports):
     for sport in sports:
         add_sport(sport)
 
-def add_user(username, email, firstname, lastname):
+def add_user(username, email, firstname, lastname, city):
     print "User: " + username
     user = User.objects.create_user(username, email, password=username)
     user.first_name = firstname
     user.last_name = lastname
     user.save()
+    add_user_preferred_city(username, city)
 
-def add_superuser(username, email, firstname, lastname):
+def add_superuser(username, email, firstname, lastname, city):
     print "Super user: " + username
     user = User.objects.create_superuser(username, email, password=username)
     user.first_name = firstname
     user.last_name = lastname
     user.save()
+    add_user_preferred_city(username, city)
+
+#called from user addition functions
+def add_user_preferred_city(user, city):
+    UserPreferredCities.objects.get_or_create(
+        user = User.objects.get(username = user),
+        city = City.objects.get(city = city),
+    )
+    print "Preferred city: %s, %s" % (user, city)
 
 def add_session(id, sport, hostplayer, guestplayer, date, time, city, location, price, details):
     print "Session [%d]: %s, %s %s" % (id, hostplayer, date, time)
@@ -47,13 +57,6 @@ def add_session(id, sport, hostplayer, guestplayer, date, time, city, location, 
         price = price,
         details = details,
     )
-
-def add_user_preferred_city(user, city):
-    prefCity = UserPreferredCities.objects.get_or_create(
-        user = User.objects.get(username = user),
-        city = City.objects.get(city = city),
-    )[0]
-    print "Preferred city [%d]: %s, %s" % (prefCity.id, user, city)
 
 def add_offer(session, guest):
     offer = Offer.objects.get_or_create(
@@ -89,24 +92,17 @@ def populate():
     add_sports(["Squash", "Tennis", "Chess", "Badminton", "Pool", ])
 
     # Superusers.
-    add_superuser("admin", "admin@playmaker.com", "Admin", "Nimda")
+    add_superuser("admin", "admin@playmaker.com", "Admin", "Nimda", "Edinburgh")
 
     # Users.
-    add_user("jack", "jack@jones.com", "Jack", "Jones")
-    add_user("john", "john@doe.com", "John", "Doe")
-    add_user("leif", "leif@azzopardi.com", "Leif", "Azzopardi")
-    add_user("martynas", "martynas@buivys.com", "Martynas", "Buivys")
-    add_user("raluca", "raluca@criste.com", "Raluca", "Criste")
-    add_user("helen", "helen@foster.com", "Helen", "Foster")
-    add_user("tomasz", "tomasz@sadowski.com", "Tomasz", "Sadowski")
-    add_user("vlad", "vlad@schnakovszki.com", "Vlad", "Schnakovszki")
-
-    # Add favorite cities.
-    add_user_preferred_city("jack", "London")
-    add_user_preferred_city("john", "Aberdeen")
-    add_user_preferred_city("leif", "Glasgow")
-    add_user_preferred_city("helen", "Glasgow")
-    add_user_preferred_city("vlad", "Glasgow")
+    add_user("jack", "jack@jones.com", "Jack", "Jones", "London")
+    add_user("john", "john@doe.com", "John", "Doe", "Aberdeen")
+    add_user("leif", "leif@azzopardi.com", "Leif", "Azzopardi", "Glasgow")
+    add_user("martynas", "martynas@buivys.com", "Martynas", "Buivys", "Glasgow")
+    add_user("raluca", "raluca@criste.com", "Raluca", "Criste", "Glasgow")
+    add_user("helen", "helen@foster.com", "Helen", "Foster", "Glasgow")
+    add_user("tomasz", "tomasz@sadowski.com", "Tomasz", "Sadowski", "Glasgow")
+    add_user("vlad", "vlad@schnakovszki.com", "Vlad", "Schnakovszki", "Glasgow")
 
     # Sessions.
     #add_session(id, sport, hostplayer, guestplayer, date, time, city, location, price, details)

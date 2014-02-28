@@ -58,7 +58,5 @@ class Sport(models.Model):
         return unicode(self.sport)
 
 class UserPreferredCities(models.Model):
-    user = models.ForeignKey(User, unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="user", )
+    user = models.ForeignKey(User, primary_key=True, blank=False, null=False, on_delete=models.CASCADE, db_column="user", )
     city = models.ForeignKey('City', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="city", )
-    class Meta:
-        unique_together = ('user', 'city')
