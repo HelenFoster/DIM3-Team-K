@@ -53,7 +53,7 @@ def attempt_login(request):
             if user.is_active:
                 # Valid user, credentials stored, go to main page.
                 login(request, user)
-                return HttpResponseRedirect('mainpage.html', context)
+                return HttpResponseRedirect('/', context)
             else:
                 failure_reason = 'Your account is disabled!'
         else:
