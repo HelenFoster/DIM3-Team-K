@@ -12,18 +12,20 @@ from forms import RegistrationForm
 @csrf_exempt
 def mainpage(request):
     context = RequestContext(request)
-    # Show the city selection page if not authenticated.
-    # if not request.user.is_authenticated():
-    # Load the animals to the dictionary.
-    cities = []
-    all_cities = City.objects.all().order_by('city')
-    for city in all_cities:
-        print city.city
-        cities.append(
-            city.city
-        )
-    context_dict = {'cities': cities, }
-    return render_to_response('mainpage.html', context_dict, context)
+    if request.user.is_authenticated():
+        context_dict = {}
+        return render_to_response('mainpage_logged_in.html', context_dict, context)
+    else:
+        # Show the city selection page if not authenticated.
+        cities = []
+        all_cities = City.objects.all().order_by('city')
+        for city in all_cities:
+            print city.city
+            cities.append(
+                city.city
+            )
+        context_dict = {'cities': cities, }
+        return render_to_response('mainpage.html', context_dict, context)
 
 
 # To be called when the user clicks the login button.
