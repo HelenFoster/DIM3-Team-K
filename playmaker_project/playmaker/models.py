@@ -60,3 +60,5 @@ class Sport(models.Model):
 class UserPreferredCities(models.Model):
     user = models.ForeignKey(User, unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="user", )
     city = models.ForeignKey('City', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="city", )
+    class Meta:
+        unique_together = ('user', 'city')
