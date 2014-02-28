@@ -20,7 +20,10 @@ def mainpage(request):
         sports = Sport.objects.all()
         city = UserPreferredCities.objects.get(user=request.user)
         sessions = Session.objects.filter(city=city).annotate(num_offers=Count('offer'))
-        context_dict = {'city': city, 'sports': sports, 'sessions': sessions}
+        context_dict = get_context_dictionary(request)
+        context_dict['city'] = city
+        context_dict['sports'] = sports
+        context_dict['sessions'] = sessions
         return render_to_response('mainpage_logged_in.html', context_dict, context)
     else:
         # Show the city selection page if not authenticated.

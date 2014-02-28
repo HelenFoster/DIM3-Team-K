@@ -6,7 +6,7 @@
         <div id="top-nav">
             <ul>
                 <li><a href="/" title="Title goes here"><span class="glyphicon glyphicon-home"></span>Home</a></li>
-                {% if user %}
+                {% if username %}
                     <li><a href="/bookings/" title="Title goes here"><span class="glyphicon glyphicon-tasks"></span>Bookings</a></li>
                     <li><a href="/preferences/" title="Title goes here"><span class="glyphicon glyphicon-wrench"></span>Preferences</a></li>
                 {% endif %}
@@ -16,7 +16,7 @@
     </div>
     <div class="col-md-2 column cta-wrap">
         <div id="cta">
-            {% if user %}
+            {% if username %}
                 <a class="btn btn-sm btn-primary" href="/logout/">Logout</a>
             {% else %}
                 <a class="btn btn-sm btn-success" href="/login/">Login</a>
