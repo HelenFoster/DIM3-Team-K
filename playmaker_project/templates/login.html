@@ -1,8 +1,69 @@
 {% extends 'layouts/base.html' %}
 {% block page_title %}Login{% endblock %}
 {% block page_description %}Login to your PlayMaker account{% endblock %}
-{% block extra_libraries %}{% endblock %}
-{% block content %}
-Login (stub)
+{% block extra_libraries %}
+   <script type="text/javascript">
+
+        $(document).ready(function() {
+
+            // Remove red borders on click
+            var $FORM = $( "#login-form");
+            $FORM.on("change", "input", function() {
+                $(this).css("border", "none");
+            });
+
+            $FORM.validate({
+                rules: {
+                    username: "required",
+                    password: "required"
+                },
+                messages: {
+                    username: "Please enter your username",
+                    password: "Please enter your password"
+                },
+                errorPlacement: function(error, element) {
+                    element.css("border", "1px solid red")
+                           .attr("title", error.text())
+                           .attr("data-placement", "top")
+                           .attr("data-toggle", "tooltip")
+                           .tooltip();
+                }
+            });
+
+        });
+    </script>
 {% endblock %}
 
+{% block content %}
+
+    <div class="row clearfix">
+        <div class="col-md-12 column splash">
+            <div class="splash-left">
+                <span class="splash-heading">Welcome back</span>
+                <span class="splash-description">are you ready for the challenge?</span>
+            </div>
+            <div class="splash-right">
+                <form class="form-horizontal" role="form" id="login-form" method="POST" action="/login">
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" placeholder="Username" name="username" />
+                        </div>
+
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" placeholder="Password" name="password" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            <button type="submit" class="btn btn-large btn-success btn-block" id="submit">Log in</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
