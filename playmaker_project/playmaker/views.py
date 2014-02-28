@@ -2,6 +2,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth import login
+from django.contrib.auth import logout
 from django.http import *
 from django.db.models import Count
 from models import *
@@ -173,3 +174,9 @@ def add_message_to_session(request):
             return HttpResponse(status=405)
 
     return HttpResponseNotModified
+
+
+@csrf_exempt
+def attempt_logout(request):
+    logout()
+    return HttpResponseRedirect('/')
