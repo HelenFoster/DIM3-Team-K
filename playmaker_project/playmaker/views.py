@@ -1,7 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.contrib.auth import authenticate
+from django.contrib.auth import login
 from django.http import *
 from django.db.models import Count
 from models import *
@@ -34,10 +34,15 @@ def mainpage(request):
 # Will attempt to authenticate the user.
 # If the credentials are valid, redirect to the main page, where the user should now see the activities.
 # If the credentials are invalid, render the login_failed page with the proper failure reason.
-@csrf_protect
-def login(request):
+@csrf_exempt
+def attempt_login(request):
     context = RequestContext(request)
     failure_reason = 'OK'
+    # Display the login page.
+    if not request.POST:
+        context = RequestContext(request)
+        return render_to_response('login.html', context)
+
     # Only accept POST requests.
     if request.POST:
         # Extract the username and password from the request.
@@ -58,16 +63,6 @@ def login(request):
     # Add the failure_reason and render the login_failed page.
     context_dict = {'result': failure_reason}
     return render_to_response('login_failed.html', context_dict, context, )
-
-# Displays the login page.
-@csrf_exempt
-def show_login_page(request):
-    context = RequestContext(request)
-    # Only accept get requests.
-    if request.GET:
-        return render_to_response('login.html', context)
-
-    return HttpResponse(status=405)
 
 @csrf_exempt
 def register(request):

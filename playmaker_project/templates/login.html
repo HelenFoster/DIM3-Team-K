@@ -1,4 +1,5 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/base_full_width.html' %}
+{% csrf_token %}
 {% block page_title %}Login{% endblock %}
 {% block page_description %}Login to your PlayMaker account{% endblock %}
 {% block extra_libraries %}
@@ -43,14 +44,14 @@
                 <span class="splash-description">are you ready for the challenge?</span>
             </div>
             <div class="splash-right">
-                <form class="form-horizontal" role="form" id="login-form" method="POST" action="/login">
+                <form class="form-horizontal" role="form" id="login-form" method="POST" action="/login/">
                     <div class="form-group">
                         <div class="col-sm-4">
                             <input class="form-control" type="text" placeholder="Username" name="username" />
                         </div>
 
                         <div class="col-sm-4">
-                            <input class="form-control" type="text" placeholder="Password" name="password" />
+                            <input class="form-control" type="password" placeholder="Password" name="password" />
                         </div>
                     </div>
 

@@ -4,7 +4,7 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
     url(r'^' + '$', views.mainpage, name='mainpage'),
-    url(r'^' + 'login/$', views.show_login_page, name='show_login_page'),
+    url(r'^' + 'login/$', views.attempt_login, name='attempt_login'),
     url(r'^' + 'register/$', views.register, name='register'),
     url(r'^' + 'bookings/$', views.bookings, name='bookings'),
     url(r'^' + 'preferences/$', views.preferences, name='preferences'),
