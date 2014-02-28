@@ -1,1 +1,40 @@
-Main page logged in (stub)
+{% extends 'layouts/base.html' %}
+{% block page_title %}Welcome to PlayMaker{% endblock %}
+{% block page_description %}PlayMaker main page.{% endblock %}
+{% block extra_libraries %}{% endblock %}
+{% block content %}
+        <h1>Welcome to PlayMaker</h1>
+
+        <h2>Sessions in your city ({{ city.city }})</h2>
+
+        {% if sessions %}
+            <table>
+                <tr>
+                    <th>id</th>
+                    <th>sport</th>
+                    <th>Host</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>City</th>
+                    <th>Location</th>
+                    <th>Price</th>
+                    <th>Offers</th>
+                </tr>
+                {% for session in sessions %}
+                <tr>
+                    <td>{{ session.id }}</td>
+                    <td>{{ session.sport }}</td>
+                    <td>{{ session.hostplayer }}</td>
+                    <td>{{ session.date }}</td>
+                    <td>{{ session.time }}</td>
+                    <td>{{ session.city }}</td>
+                    <td>{{ session.location }}</td>
+                    <td>{{ session.price }}</td>
+                    <td>{{ session.num_offers }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <strong>There are no sessions present.</strong>
+        {% endif %}
+{% endblock %}

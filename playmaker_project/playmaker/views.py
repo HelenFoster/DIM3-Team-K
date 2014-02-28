@@ -16,7 +16,10 @@ from helpers import get_context_dictionary
 def mainpage(request):
     context = RequestContext(request)
     if request.user.is_authenticated():
-        context_dict = {}
+        sports = Sport.objects.all()
+        city = UserPreferredCities.objects.get(user=request.user)
+        sessions = Session.objects.filter(city=city).annotate(num_offers=Count('offer'))
+        context_dict = {'city': city, 'sports': sports, 'sessions': sessions}
         return render_to_response('mainpage_logged_in.html', context_dict, context)
     else:
         # Show the city selection page if not authenticated.
