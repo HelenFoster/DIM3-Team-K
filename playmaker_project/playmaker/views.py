@@ -173,3 +173,21 @@ def add_message_to_session(request):
             return HttpResponse(status=405)
 
     return HttpResponseNotModified
+
+def create_session(request):
+    if request.method == 'POST': # If the form has been submitted...
+        # ContactForm was defined in the the previous section
+        form = CreateSession(request.POST) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            # Process the data in form.cleaned_data
+            # ...
+            return HttpResponseRedirect('/thanks/') # Redirect after POST
+    else:
+        form = ContactForm() # An unbound form
+
+    return render(request, 'contact.html', {
+        'form': form,
+    })
+
+    context_dict = {'sport': session_sport, 'sports': sports, 'sessions': sessions}
+    return render_to_response('view_sessions_by_sport.html', context_dict, context)

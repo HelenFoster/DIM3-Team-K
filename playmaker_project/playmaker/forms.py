@@ -42,7 +42,17 @@ class AddMessageToSessionForm(forms.Form):
             raise forms.ValidationError("Empty session. Try again. ")
         return self.cleaned_data
 
+class CreateSession(forms.Form):
 
+    sport =
+    hostplayer = forms.
+    guestplayer =
+    date = forms.DateTimeField()
+    time = forms.TimeField()
+    city = forms.CharField()
+    location = forms.CharField()
+    price = forms.FloatField()
+    details = forms.CharField(max_length=120, required=False)
 
 
 
