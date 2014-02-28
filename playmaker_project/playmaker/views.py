@@ -59,6 +59,16 @@ def login(request):
     context_dict = {'result': failure_reason}
     return render_to_response('login_failed.html', context_dict, context, )
 
+# Displays the login page.
+@csrf_exempt
+def show_login_page(request):
+    context = RequestContext(request)
+    # Only accept get requests.
+    if request.GET:
+        return render_to_response('login.html', context)
+
+    return HttpResponse(status=405)
+
 @csrf_exempt
 def register(request):
     context = RequestContext(request)
