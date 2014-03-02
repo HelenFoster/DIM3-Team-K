@@ -184,5 +184,5 @@ def add_message_to_session(request):
 
 @csrf_exempt
 def attempt_logout(request):
-    logout()
+    logout(request)
     return HttpResponseRedirect('/')
