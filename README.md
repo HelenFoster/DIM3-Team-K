@@ -6,6 +6,8 @@ Setup
 
 1.  Install the requirements listed in Documents/requirements.txt
 
+    The following commands should be executed from the playmaker_project subfolder (the outer one).
+
 2.  To create the database, run
 
         python manage.py syncdb
@@ -20,7 +22,7 @@ Setup
 
         python manage.py runserver
 
-After changing the models, delete playmaker_project/playmaker_db.sqlite3 and start from step 2.
+After changing the models, delete playmaker_db.sqlite3 and start from step 2.
 
 If changing the data in the population script, it suffices to rerun step 3,
 because the population script deletes the rows before refilling them.

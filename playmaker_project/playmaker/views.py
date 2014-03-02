@@ -9,6 +9,7 @@ from models import *
 from forms import RegistrationForm
 from forms import AddMessageToSessionForm
 from django.contrib.auth import authenticate
+import datetime
 from helpers import get_context_dictionary
 
 
@@ -19,7 +20,10 @@ def mainpage(request):
     if request.user.is_authenticated():
         sports = Sport.objects.all()
         city = UserPreferredCities.objects.get(user=request.user)
-        sessions = Session.objects.filter(city=city).annotate(num_offers=Count('offer'))
+        today = datetime.datetime.now().date()
+        sessions = Session.objects.filter(city=city.city, date__gte=today)
+        sessions=sessions.annotate(num_offers=Count('offer'))
+        sessions = sessions.order_by('date', 'time')
         context_dict = get_context_dictionary(request)
         context_dict['city'] = city
         context_dict['sports'] = sports
@@ -147,7 +151,10 @@ def view_session_by_id(request, session_id):
 @csrf_exempt
 def view_sessions_by_sport(request, session_sport):
     context = RequestContext(request)
-    sessions = Session.objects.filter(sport=session_sport).annotate(num_offers=Count('offer'))
+    today = datetime.datetime.now().date()
+    sessions = Session.objects.filter(sport=session_sport, date__gte=today)
+    sessions = sessions.annotate(num_offers=Count('offer'))
+    sessions = sessions.order_by('date', 'time')
     sports = Sport.objects.all()
     context_dict = get_context_dictionary(request)
     context_dict['sport'] = session_sport
