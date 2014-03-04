@@ -1,6 +1,7 @@
 import re
 from django import forms
 from django.contrib.auth.models import User
+from models import *
 from django.core.exceptions import ValidationError
  
 class RegistrationForm(forms.Form):
@@ -43,11 +44,22 @@ class AddMessageToSessionForm(forms.Form):
         return self.cleaned_data
 
 
+class CreateSession(forms.Form):
 
+    sport = forms.CharField(required=True)
+    hostplayer = forms.IntegerField(required=True)
+    date = forms.DateTimeField(required=True)
+    time = forms.TimeField(required=True)
+    city = forms.Select(required=True)
+    location = forms.CharField(required=True)
+    price = forms.FloatField()
+    details = forms.CharField()
 
-
-
-
+    def clean_sport(self):
+        sport = self.cleaned_data['sport']
+        if Sport.objects.get(sport=sport).DoesNotExist:
+            raise ValidationError("This sport does not exist")
+        return self.cleaned_data
 
 
 

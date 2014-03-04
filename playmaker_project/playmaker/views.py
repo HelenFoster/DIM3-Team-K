@@ -8,6 +8,7 @@ from django.db.models import Count
 from models import *
 from forms import RegistrationForm
 from forms import AddMessageToSessionForm
+from forms import CreateSession
 from django.contrib.auth import authenticate
 import datetime
 from helpers import get_context_dictionary
