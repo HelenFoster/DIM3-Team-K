@@ -180,11 +180,6 @@ h6 {
 	margin: 0 auto;
 }
 
-.promo ul {
-	margin: 0 auto;
-}
-
-
 .promo span {
 	display: block;
 }
@@ -206,12 +201,13 @@ h6 {
 }
 
 .promo-steps {
-	display:table-row;
+	display:table;
+    margin: 0 auto;
+    padding-right: 40px;
 }
 
 
-.promo-step {	
-	display: table-cell;
+.promo-step {
 	list-style-type: none;	
 	float: left;
 	min-width: 100px;
