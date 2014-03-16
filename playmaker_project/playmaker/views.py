@@ -13,7 +13,6 @@ from django.contrib.auth import authenticate
 import datetime
 from helpers import get_context_dictionary
 
-
 # Create your views here.
 @csrf_exempt
 def mainpage(request):
@@ -170,6 +169,7 @@ def view_session_by_id(request, session_id):
     offer_count = offers.__len__()
     messages = Message.objects.filter(session = session_id)
     guestplayer = session.guestplayer
+    sports = Sport.objects.all()
 
     if username != session.hostplayer:
         host_viewing = False
@@ -177,6 +177,7 @@ def view_session_by_id(request, session_id):
     if guestplayer is not None:
         offer_accepted = True
     context_dict = get_context_dictionary(request)
+    context_dict['sports'] = sports
     context_dict['current_viewer'] = username
     context_dict['session'] = session
     context_dict['host_viewing'] = host_viewing
