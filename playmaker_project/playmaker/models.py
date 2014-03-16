@@ -2,12 +2,19 @@ __author__ = 'Vlad Schnakovszki'
 
 from django.db import models
 from django.contrib.auth.models import User
-# Added default values for some fields (e.g. unique=False) to be explicit.
-# primary_key=True implies unique=True and null=False.
+from django.template.defaultfilters import slugify
+
 # Foreign keys default their relationship to the primary key.
 
 class City(models.Model):
-    city = models.CharField(primary_key=True, max_length=64, blank=False, db_column="city", )
+    # id = AutoField(primary_key=True) added automatically.
+    city = models.CharField(unique=True, blank=False, null=False, max_length=64, )
+    city_slug = models.SlugField(unique=True, blank=False, null=False, max_length=64, )
+
+    # Stores the city slug.
+    def save(self, *args, **kwargs):
+        self.city_slug = slugify(self.city)
+        super(City, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = 'Cities'
@@ -16,20 +23,20 @@ class City(models.Model):
 
 class Message(models.Model):
     # id = AutoField(primary_key=True) added automatically.
-    session = models.ForeignKey('Session', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="session", )
-    user_op = models.ForeignKey(User, unique=False, blank=False, null=False, on_delete=models.CASCADE, related_name='member_op', db_column="user_op", )
-    user_viewer = models.ForeignKey(User, unique=False, blank=True, null=True, on_delete=models.CASCADE, related_name='member_viewer', db_column="user_viewer", )
-    date = models.DateField(blank=False, null=False, db_column="date", )
-    time = models.TimeField(blank=False, null=False, db_column="time", )
-    message = models.TextField(unique=False, blank=True, null=False, db_column="message", )
+    session = models.ForeignKey('Session', unique=False, blank=False, null=False, on_delete=models.CASCADE, )
+    user_op = models.ForeignKey(User, unique=False, blank=False, null=False, on_delete=models.CASCADE, related_name='member_op', )
+    user_viewer = models.ForeignKey(User, unique=False, blank=True, null=True, on_delete=models.CASCADE, related_name='member_viewer', )
+    date = models.DateField(blank=False, null=False, )
+    time = models.TimeField(blank=False, null=False, )
+    message = models.TextField(unique=False, blank=True, null=False, )
 
     def __unicode__(self):
         return unicode(self.id)
 
 class Offer(models.Model):
     # id = AutoField(primary_key=True) added automatically.
-    session = models.ForeignKey('Session', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="session", )
-    guest = models.ForeignKey(User, unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="guest", )
+    session = models.ForeignKey('Session', unique=False, blank=False, null=False, on_delete=models.CASCADE, )
+    guest = models.ForeignKey(User, unique=False, blank=False, null=False, on_delete=models.CASCADE, )
 
     class Meta:
         unique_together = (('session', 'guest'),)
@@ -38,25 +45,33 @@ class Offer(models.Model):
 
 class Session(models.Model):
     # id = AutoField(primary_key=True) added automatically.
-    sport = models.ForeignKey('Sport', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="sport", )
-    hostplayer = models.ForeignKey(User, unique=False, blank=False, null=False, on_delete=models.CASCADE, related_name='member_host', db_column="hostplayer", )
-    guestplayer = models.ForeignKey(User, unique=False, blank=True, null=True, on_delete=models.CASCADE, related_name='member_guest', db_column="guestplayer", )
-    date = models.DateField(blank=False, null=False, db_column="date", )
-    time = models.TimeField(blank=False, null=False, db_column="time", )
-    city = models.ForeignKey('City', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="city", )
-    location = models.CharField(max_length=64, unique=False, blank=False, null=False, db_column="location", )
-    price = models.FloatField(unique=False, blank=False, null=False, default=0, db_column="price", )
-    details = models.TextField(unique=False, blank=True, null=False, db_column="details", )
+    sport = models.ForeignKey('Sport', unique=False, blank=False, null=False, to_field='sport', on_delete=models.CASCADE, )
+    hostplayer = models.ForeignKey(User, unique=False, blank=False, null=False, on_delete=models.CASCADE, related_name='member_host', )
+    guestplayer = models.ForeignKey(User, unique=False, blank=True, null=True, on_delete=models.CASCADE, related_name='member_guest', )
+    date = models.DateField(blank=False, null=False, )
+    time = models.TimeField(blank=False, null=False, )
+    city = models.ForeignKey('City', unique=False, blank=False, null=False, to_field='city', on_delete=models.CASCADE, )
+    location = models.CharField(max_length=64, unique=False, blank=False, null=False, )
+    price = models.FloatField(unique=False, blank=False, null=False, default=0, )
+    details = models.TextField(unique=False, blank=True, null=False, )
 
     def __unicode__(self):
         return unicode(self.id)
 
 class Sport(models.Model):
-    sport = models.CharField(primary_key=True, max_length=64, blank=False, db_column="sport", )
+    # id = AutoField(primary_key=True) added automatically.
+    sport = models.CharField(unique=True, blank=False, null=False, max_length=64, )
+    sport_slug = models.SlugField(unique=True, blank=False, null=False, max_length=64, )
+
+    # Stores the city slug.
+    def save(self, *args, **kwargs):
+        self.sport_slug = slugify(self.sport)
+        super(Sport, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return unicode(self.sport)
 
 class UserPreferredCities(models.Model):
-    user = models.ForeignKey(User, primary_key=True, blank=False, null=False, on_delete=models.CASCADE, db_column="user", )
-    city = models.ForeignKey('City', unique=False, blank=False, null=False, on_delete=models.CASCADE, db_column="city", )
+    # id = AutoField(primary_key=True) added automatically.
+    user = models.ForeignKey(User, unique=True, blank=False, null=False, on_delete=models.CASCADE, )
+    city = models.ForeignKey('City', unique=False, blank=False, null=False, on_delete=models.CASCADE, )
