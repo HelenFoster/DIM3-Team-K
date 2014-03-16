@@ -45,21 +45,21 @@ class AddMessageToSessionForm(forms.Form):
 
 
 class CreateSession(forms.Form):
+    print "hello"
+    #sport = forms.CharField(required=True)
+    #hostplayer = forms.IntegerField(required=True)
+    #date = forms.DateTimeField(required=True)
+    #time = forms.TimeField(required=True)
+    #city = forms.Select(required=True)
+    #location = forms.CharField(required=True)
+    #price = forms.FloatField()
+    #details = forms.CharField()
 
-    sport = forms.CharField(required=True)
-    hostplayer = forms.IntegerField(required=True)
-    date = forms.DateTimeField(required=True)
-    time = forms.TimeField(required=True)
-    city = forms.Select(required=True)
-    location = forms.CharField(required=True)
-    price = forms.FloatField()
-    details = forms.CharField()
-
-    def clean_sport(self):
-        sport = self.cleaned_data['sport']
-        if Sport.objects.get(sport=sport).DoesNotExist:
-            raise ValidationError("This sport does not exist")
-        return self.cleaned_data
+#def clean_sport(self):
+ #   sport = self.cleaned_data['sport']
+  #  if Sport.objects.get(sport=sport).DoesNotExist:
+   #     raise ValidationError("This sport does not exist")
+    #return self.cleaned_data
 
 
 
