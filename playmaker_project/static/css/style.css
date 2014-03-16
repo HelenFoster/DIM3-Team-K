@@ -248,12 +248,16 @@ h6 {
  .sidebar-wrap ul {
  	padding: 0;
  	font-size: 14px;
- 	color: #848484;
  }
 
  .sidebar-wrap li {
  	list-style-type: none;
  	line-height: 36px;
+ }
+
+ .sidebar-wrap li > a {
+     text-decoration: none;
+     color: #848484;
  }
 
  .sidebar-wrap p {
