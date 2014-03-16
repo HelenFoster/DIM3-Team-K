@@ -3,36 +3,45 @@
 {% block page_description %}PlayMaker main page.{% endblock %}
 {% block extra_libraries %}{% endblock %}
 {% block content %}
-        <h2>Sessions in {{ city.city }}</h2>
-        <br/>
-        {% if sessions %}
-            <table>
-                <tr>
-                    <!--<th>id</th>-->
-                    <th>sport</th>
-                    <th>Host</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <!--<th>City</th>-->
-                    <th>Location</th>
-                    <th>Price</th>
-                    <th>Offers</th>
-                </tr>
-                {% for session in sessions %}
-                <tr>
-                    <!--<td>{{ session.id }}</td>-->
-                    <td>{{ session.sport }}</td>
-                    <td>{{ session.hostplayer }}</td>
-                    <td>{{ session.date }}</td>
-                    <td>{{ session.time }}</td>
-                    <!--<td>{{ session.city }}</td>-->
-                    <td>{{ session.location }}</td>
-                    <td>£{{ session.price }}</td>
-                    <td>{{ session.num_offers }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        {% else %}
-            <strong>There are no sessions present.</strong>
-        {% endif %}
+<h2>Sessions in {{ city.city }}</h2>
+<br/>
+
+<div class="single-offer">
+
+</div>
+
+{% if sessions %}
+<table>
+    <tr>
+        <!--<th>id</th>-->
+        <th>Sport</th>
+        <th>Host</th>
+        <th>Date</th>
+        <th>Time</th>
+        <!--<th>City</th>-->
+        <th>Location</th>
+        <th>Price</th>
+        <th>Offers</th>
+        <th>Actions</th>
+    </tr>
+    {% for session in sessions %}
+    <tr>
+        <!--<td>{{ session.id }}</td>-->
+        <td>{{ session.sport }}</td>
+        <td>{{ session.hostplayer }}</td>
+        <td>{{ session.date }}</td>
+        <td>{{ session.time }}</td>
+        <!--<td>{{ session.city }}</td>-->
+        <td>{{ session.location }}</td>
+        <td>£{{ session.price }}</td>
+        <td>{{ session.num_offers }}</td>
+        <td><a class="btn btn-sm btn-primary">View</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<strong>There are no sessions present.</strong>
+{% endif %}
+
 {% endblock %}

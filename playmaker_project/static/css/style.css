@@ -269,12 +269,32 @@ h6 {
  .content-wrap {
  }
 
+/*
+ * Table styles
+ *
+ */
+
+
+table {
+    margin: 0px auto;
+    text-align: center;
+}
+
+th {
+    padding: 5px;
+    border: 1px solid #848484;
+}
+
+td {
+    border: 1px solid #848484;
+    padding: 5px;
+}
 
 /*
  *	More icons at:;
  *	http://www.flaticon.com/categories/sports/
  *
-*/
+ */
 
 
 .menu-icon {
