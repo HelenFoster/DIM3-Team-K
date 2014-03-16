@@ -300,14 +300,28 @@ td {
  *
  */
 
-
-.menu-icon {
-
+.badminton-icon {
+	background: url('../img/badminton.png') no-repeat center center;
 }
 
-.basketball-icon {
-	background: url('../img/basketball.png') no-repeat center center;
-	width:36px; 
+.tennis-icon {
+	background: url('../img/tennis.png') no-repeat center center;
+}
+
+.squash-icon {
+	background: url('../img/squash.png') no-repeat center center;
+}
+
+.chess-icon {
+	background: url('../img/chess.png') no-repeat center center;
+}
+
+.pool-icon {
+	background: url('../img/pool.png') no-repeat center center;
+}
+
+.sport-icon {
+	width:36px;
 	height:36px;
 	float: left;
 	background-size: cover;

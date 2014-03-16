@@ -1,7 +1,7 @@
 <span class="sidebar-heading">Sports</span>
 <ul>
         {% for sport in sports %}
-            <li><span class="{{ sport|lower }}-icon"></span><a href="/sessions/{{ sport.sport_slug }}/">{{ sport.sport }}</a></li>
+            <li><span class="sport-icon {{ sport|lower }}-icon"></span><a href="/sessions/{{ sport.sport_slug }}/">{{ sport.sport }}</a></li>
         {% endfor %}
 </ul>
 <span class="sidebar-heading">Filters</span>
