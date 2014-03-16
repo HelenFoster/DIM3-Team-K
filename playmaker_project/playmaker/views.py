@@ -105,7 +105,8 @@ def register(request):
 def bookings(request):
     context = RequestContext(request)
     context_dict = get_context_dictionary(request)
-    context_dict['your_key'] = 'your_value'
+    sports = Sport.objects.all()
+    context_dict['sports'] = sports
     return render_to_response('bookings.html', context_dict, context)
 
 @csrf_exempt
