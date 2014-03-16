@@ -278,6 +278,26 @@ h6 {
  .content-wrap {
  }
 
+ /*
+ *	Session details by ID
+ *
+ */
+
+ .session-details {
+
+ }
+
+ .session-details-left {
+     float: left;
+     width:60%;
+     background-color: #f7fbfd;
+ }
+
+ .session-details-right {
+     float:left;
+     width: 40%;
+ }
+
 /*
  * Table styles
  *
@@ -345,4 +365,5 @@ td {
  	color: #fff;
  	text-align: center;
  	display:block;
+     display:none;
  }
