@@ -7,7 +7,14 @@
     <h1>Bookings</h1>
 
     <h3>Events created by me</h3>
+    {% for session in sessions_i_created %}
+        {{ session.sport }} {{ session.hostplayer }} {{ session.guestplayer }} {{ session.date }} {{ session.time }}
+        {{ session.city }} {{ session.location }} {{ session.price }} {{ session.details }}
+    {% endfor %}
 
     <h3>Events I joined</h3>
-
+    {% for session in sessions_i_joined %}
+        {{ session.sport }} {{ session.hostplayer }} {{ session.guestplayer }} {{ session.date }} {{ session.time }}
+        {{ session.city }} {{ session.location }} {{ session.price }} {{ session.details }}
+    {% endfor %}
 {% endblock %}

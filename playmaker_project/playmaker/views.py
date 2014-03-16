@@ -108,10 +108,19 @@ def register(request):
 @csrf_exempt
 def bookings(request):
     context = RequestContext(request)
-    context_dict = get_context_dictionary(request)
-    sports = Sport.objects.all()
-    context_dict['sports'] = sports
-    return render_to_response('bookings.html', context_dict, context)
+    if request.user.is_authenticated():
+        context_dict = get_context_dictionary(request)
+        username = request.user.username
+        sports = Sport.objects.all()
+        sessions_i_created = Session.objects.filter(hostplayer = username)
+        sessions_i_joined = Session.objects.filter(guestplayer = username)
+        context_dict['sports'] = sports
+        context_dict['sessions_i_created'] = sessions_i_created
+        context_dict['sessions_i_joined'] = sessions_i_joined
+        return render_to_response('bookings.html', context_dict, context)
+    else:
+        return render_to_response('login.html', context)
+
 
 @csrf_exempt
 def preferences(request):
