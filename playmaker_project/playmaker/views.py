@@ -86,7 +86,11 @@ def register(request):
         #create form object
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            user.save()
+            #hash password with the set_password method
+            user.set_password(user.password)
+            user.save()
             # return response and redirect user to Bookings page
             return HttpResponseRedirect('bookings.html', context)
 

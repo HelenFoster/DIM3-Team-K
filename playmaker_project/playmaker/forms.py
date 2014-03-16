@@ -3,16 +3,19 @@ from django import forms
 from django.contrib.auth.models import User
 from models import *
 from django.core.exceptions import ValidationError
- 
+
+
 class RegistrationForm(forms.Form):
  
-    username = forms.RegexField(regex=r'./_', widget=forms.TextInput(attrs=dict(required=True, max_length=64)),
-                                error_messages={'invalid': "This value must contain only letters, numbers"
-                                " and underscores."})
+    username = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
     first_name = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
     last_name = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
     password = forms.CharField(widget=forms.PasswordInput(attrs=dict(required=True, max_length=64, render_value=False)))
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'password')
 
     def clean_username(self):
         try:
@@ -20,6 +23,7 @@ class RegistrationForm(forms.Form):
         except User.DoesNotExist:
             return self.cleaned_data['username']
         raise forms.ValidationError("The username already exists. Please try another one.")
+
 
 class AddMessageToSessionForm(forms.Form):
     #id = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label=_("id"))
