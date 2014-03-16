@@ -110,10 +110,10 @@ def bookings(request):
     context = RequestContext(request)
     if request.user.is_authenticated():
         context_dict = get_context_dictionary(request)
-        username = request.user.username
+        user = request.user
         sports = Sport.objects.all()
-        sessions_i_created = Session.objects.filter(hostplayer = username)
-        sessions_i_joined = Session.objects.filter(guestplayer = username)
+        sessions_i_created = Session.objects.filter(hostplayer = user)
+        sessions_i_joined = Session.objects.filter(guestplayer = user)
         context_dict['sports'] = sports
         context_dict['sessions_i_created'] = sessions_i_created
         context_dict['sessions_i_joined'] = sessions_i_joined
