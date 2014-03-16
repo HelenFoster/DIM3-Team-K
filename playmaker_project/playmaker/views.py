@@ -35,10 +35,7 @@ def mainpage(request):
         cities = []
         all_cities = City.objects.all().order_by('city')
         for city in all_cities:
-            print city.city
-            cities.append(
-                city.city
-            )
+            cities.append(city.city)
         context_dict = get_context_dictionary(request)
         context_dict['cities'] = cities
         return render_to_response('mainpage.html', context_dict, context)
@@ -82,20 +79,27 @@ def attempt_login(request):
 @csrf_exempt
 def register(request):
     context = RequestContext(request)
-    # only accept POST requests
+
+    # check if the request contains POST data
+    # this happens when a user submits a form
     if request.POST:
-       #create form object
+        #create form object
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             # return response and redirect user to Bookings page
             return HttpResponseRedirect('bookings.html', context)
 
-    failure_reason = 'Unable to register!'
-    # Add the failure_reason and render the login_failed page.
+    # Show the city selection page if not authenticated.
+    cities = []
+    all_cities = City.objects.all().order_by('city')
+    for city in all_cities:
+        cities.append(city.city)
     context_dict = get_context_dictionary(request)
-    context_dict['result'] = failure_reason
+    context_dict['cities'] = cities
     return render_to_response('register.html', context_dict, context)
+
+
 
 @csrf_exempt
 def bookings(request):
@@ -168,7 +172,7 @@ def add_message_to_session(request):
     context = RequestContext(request)
     #    only accept POST requests
     if request.POST:
-       #    create form object
+        #    create form object
         form = AddMessageToSessionForm(request.POST)
         #   if form is valid
         if form.is_valid():
