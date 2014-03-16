@@ -155,6 +155,7 @@ def view_session_by_id(request, session_id):
     offer_accepted = False
     session = Session.objects.get(id = session_id)
     offers = Offer.objects.select_related().filter(session = session_id)
+    offer_count = offers.__len__()
     messages = Message.objects.filter(session = session_id)
     guestplayer = session.guestplayer
 
@@ -168,6 +169,7 @@ def view_session_by_id(request, session_id):
     context_dict['host_viewing'] = host_viewing
     context_dict['messages'] = messages
     context_dict['offers'] = offers
+    context_dict['offer_count'] = offer_count
     context_dict['offer_accepted'] = offer_accepted
     return render_to_response('view_session_by_id.html', context_dict, context)
 

@@ -4,7 +4,6 @@
 {% block extra_libraries %}{% endblock %}
 {% block content %}
 
-<<<<<<< HEAD
 <h1>Session of {{ session.sport }} by player {{ session.hostplayer }}</h1>
      {% if session %}
             <table>
@@ -56,7 +55,7 @@
 
 <br>
     {% if host_viewing and not offer_accepted %}
-    <h2>Offers from :</h2>
+    <h2>You have total of {{ offer_count }} offers from :</h2>
     {% for offer in offers %}
         <table>
             <tr>
@@ -69,6 +68,8 @@
             </tr>
         {% endfor %}
         </table>
+    {% elif not host_viewing %}
+        This session currently has {{ offer_count }} offers
     {% elif offer_accepted %}
         {{ session.hostplayer }} will play with {{ session.guestplayer }}
     {% endif %}
