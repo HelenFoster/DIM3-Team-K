@@ -153,7 +153,7 @@ def view_session_by_id(request, session_id):
 def view_sessions_by_sport(request, session_sport):
     context = RequestContext(request)
     today = datetime.datetime.now().date()
-    sessions = Session.objects.filter(sport=session_sport, date__gte=today)
+    sessions = Session.objects.filter(sport=Sport.objects.get(sport_slug=session_sport).sport, date__gte=today)
     sessions = sessions.annotate(num_offers=Count('offer'))
     sessions = sessions.order_by('date', 'time')
     sports = Sport.objects.all()
