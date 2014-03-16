@@ -36,22 +36,31 @@
             <strong>Session error.</strong>
         {% endif %}
 
-    {% if True %} <!-- always TRUE until the private messages functionality is added-->
+
         {% for message in messages %}
         <table>
-            <tr>
-                <th>{{ message.user_op }}</th>
-                <th>{{ message.date }}</th>
-                <th>{{ session.time }}</th>
-            </tr>
-            <tr>
-                <td>{{ message.message }}</td>
-            </tr>
+            {% if message.user_viewer == None %}
+                <tr>
+                    <th>{{ message.user_op }}</th>
+                    <th>{{ message.date }}</th>
+                    <th>{{ session.time }}</th>
+                </tr>
+                <tr>
+                    <td>{{ message.message }}</td>
+                </tr>
+            {% elif message.user_viewer == current_viewer or message.user_op == current_viewer %}
+                <tr>
+                    <th>{{ message.user_op }}</th>
+                    <th>{{ message.date }}</th>
+                    <th>{{ session.time }}</th>
+                </tr>
+                <tr>
+                    <td>{{ message.message }}</td>
+                </tr>
+            {% endif %}
         {% endfor %}
         </table>
-    {% else %}
         <strong>Message error</strong>
-    {% endif %}
 
 <br>
     {% if host_viewing and not offer_accepted %}
@@ -69,7 +78,7 @@
         {% endfor %}
         </table>
     {% elif not host_viewing %}
-        This session currently has {{ offer_count }} offers
+        Number of offers for this session: {{ offer_count }}
     {% elif offer_accepted %}
         {{ session.hostplayer }} will play with {{ session.guestplayer }}
     {% endif %}

@@ -165,6 +165,7 @@ def view_session_by_id(request, session_id):
     if guestplayer is not None:
         offer_accepted = True
     context_dict = get_context_dictionary(request)
+    context_dict['current_viewer'] = username
     context_dict['session'] = session
     context_dict['host_viewing'] = host_viewing
     context_dict['messages'] = messages
