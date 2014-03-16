@@ -254,11 +254,20 @@ h6 {
  .sidebar-wrap li > a {
      text-decoration: none;
      color: #848484;
+     padding-right:40px;
+     padding-top:5px;
+     padding-bottom:5px;
  }
 
  .sidebar-wrap p {
  	color: #848484;
  	line-height: 24px;	
+ }
+
+ #host-session-button {
+     display:block;
+     width: 100%;
+     margin: 0 auto;
  }
 
 /*	

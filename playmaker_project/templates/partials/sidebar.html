@@ -1,8 +1,10 @@
 <span class="sidebar-heading">Sports</span>
 <ul>
         {% for sport in sports %}
-            <li><span class="sport-icon {{ sport|lower }}-icon"></span><a href="/sessions/{{ sport.sport_slug }}/">{{ sport.sport }}</a></li>
+            <li><a href="/sessions/{{ sport.sport_slug }}/"><span class="sport-icon {{ sport|lower }}-icon"></span>{{ sport.sport }}</a></li>
         {% endfor %}
 </ul>
-<span class="sidebar-heading">Filters</span>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+<span class="sidebar-heading">Host a Session</span>
+<p>Use Play Maker to find people to participate in your event.</p>
+<a href="#" class="btn btn-sm btn-success" id="host-session-button">Get started</a>
+<br /><br /><br /><br />
