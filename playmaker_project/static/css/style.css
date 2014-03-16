@@ -285,13 +285,14 @@ table {
 }
 
 th {
-    padding: 5px;
+    padding: 10px;
     border: 1px solid #848484;
+    text-align: center;
 }
 
 td {
     border: 1px solid #848484;
-    padding: 5px;
+    padding: 10px;
 }
 
 /*
