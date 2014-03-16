@@ -74,4 +74,4 @@ class Sport(models.Model):
 class UserPreferredCities(models.Model):
     # id = AutoField(primary_key=True) added automatically.
     user = models.ForeignKey(User, unique=True, blank=False, null=False, on_delete=models.CASCADE, )
-    city = models.ForeignKey('City', unique=False, blank=False, null=False, on_delete=models.CASCADE, )
+    city = models.ForeignKey('City', unique=False, blank=False, null=False, to_field='city', on_delete=models.CASCADE, )
