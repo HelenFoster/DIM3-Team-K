@@ -1,0 +1,33 @@
+{% if sessions %}
+<table>
+    <tr>
+        <!--<th>id</th>-->
+        <th>Sport</th>
+        <th>Host</th>
+        <th>Date</th>
+        <th>Time</th>
+        <!--<th>City</th>-->
+        <th>Location</th>
+        <th>Price</th>
+        <th>Offers</th>
+        <th>Actions</th>
+    </tr>
+    {% for session in sessions %}
+    <tr>
+        <!--<td>{{ session.id }}</td>-->
+        <td>{{ session.sport }}</td>
+        <td>{{ session.hostplayer }}</td>
+        <td>{{ session.date }}</td>
+        <td>{{ session.time }}</td>
+        <!--<td>{{ session.city }}</td>-->
+        <td>{{ session.location }}</td>
+        <td>£{{ session.price }}</td>
+        <td>{{ session.num_offers }}</td>
+        <td><a href="/session/{{ session.id }}" class="btn btn-sm btn-primary" title="View {{ session.sport }} sessions">View</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<p class="text-center"><strong>There are no {{ sport }} sessions present.</strong></p>
+{% endif %}
