@@ -3,5 +3,73 @@
 {% block page_description %}View session details{% endblock %}
 {% block extra_libraries %}{% endblock %}
 {% block content %}
-View session by ID (stub)
+
+<h1>Session of {{ session.sport }} by player {{ session.hostplayer }}</h1>
+     {% if session %}
+            <table>
+                <tr>
+                    <th>id</th>
+                    <th>Sport</th>
+                    <th>HostPlayer</th>
+                    <th>GuestPlayer</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>City</th>
+                    <th>Location</th>
+                    <th>Price</th>
+                    <th>Details</th>
+                </tr>
+                <tr>
+                    <td>{{ session.id }}</td>
+                    <td>{{ session.sport }}</td>
+                    <td>{{ session.hostplayer }}</td>
+                    <td>{{ session.guestplayer }}</td>
+                    <td>{{ session.date }}</td>
+                    <td>{{ session.time }}</td>
+                    <td>{{ session.city }}</td>
+                    <td>{{ session.location }}</td>
+                    <td>{{ session.price }}</td>
+                    <td>{{ session.details }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <strong>Session error.</strong>
+        {% endif %}
+
+    {% if True %} <!-- always TRUE until the private messages functionality is added-->
+        {% for message in messages %}
+        <table>
+            <tr>
+                <th>{{ message.user_op }}</th>
+                <th>{{ message.date }}</th>
+                <th>{{ session.time }}</th>
+            </tr>
+            <tr>
+                <td>{{ message.message }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+        <strong>Message error</strong>
+    {% endif %}
+
+<br>
+    {% if host_viewing and not offer_accepted %}
+    <h2>Offers from :</h2>
+    {% for offer in offers %}
+        <table>
+            <tr>
+                <th>{{ offer.guest }}</th>
+                <td>
+                    <form action="" method="POST">    <!-- USE A FUNCTION HERE TO ACCEPT THE OFFER-->
+                        <input id="submit" type="button" value="Accept" />
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% elif offer_accepted %}
+        {{ session.hostplayer }} will play with {{ session.guestplayer }}
+    {% endif %}
+
 {% endblock %}

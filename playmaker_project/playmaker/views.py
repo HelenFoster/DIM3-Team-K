@@ -145,8 +145,25 @@ def view_sessions(request):
 @csrf_exempt
 def view_session_by_id(request, session_id):
     context = RequestContext(request)
+    username = request.user.username
+    host_viewing = True
+    offer_accepted = False
+    session = Session.objects.get(id = session_id)
+    offers = Offer.objects.select_related().filter(session = session_id)
+    messages = Message.objects.filter(session = session_id)
+    guestplayer = session.guestplayer
+
+    if username != session.hostplayer:
+        host_viewing = False
+
+    if guestplayer is not None:
+        offer_accepted = True
     context_dict = get_context_dictionary(request)
-    context_dict['your_key'] = 'your_value'
+    context_dict['session'] = session
+    context_dict['host_viewing'] = host_viewing
+    context_dict['messages'] = messages
+    context_dict['offers'] = offers
+    context_dict['offer_accepted'] = offer_accepted
     return render_to_response('view_session_by_id.html', context_dict, context)
 
 @csrf_exempt
