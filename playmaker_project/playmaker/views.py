@@ -127,13 +127,12 @@ def preferences(request):
     context = RequestContext(request)
     if request.GET:
         if request.user.is_authenticated():
-            city = UserPreferredCities.objects.get(username=request.user).city
             context_dict = get_context_dictionary(request)
             context_dict['username'] = request.user.username
             context_dict['email'] = request.user.email
             context_dict['first_name'] = request.user.first_name
             context_dict['last_name'] = request.user.last_name
-            context_dict['city'] = city
+            context_dict['city'] = UserPreferredCities.objects.get(username=request.user).city.city
             return render_to_response('preferences.html', context_dict, context)
         #if not authenticated, go to login page
         else:
