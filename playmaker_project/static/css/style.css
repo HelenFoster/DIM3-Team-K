@@ -180,11 +180,6 @@ h6 {
 	margin: 0 auto;
 }
 
-.promo ul {
-	margin: 0 auto;
-}
-
-
 .promo span {
 	display: block;
 }
@@ -206,12 +201,13 @@ h6 {
 }
 
 .promo-steps {
-	display:table-row;
+	display:table;
+    margin: 0 auto;
+    padding-right: 40px;
 }
 
 
-.promo-step {	
-	display: table-cell;
+.promo-step {
 	list-style-type: none;	
 	float: left;
 	min-width: 100px;
@@ -258,11 +254,20 @@ h6 {
  .sidebar-wrap li > a {
      text-decoration: none;
      color: #848484;
+     padding-right:40px;
+     padding-top:5px;
+     padding-bottom:5px;
  }
 
  .sidebar-wrap p {
  	color: #848484;
  	line-height: 24px;	
+ }
+
+ #host-session-button {
+     display:block;
+     width: 100%;
+     margin: 0 auto;
  }
 
 /*	
@@ -285,13 +290,14 @@ table {
 }
 
 th {
-    padding: 5px;
+    padding: 10px;
     border: 1px solid #848484;
+    text-align: center;
 }
 
 td {
     border: 1px solid #848484;
-    padding: 5px;
+    padding: 10px;
 }
 
 /*
