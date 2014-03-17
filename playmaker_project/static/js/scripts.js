@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
-	// Make the sidebar's height match the content wrapper's height
-	$(".uneven-heights").setAllToMaxHeight();
+    // Make the sidebar's height match the content wrapper's height
+    $(".uneven-heights").setAllToMaxHeight();
 
     // Adjust sidebar height
     var preferedHeight = $(window).height() - $(".header").css("height").slice(0,-2);
@@ -21,26 +21,46 @@ $(document).ready(function() {
  */
 
 $.fn.setAllToMaxHeight = function(){
-	return this.height(Math.max.apply(this,$.map(this,function(e){return $(e).height()})));
+    return this.height(Math.max.apply(this,$.map(this,function(e){return $(e).height()})));
 }
 
-function reloadMessages(id) {
+function reloadMessages(id, hostplayer) {
 
-    var $target = $(".discussion");
+    var $target = $(".message-container");
     var url = "/getmsgs/" + id;
-    var messages = [];
 
     // Retrieve all messages for the discussion
-    $.get(url, {
-        sessionId: "1"
-    }).done(function(data) {
-        alert("Successfully got the messages! ");
+    $.getJSON(url).done(function(data) {
 
-        // Clear current messages
         $target.empty();
+        var messages = [];
 
-        // Load the new messages
-        $target.append(data);
+        // Process JSON into an array
+        for (var i = 0; i < data.length; i++) {
+            messages.push(data[i]);
+        }
+
+        // Append to the chat
+        var output = [];
+        $.each(messages, function() {
+
+            var current = $(this)[0];
+
+            if (hostplayer == current.user_op) {
+                output.push('<li class="self">');
+            } else {
+                output.push('<li class="other">');
+            }
+
+            output.push('<div class="avatar"></div>');
+            output.push('<div class="messages">');
+            output.push('<p>' + current.message + '</p>');
+            output.push('<time>' + current.user_op + ' • ' + current.time + ' ' + current.date + '</time>');
+            output.push('</div></li>');
+
+        });
+
+        $target.append(output.join(''));
     }).fail(function() {
         alert("Could not reload messages!");
     });

@@ -14,7 +14,6 @@
                 var message = $(".chat-message").val();
                 var url = "/sendmsg/";
 
-
                 // TODO: pick up CSRF token and ship it along with ajax request
                 if (message.trim() != "") {
                     $.post(url, {
@@ -28,7 +27,7 @@
 
             });
 
-            reloadMessages({{ session.id }});
+            reloadMessages({{ session.id }}, "{{ session.hostplayer }}");
         });
 
 
