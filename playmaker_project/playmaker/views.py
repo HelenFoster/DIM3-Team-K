@@ -9,6 +9,7 @@ from models import *
 from forms import RegistrationForm
 from forms import AddMessageToSessionForm
 from forms import CreateSession
+from forms import PreferencesForm
 from django.contrib.auth import authenticate
 import datetime
 from helpers import get_context_dictionary
@@ -133,28 +134,34 @@ def bookings(request):
 @csrf_exempt
 def preferences(request):
     context = RequestContext(request)
-    if request.GET:
-        if request.user.is_authenticated():
-            context_dict = get_context_dictionary(request)
-            context_dict['username'] = request.user.username
-            context_dict['email'] = request.user.email
-            context_dict['first_name'] = request.user.first_name
-            context_dict['last_name'] = request.user.last_name
-            context_dict['city'] = UserPreferredCities.objects.get(username=request.user).city.city
-            return render_to_response('preferences.html', context_dict, context)
-        #if not authenticated, go to login page
-        else:
-            return HttpResponseRedirect('login.html')
-
-    return HttpResponse(status=405)
+    context_dict = get_context_dictionary(request)
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/login/')
+    if request.method == 'POST':
+        return HttpResponse('something was submitted')
+    form_initial = {}
+    form_initial['email'] = request.user.email
+    form_initial['first_name'] = request.user.first_name
+    form_initial['last_name'] = request.user.last_name
+    form_initial['city'] = UserPreferredCities.objects.get(user=request.user).city
+    
+    context_dict['form'] = PreferencesForm(initial=form_initial)
+    return render_to_response('preferences.html', context_dict, context)
 
 
 @csrf_exempt
 def user_profile(request, username):
     context = RequestContext(request)
     context_dict = get_context_dictionary(request)
-    context_dict['your_key'] = 'your_value'
+    users = User.objects.filter(username=username)
+    if users.exists():
+        user = users[0]
+        context_dict['profile_username'] = user.username
+        context_dict['first_name'] = user.first_name
+        context_dict['last_name'] = user.last_name
+        context_dict['city'] = UserPreferredCities.objects.get(user=user).city
     return render_to_response('user_profile.html', context_dict, context)
+
 
 @csrf_exempt
 def view_sessions(request):

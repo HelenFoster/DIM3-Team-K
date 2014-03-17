@@ -3,5 +3,30 @@
 {% block page_description %}Manage your PlayMaker account preferences.{% endblock %}
 {% block extra_libraries %}{% endblock %}
 {% block content %}
-Preferences (stub)
+
+{% if updated %}
+<div>
+    Preferences updated!
+</div>
+{% endif %}
+
+<div>
+    <form id="preferences_form" method="post" action="/preferences/">
+
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+
+        {% for field in form.visible_fields %}
+            {{ field }}
+            {{ field.help_text }}
+            {{ field.errors }}
+            <br>
+        {% endfor %}
+
+        <input type="submit" name="submit" value="Update" />
+    </form>
+</div>
 {% endblock %}
+

@@ -25,6 +25,16 @@ class RegistrationForm(forms.Form):
         raise forms.ValidationError("The username already exists. Please try another one.")
 
 
+class PreferencesForm(forms.Form):
+    current_password = forms.CharField(required=False, help_text="Current password (if you want to change it or your email)",
+        widget=forms.PasswordInput(attrs=dict(required=False, max_length=64, render_value=False)))
+    new_password = forms.CharField(required=False, help_text="New password (if you want to change it)", 
+        widget=forms.PasswordInput(attrs=dict(required=False, max_length=64, render_value=False)))
+    email = forms.EmailField(help_text="Email", widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
+    first_name = forms.CharField(help_text="First name", widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
+    last_name = forms.CharField(help_text="Last name", widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
+
+
 class AddMessageToSessionForm(forms.Form):
     #id = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label=_("id"))
     session = forms.IntegerField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="session")
