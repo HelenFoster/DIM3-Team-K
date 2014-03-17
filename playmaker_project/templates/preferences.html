@@ -50,9 +50,13 @@
 
     <h1>Preferences</h1>
 
-    {% if updated %}
+    {% if updated and updated != None %}
         <div>
             Preferences updated!
+        </div>
+    {% elif not updated and updated != None %}
+        <div>
+            Something went wrong... try again
         </div>
     {% endif %}
 
@@ -93,7 +97,6 @@
         </div>
 
     </form>
-
 
 
 {% endblock %}

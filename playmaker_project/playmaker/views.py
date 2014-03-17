@@ -158,14 +158,32 @@ def preferences(request):
     context_dict['sports'] = sports
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/login/')
-    if request.method == 'POST':
-        return HttpResponse('something was submitted')
+    if request.method == "POST":
+        form = PreferencesForm(data = request.POST)
+        if form.is_valid():
+            form_initial = {}
+            form_initial['email'] = request.user.email
+            form_initial['first_name'] = request.user.first_name
+            form_initial['last_name'] = request.user.last_name
+            form_initial['city'] = UserPreferredCities.objects.get(user=request.user).city
+            context_dict['form'] = PreferencesForm(initial=form_initial)
+            context_dict['updated'] = True
+            return render_to_response('preferences.html', context_dict, context)
+        else:
+            form_initial = {}
+            form_initial['email'] = request.user.email
+            form_initial['first_name'] = request.user.first_name
+            form_initial['last_name'] = request.user.last_name
+            form_initial['city'] = UserPreferredCities.objects.get(user=request.user).city
+            context_dict['form'] = PreferencesForm(initial=form_initial)
+            context_dict['updated'] = False
+            return render_to_response('preferences.html', context_dict, context)
+
     form_initial = {}
     form_initial['email'] = request.user.email
     form_initial['first_name'] = request.user.first_name
     form_initial['last_name'] = request.user.last_name
     form_initial['city'] = UserPreferredCities.objects.get(user=request.user).city
-    
     context_dict['form'] = PreferencesForm(initial=form_initial)
     return render_to_response('preferences.html', context_dict, context)
 
