@@ -192,6 +192,8 @@ def preferences(request):
 def user_profile(request, username):
     context = RequestContext(request)
     context_dict = get_context_dictionary(request)
+    sports = Sport.objects.all()
+    context_dict['sports'] = sports
     users = User.objects.filter(username=username)
     if users.exists():
         user = users[0]

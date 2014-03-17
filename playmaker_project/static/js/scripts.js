@@ -51,7 +51,6 @@ function reloadMessages(id, hostplayer) {
             } else {
                 output.push('<li class="other">');
             }
-
             output.push('<div class="avatar"></div>');
             output.push('<div class="messages">');
             output.push('<p>' + current.message + '</p>');

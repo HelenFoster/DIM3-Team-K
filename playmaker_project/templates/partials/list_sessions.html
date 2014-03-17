@@ -1,12 +1,10 @@
 {% if sessions %}
 <table>
     <tr>
-        <!--<th>id</th>-->
         <th>Sport</th>
         <th>Host</th>
         <th>Date</th>
         <th>Time</th>
-        <!--<th>City</th>-->
         <th>Location</th>
         <th>Price</th>
         <th>Offers</th>
@@ -14,12 +12,10 @@
     </tr>
     {% for session in sessions %}
     <tr>
-        <!--<td>{{ session.id }}</td>-->
         <td>{{ session.sport }}</td>
-        <td><a href="/profile/{{ session.hostplayer }}" title="View ">{{ session.hostplayer }}</a></td>
+        <td><a href="/profile/{{ session.hostplayer }}" title="View {{ session.hostplayer }}'s profile" class="colourless">{{ session.hostplayer }}</a></td>
         <td>{{ session.date }}</td>
         <td>{{ session.time|time:"g:i A" }}</td>
-        <!--<td>{{ session.city }}</td>-->
         <td>{{ session.location }}</td>
         <td>£{{ session.price }}</td>
         <td>{{ session.num_offers }}</td>
@@ -29,5 +25,5 @@
 </table>
 
 {% else %}
-<p class="text-center"><strong>There are no {{ sport }} sessions present.</strong></p>
+<p>There are no {{ sport }} sessions present.</p>
 {% endif %}
