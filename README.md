@@ -27,8 +27,13 @@ After changing the models, delete playmaker_db.sqlite3 and start from step 2.
 If changing the data in the population script, it suffices to rerun step 3,
 because the population script deletes the rows before refilling them.
 
-Notes
+Accounts
 ----
 
-SQLite administration on Windows: http://sqliteadmin.orbmu2k.de/
+Superuser: "admin"
+
+Regular users: "vlad", "tomasz", "helen", "leif"...
+
+Passwords are currently the same as the usernames.
+
 
