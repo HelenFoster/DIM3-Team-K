@@ -12,6 +12,7 @@ from forms import PreferencesForm
 from forms import CreateSessionForm
 from django.contrib.auth import authenticate
 import datetime
+import json
 from helpers import get_context_dictionary
 
 # Create your views here.
@@ -239,7 +240,22 @@ def add_message_to_session(request):
 @csrf_exempt
 def get_messages(request, session_id):
     response = []
-    return HttpResponse("get_messages stub " + session_id)
+    messages_all = Message.objects.filter(session=session_id)
+    messages_public = messages_all.filter(user_viewer=None)
+    messages_private = messages_all.filter(user_viewer=request.user)
+    messages_filtered = (messages_public | messages_private).order_by('date', 'time')
+    for message in messages_filtered:
+        viewer = message.user_viewer
+        if viewer is not None:
+            viewer = str(viewer)
+        response.append({
+            'user_op': str(message.user_op),
+            'user_viewer': viewer,
+            'date': str(message.date),
+            'time': str(message.time),
+            'message': message.message,
+        })
+    return HttpResponse(json.dumps(response, indent=4))
 
 
 
