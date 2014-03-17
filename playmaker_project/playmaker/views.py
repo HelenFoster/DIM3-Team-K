@@ -284,7 +284,8 @@ def add_message_to_session(request):
     #todo: set viewer if session is private
     print "3"
     #problem here
-    message = Message.objects.create(session, request.user, None, datetime.today(), datetime.today(), messageText)
+    message = Message.objects.create(session=session, user_op=request.user, user_viewer=None, date=datetime.datetime.now(), time=datetime.datetime.now(), message=messageText)
+    message.save()
     print "4"
     return HttpResponse(status=200)
 
