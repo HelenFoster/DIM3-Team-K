@@ -8,7 +8,8 @@ from django.db.models import Count
 from models import *
 from forms import RegistrationForm
 from forms import AddMessageToSessionForm
-from forms import CreateSession
+from forms import PreferencesForm
+from forms import CreateSessionForm
 from django.contrib.auth import authenticate
 import datetime
 from helpers import get_context_dictionary
@@ -111,11 +112,20 @@ def bookings(request):
         context_dict = get_context_dictionary(request)
         user = request.user
         sports = Sport.objects.all()
-        sessions_i_created = Session.objects.filter(hostplayer = user)
-        sessions_i_joined = Session.objects.filter(guestplayer = user)
+        sessions_i_created = Session.objects \
+            .filter(hostplayer = user) \
+            .annotate(num_offers=Count('offer'))
+        sessions_i_joined = Session.objects \
+            .filter(guestplayer = user) \
+            .annotate(num_offers=Count('offer'))
+        sessions_i_offered = Session.objects \
+            .exclude(guestplayer = user) \
+            .filter(offer__guest__exact = user) \
+            .annotate(num_offers=Count('offer'))
         context_dict['sports'] = sports
         context_dict['sessions_i_created'] = sessions_i_created
         context_dict['sessions_i_joined'] = sessions_i_joined
+        context_dict['sessions_i_offered'] = sessions_i_offered
         return render_to_response('bookings.html', context_dict, context)
     else:
         return render_to_response('login.html', context)
@@ -124,28 +134,34 @@ def bookings(request):
 @csrf_exempt
 def preferences(request):
     context = RequestContext(request)
-    if request.GET:
-        if request.user.is_authenticated():
-            context_dict = get_context_dictionary(request)
-            context_dict['username'] = request.user.username
-            context_dict['email'] = request.user.email
-            context_dict['first_name'] = request.user.first_name
-            context_dict['last_name'] = request.user.last_name
-            context_dict['city'] = UserPreferredCities.objects.get(username=request.user).city.city
-            return render_to_response('preferences.html', context_dict, context)
-        #if not authenticated, go to login page
-        else:
-            return HttpResponseRedirect('login.html')
-
-    return HttpResponse(status=405)
+    context_dict = get_context_dictionary(request)
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/login/')
+    if request.method == 'POST':
+        return HttpResponse('something was submitted')
+    form_initial = {}
+    form_initial['email'] = request.user.email
+    form_initial['first_name'] = request.user.first_name
+    form_initial['last_name'] = request.user.last_name
+    form_initial['city'] = UserPreferredCities.objects.get(user=request.user).city
+    
+    context_dict['form'] = PreferencesForm(initial=form_initial)
+    return render_to_response('preferences.html', context_dict, context)
 
 
 @csrf_exempt
 def user_profile(request, username):
     context = RequestContext(request)
     context_dict = get_context_dictionary(request)
-    context_dict['your_key'] = 'your_value'
+    users = User.objects.filter(username=username)
+    if users.exists():
+        user = users[0]
+        context_dict['profile_username'] = user.username
+        context_dict['first_name'] = user.first_name
+        context_dict['last_name'] = user.last_name
+        context_dict['city'] = UserPreferredCities.objects.get(user=user).city
     return render_to_response('user_profile.html', context_dict, context)
+
 
 @csrf_exempt
 def view_sessions(request):
@@ -219,6 +235,32 @@ def add_message_to_session(request):
             return HttpResponse(status=405)
 
     return HttpResponseNotModified
+
+@csrf_exempt
+def create_session(request):
+    context = RequestContext(request)
+    #    only accept POST requests
+    if request.POST:
+        #    create form object
+        form = CreateSessionForm(request.POST)
+        #   if form is valid
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponse(status=200)
+        else:
+            #   print the problems to the terminal
+            print form.errors
+            #   return 405 response
+            return HttpResponse(status=405)
+
+    context_dict = get_context_dictionary(request)
+    sports = Sport.objects.all()
+    cities = City.objects.all().order_by('city')
+    user_preferred_city = UserPreferredCities.objects.get(user=request.user)
+    context_dict['sports'] = sports
+    context_dict['cities'] = cities
+    context_dict['user_preferred_city'] = user_preferred_city
+    return render_to_response('create_session.html', context_dict, context)
 
 
 @csrf_exempt

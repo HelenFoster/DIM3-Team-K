@@ -3,5 +3,18 @@
 {% block page_description %}View user profile on PlayMaker.{% endblock %}
 {% block extra_libraries %}{% endblock %}
 {% block content %}
-User profile (stub)
+
+{% if profile_username %}
+
+User: {{ profile_username }}<br>
+First name: {{ first_name }}<br>
+Last name: {{ last_name }}<br>
+City: {{ city }}<br>
+
+{% else %}
+
+User not found.
+
+{% endif %}
+
 {% endblock %}

@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 
 
 class RegistrationForm(forms.Form):
- 
     username = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
     first_name = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
@@ -23,6 +22,16 @@ class RegistrationForm(forms.Form):
         except User.DoesNotExist:
             return self.cleaned_data['username']
         raise forms.ValidationError("The username already exists. Please try another one.")
+
+
+class PreferencesForm(forms.Form):
+    current_password = forms.CharField(required=False, help_text="Current password (if you want to change it or your email)",
+        widget=forms.PasswordInput(attrs=dict(required=False, max_length=64, render_value=False)))
+    new_password = forms.CharField(required=False, help_text="New password (if you want to change it)", 
+        widget=forms.PasswordInput(attrs=dict(required=False, max_length=64, render_value=False)))
+    email = forms.EmailField(help_text="Email", widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
+    first_name = forms.CharField(help_text="First name", widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
+    last_name = forms.CharField(help_text="Last name", widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
 
 
 class AddMessageToSessionForm(forms.Form):
@@ -48,22 +57,15 @@ class AddMessageToSessionForm(forms.Form):
         return self.cleaned_data
 
 
-class CreateSession(forms.Form):
-    print "hello"
-    #sport = forms.CharField(required=True)
-    #hostplayer = forms.IntegerField(required=True)
-    #date = forms.DateTimeField(required=True)
-    #time = forms.TimeField(required=True)
-    #city = forms.Select(required=True)
-    #location = forms.CharField(required=True)
-    #price = forms.FloatField()
-    #details = forms.CharField()
-
-#def clean_sport(self):
- #   sport = self.cleaned_data['sport']
-  #  if Sport.objects.get(sport=sport).DoesNotExist:
-   #     raise ValidationError("This sport does not exist")
-    #return self.cleaned_data
+class CreateSessionForm(forms.Form):
+    sport = forms.Select()
+    hostplayer = forms.IntegerField()
+    date = forms.DateTimeField()
+    time = forms.TimeField()
+    city = forms.Select()
+    location = forms.CharField()
+    price = forms.FloatField()
+    details = forms.CharField()
 
 
 
