@@ -24,10 +24,10 @@ $.fn.setAllToMaxHeight = function(){
 	return this.height(Math.max.apply(this,$.map(this,function(e){return $(e).height()})));
 }
 
-function reloadMessages() {
+function reloadMessages(id) {
 
     var $target = $(".discussion");
-    var url = "/getmsgs/1";
+    var url = "/getmsgs/" + id;
     var messages = [];
 
     // Retrieve all messages for the discussion
