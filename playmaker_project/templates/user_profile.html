@@ -4,17 +4,16 @@
 {% block extra_libraries %}{% endblock %}
 {% block content %}
 
-{% if profile_username %}
+    {% if profile_username %}
 
-User: {{ profile_username }}<br>
-First name: {{ first_name }}<br>
-Last name: {{ last_name }}<br>
-City: {{ city }}<br>
+        <h1>About {{ profile_username }}</h1>
+        <b>Name:</b> {{ first_name }} {{ last_name }}<br>
+        <b>City:</b> {{ city }}<br>
 
-{% else %}
+    {% else %}
 
-User not found.
+        User not found.
 
-{% endif %}
+    {% endif %}
 
 {% endblock %}

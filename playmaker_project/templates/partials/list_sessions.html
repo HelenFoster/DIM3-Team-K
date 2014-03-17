@@ -13,7 +13,7 @@
     {% for session in sessions %}
     <tr>
         <td>{{ session.sport }}</td>
-        <td><a href="/profile/{{ session.hostplayer }}" title="View ">{{ session.hostplayer }}</a></td>
+        <td><a href="/profile/{{ session.hostplayer }}" title="View {{ session.hostplayer }}'s profile" class="colourless">{{ session.hostplayer }}</a></td>
         <td>{{ session.date }}</td>
         <td>{{ session.time|time:"g:i A" }}</td>
         <td>{{ session.location }}</td>
