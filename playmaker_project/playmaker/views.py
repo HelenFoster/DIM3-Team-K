@@ -183,18 +183,6 @@ def user_profile(request, username):
         context_dict['city'] = UserPreferredCities.objects.get(user=user).city
     return render_to_response('user_profile.html', context_dict, context)
 
-
-@csrf_exempt
-def view_sessions(request):
-    context = RequestContext(request)
-    username = request.user.username
-    sessionsCreated = Session.objects.filter(hostplayer=User.objects.get(username=username))
-    sessionsApplied = Session.objects.filter(guestplayer=User.objects.get(username=username))
-    context_dict = get_context_dictionary(request)
-    context_dict['sessionsICreated'] = sessionsCreated
-    context_dict['sessionsIApplied'] = sessionsApplied
-    return render_to_response('view_sessions.html', context_dict, context)
-
 @csrf_exempt
 def view_session_by_id(request, session_id):
     context = RequestContext(request)
