@@ -17,7 +17,7 @@
                 // TODO: pick up CSRF token and ship it along with ajax request
                 if (message.trim() != "") {
                     $.post(url, {
-                        data: {'message': message, 'session_id': {{ session.id }}}
+                        'message': message, 'session_id': {{ session.id }}
                     }).done(function() {
 
                     }).fail(function() {
