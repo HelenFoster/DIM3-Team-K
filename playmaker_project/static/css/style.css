@@ -27,9 +27,14 @@ a, a:visited, a:hover {
 h1, h2, h3, h4, h5, h6 {
 	font-size: 56px;
 	font-weight: 100;
-	padding-top: 15px;
+	/*padding-top: 15px;*/
 	color: black;
-	text-align: center;
+
+}
+
+h1 {
+    border-bottom:3px solid #ececec;
+    padding-bottom: 20px;
 }
 
 h2 {
@@ -61,6 +66,11 @@ h6 {
  	height: 40px;
  	background-color: #336699;
  	color: #fff;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index: 100;
  }
 
  .logo-wrap { 	
@@ -232,6 +242,8 @@ h6 {
  	border-left: 1px solid #ececec;
  	background-color: #f7fbfd;
  	padding-top:25px;
+    position: fixed;
+    margin-top:40px;
  }
 
  .sidebar-heading {
@@ -275,7 +287,9 @@ h6 {
  *
  */
 
- .content-wrap {
+ .content-wrap-sidebar {
+     margin-left: 233px;
+     margin-top:40px;
  }
 
  /*
@@ -285,17 +299,24 @@ h6 {
 
  .session-details {
 
+    /*background-color: #f7fbfd;*/
  }
 
- .session-details-left {
-     float: left;
-     width:60%;
-     background-color: #f7fbfd;
+ .join-button {
+    width: 40%;
  }
 
- .session-details-right {
-     float:left;
-     width: 40%;
+ .user-wrap {
+     font-size:16px;
+     min-height:36px;
+
+ }
+
+ .detail-wrap {
+     min-height:50px;
+ }
+
+ .chat-wrap {
  }
 
 /*
@@ -305,7 +326,7 @@ h6 {
 
 
 table {
-    margin: 0px auto;
+
     text-align: center;
 }
 
@@ -344,6 +365,26 @@ td {
 
 .pool-icon {
 	background: url('../img/pool.png') no-repeat center center;
+}
+
+.user-icon {
+	background: url('../img/user.png') no-repeat center center;
+}
+
+.time-icon {
+	background: url('../img/time.png') no-repeat center center;
+}
+
+.location-icon {
+	background: url('../img/location.png') no-repeat center center;
+}
+
+.pound-icon {
+	background: url('../img/pound.png') no-repeat center center;
+}
+
+.offers-icon {
+	background: url('../img/offers.png') no-repeat center center;
 }
 
 .sport-icon {

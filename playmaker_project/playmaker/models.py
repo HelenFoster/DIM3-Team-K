@@ -30,6 +30,9 @@ class Message(models.Model):
     time = models.TimeField(blank=False, null=False, )
     message = models.TextField(unique=False, blank=True, null=False, )
 
+    class Meta:
+        ordering = ['date', 'time', ]
+
     def __unicode__(self):
         return unicode(self.id)
 
