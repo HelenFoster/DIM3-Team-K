@@ -158,9 +158,17 @@
             // Set up autocomplete combobox
             $( "#combobox" ).combobox();
             // Put the button within the dynamically generated select
-            $( ".custom-combobox" ).append($("<button type='button' class='btn btn-large btn-success'>GO</button>"));
+            $( ".custom-combobox" ).append($("<button type='button' class='btn btn-large btn-success' id='go-button'>GO</button>"));
             // Focus on the input box on page load
             $( ".custom-combobox-input").focus();
+
+            $( "#go-button").click(function() {
+                var city = $("#combobox").val().trim();
+                if (city != "") {
+                    window.location.replace("/sessions/city/" + city);
+                }
+            });
+
         });
     </script>
 {% endblock %}
