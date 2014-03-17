@@ -7,100 +7,12 @@
     <h1>Bookings</h1>
 
     <h3>Events created by me</h3>
-    {% if sessions_i_created %}
-    <table>
-        <tr>
-            <th>Sport</th>
-            <th>Host</th>
-            <th>Guest</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Location</th>
-            <th>Price</th>
-            <th>Offers</th>
-            <th>Actions</th>
-        </tr>
-        {% for session in sessions_i_created %}
-            <tr>
-                <td>{{ session.sport }}</td>
-                <td>{{ session.hostplayer }}</td>
-                <td>{{ session.guestplayer }}</td>
-                <td>{{ session.date }}</td>
-                <td>{{ session.time|time:"g:i A" }}</td>
-                <td>{{ session.location }}</td>
-                <td>£{{ session.price }}</td>
-                <td>{{ session.num_offers }}</td>
-                <td><a href="/session/{{ session.id }}" class="btn btn-sm btn-primary" title="View {{ session.sport }} sessions">View</a></td>
-            </tr>
-        {% endfor %}
-    </table>
-    {% else %}
-        <p>You have not created any sessions.</p>
-    {% endif %}
-
+    {% include "partials/list_sessions.html" with sessions=sessions_i_created %}
 
     <h3>Events I joined</h3>
-    {% if sessions_i_joined %}
-    <table>
-        <tr>
-            <th>Sport</th>
-            <th>Host</th>
-            <th>Guest</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Location</th>
-            <th>Price</th>
-            <th>Offers</th>
-            <th>Actions</th>
-        </tr>
-        {% for session in sessions_i_joined %}
-            <tr>
-                <td>{{ session.sport }}</td>
-                <td>{{ session.hostplayer }}</td>
-                <td>{{ session.guestplayer }}</td>
-                <td>{{ session.date }}</td>
-                <td>{{ session.time }}</td>
-                <td>{{ session.location }}</td>
-                <td>£{{ session.price }}</td>
-                <td>{{ session.num_offers }}</td>
-                <td><a href="/session/{{ session.id }}" class="btn btn-sm btn-primary" title="View {{ session.sport }} sessions">View</a></td>
-            </tr>
-        {% endfor %}
-    </table>
-    {% else %}
-        <p>You have not joined any sessions.</p>
-    {% endif %}
-
+    {% include "partials/list_sessions.html" with sessions=sessions_i_joined %}
 
     <h3>Events I have offers on</h3>
-    {% if sessions_i_offered %}
-    <table>
-        <tr>
-            <th>Sport</th>
-            <th>Host</th>
-            <th>Guest</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Location</th>
-            <th>Price</th>
-            <th>Offers</th>
-            <th>Actions</th>
-        </tr>
-        {% for session in sessions_i_offered %}
-            <tr>
-                <td>{{ session.sport }}</td>
-                <td>{{ session.hostplayer }}</td>
-                <td>{{ session.guestplayer }}</td>
-                <td>{{ session.date }}</td>
-                <td>{{ session.time }}</td>
-                <td>{{ session.location }}</td>
-                <td>£{{ session.price }}</td>
-                <td>{{ session.num_offers }}</td>
-                <td><a href="/session/{{ session.id }}" class="btn btn-sm btn-primary" title="View {{ session.sport }} sessions">View</a></td>
-            </tr>
-        {% endfor %}
-    </table>
-    {% else %}
-        <p>You have not made offers on any sessions.</p>
-    {% endif %}
+    {% include "partials/list_sessions.html" with sessions=sessions_i_offered %}
+
 {% endblock %}
