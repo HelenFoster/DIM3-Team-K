@@ -4,6 +4,28 @@
 {% block page_description %}View session details{% endblock %}
 {% block extra_libraries %}
     <link href="{% static "css/chat.css" %}" rel="stylesheet" />
+
+    <script type="text/javascript">
+        // Send messages via AJAX
+        $(".chat-message-send").click(function() {
+
+            var message = $(".chat-message").val();
+
+            // TODO: pick up CSRF token and ship it along with ajax request
+            if (message.trim() != "") {
+
+                $.post("/sendmsg/", {
+                    data: message
+                }).done(function() {
+                    reloadMessages();
+                }).fail(function() {
+                    console("Error sending the message via POST");
+                });
+            }
+
+        });
+    </script>
+
 {% endblock %}
 {% block content %}
 
@@ -30,34 +52,34 @@
             <hr />
 
             <div class="row">
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="detail-wrap">
-                                <span class="sport-icon location-icon"></span>
-                                {{ session.city }}<br />
-                                {{ session.location }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="detail-wrap">
-                        <span class="sport-icon time-icon"></span>
-                        {{ session.time }}<br />
-                        {{ session.date }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="detail-wrap">
-                        <span class="sport-icon pound-icon"></span>
-                        {{ session.price }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="detail-wrap">
-                        <span class="sport-icon offers-icon"></span>
-                        {{ offer_count }} offers
-                            </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="detail-wrap">
+                            <span class="sport-icon location-icon"></span>
+                            {{ session.city }}<br />
+                            {{ session.location }}
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="detail-wrap">
+                            <span class="sport-icon time-icon"></span>
+                            {{ session.time }}<br />
+                            {{ session.date }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="detail-wrap">
+                            <span class="sport-icon pound-icon"></span>
+                            {{ session.price }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="detail-wrap">
+                            <span class="sport-icon offers-icon"></span>
+                            {{ offer_count }} offers
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-6">
                     <div class="row">
 
@@ -74,7 +96,7 @@
                 </div>
             </div>
 
-        <hr />
+            <hr />
 
         </div>
         <div class="col-md-4">

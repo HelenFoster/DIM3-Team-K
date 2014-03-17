@@ -7,28 +7,6 @@ $(document).ready(function() {
     var preferedHeight = $(window).height() - $(".header").css("height").slice(0,-2);
     $(".sidebar-wrap").css("height", preferedHeight);
 
-    // Send messages via AJAX
-    $(".chat-message-send").click(function() {
-
-        var message = $(".chat-message").val();
-
-        // TODO: pick up CSRF token and ship it along with ajax request
-        if (message.trim() != "") {
-
-            $.post("/sendmsg/", {
-                data: message
-            }).done(function() {
-                alert("Message sent successfully!");
-                reloadMessages();
-            }).fail(function() {
-                alert("Message sending failure!");
-            });
-        }
-
-    });
-
-
-
 });
 
 /*
@@ -49,11 +27,11 @@ $.fn.setAllToMaxHeight = function(){
 function reloadMessages() {
 
     var $target = $(".discussion");
-    var url = "/getmessages/";
+    var url = "/getmsgs/1";
     var messages = [];
 
     // Retrieve all messages for the discussion
-    $.post(url, {
+    $.get(url, {
         sessionId: "1"
     }).done(function(data) {
         alert("Successfully got the messages! ");
