@@ -26,7 +26,7 @@
                 <td>{{ session.hostplayer }}</td>
                 <td>{{ session.guestplayer }}</td>
                 <td>{{ session.date }}</td>
-                <td>{{ session.time }}</td>
+                <td>{{ session.time|time:"g:i A" }}</td>
                 <td>{{ session.location }}</td>
                 <td>£{{ session.price }}</td>
                 <td>{{ session.num_offers }}</td>
