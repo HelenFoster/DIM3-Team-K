@@ -315,6 +315,8 @@ def get_messages(request, session_id):
 @csrf_exempt
 def create_session(request):
     context = RequestContext(request)
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/login/')
     #    only accept POST requests
     if request.POST:
         #    create form object
