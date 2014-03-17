@@ -4,6 +4,7 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
     url(r'^' + '$', views.mainpage, name='mainpage'),
+    url(r'^' + 'accept-offer/$', views.accept_offer, name='accept_offer'),
     url(r'^' + 'create/$', views.create_session, name='create_session'),
     url(r'^' + 'login/$', views.attempt_login, name='attempt_login'),
     url(r'^' + 'logout/$', views.attempt_logout, name='attempt_logout'),

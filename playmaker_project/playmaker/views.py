@@ -294,6 +294,33 @@ def make_offer(request):
     return render_to_response('view_session_by_id.html', context_dict, context)
 
 @csrf_exempt
+def accept_offer(request):
+    context = RequestContext(request);
+    # Only accept POST requests. Redirect to main if not.
+    if not request.POST:
+        return HttpResponseRedirect('/')
+    # Make sure the user is valid. Redirect to login page if not logged in.
+    if not request.user.is_authenticated() or not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+
+    # If no offer id submitted, redirect to sessions page.
+    offer_id = request.POST['offer']
+    if offer_id is None:
+        return HttpResponseRedirect('/sessions/')
+
+    # If the user is not the op, this is very likely a hack attempt.
+    # Take revenge by redirecting to main page.
+    offer = Offer.objects.get(id=offer_id)
+    if request.user is not Offer.objects.get(id=offer).session.hostplayer:
+        return HttpResponseRedirect('/')
+
+    offer.session.guestplayer = offer.guest
+    offer.save()
+
+    # Reload the page.
+    return render_to_response('view_session_by_id.html', context)
+
+@csrf_exempt
 def attempt_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
