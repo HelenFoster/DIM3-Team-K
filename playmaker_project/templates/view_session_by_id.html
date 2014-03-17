@@ -10,8 +10,8 @@
     <div class="row session-details">
         <div class="col-md-8">
             <div class="row">
-                        <h1>{{ session.sport }} Session</h1>
-            <br />
+                <h1>{{ session.sport }} Session</h1>
+                <br />
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -27,59 +27,60 @@
                     </div>
                 </div>
             </div>
+            <hr />
+
             <div class="row">
-                <div class="col-md-3">
-                    <div class="detail-wrap">
-                        <span class="sport-icon location-icon"></span>
-                        {{ session.city }}<br />
-                        {{ session.location }}
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="detail-wrap">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="detail-wrap">
+                                <span class="sport-icon location-icon"></span>
+                                {{ session.city }}<br />
+                                {{ session.location }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="detail-wrap">
                         <span class="sport-icon time-icon"></span>
                         {{ session.time }}<br />
                         {{ session.date }}
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="detail-wrap">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="detail-wrap">
                         <span class="sport-icon pound-icon"></span>
                         {{ session.price }}
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="detail-wrap">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="detail-wrap">
                         <span class="sport-icon offers-icon"></span>
                         {{ offer_count }} offers
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 chat-wrap">
+                <div class="col-md-6">
                     <div class="row">
 
                         {% if session.details %}
-                            <h3>Notes</h3>
+                            <h5>Notes</h5>
                             {{ session.details }}
                         {% endif %}
-
+                        <hr />
                     </div>
 
                     <div class="row">
-                        <h3>Participate</h3>
-                        <p>If you would like to join the session, click the button below and wait until the host of the session confirms your request.</p>
-                        <br />
                         <button type="button" class="btn btn-group-sm btn-primary join-button">Join</button>
                     </div>
                 </div>
             </div>
+
+        <hr />
+
         </div>
         <div class="col-md-4">
             <div class="row">
                 {% include 'partials/chat.html' %}
             </div>
-
         </div>
     </div>
     <div class="clearfix"></div>

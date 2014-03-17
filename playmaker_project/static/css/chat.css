@@ -74,13 +74,13 @@
   right: 0;
   bottom: -100%;
   opacity: 0.25;
-  background: radial-gradient(#ffffff, #000000);
+  background: radial-gradient(#2980b9, #2c3e50);
   animation: pulse 1s ease alternate infinite;
 }
 
 .discussion {
   list-style: none;
-  background: #e5e5e5;
+  background: #f7fbfd;
   margin: 0;
   padding: 0 0 50px 0;
 }
