@@ -22,8 +22,10 @@ def mainpage(request):
     if request.user.is_authenticated():
         sports = Sport.objects.all()
         city = UserPreferredCities.objects.get(user=request.user)
+        edit = city.city.__str__().capitalize()
+        city = edit
         today = datetime.datetime.now().date()
-        sessions = Session.objects.filter(city=city.city, date__gte=today)
+        sessions = Session.objects.filter(city=city, date__gte=today)
         sessions=sessions.annotate(num_offers=Count('offer'))
         sessions = sessions.order_by('date', 'time')
         context_dict = get_context_dictionary(request)
@@ -256,6 +258,8 @@ def view_sessions_by_city(request, session_city):
     sessions = sessions.annotate(num_offers=Count('offer'))
     sessions = sessions.order_by('date', 'time')
     sports = Sport.objects.all()
+    edit = session_city.capitalize()
+    session_city = edit
     context_dict = get_context_dictionary(request)
     context_dict['city'] = session_city
     context_dict['sports'] = sports
