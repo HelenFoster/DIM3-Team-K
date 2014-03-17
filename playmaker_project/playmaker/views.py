@@ -180,6 +180,8 @@ def view_sessions(request):
 @csrf_exempt
 def view_session_by_id(request, session_id):
     context = RequestContext(request)
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/login/')
     username = request.user.username
     host_viewing = True
     offer_accepted = False
@@ -219,6 +221,20 @@ def view_sessions_by_sport(request, session_sport):
     context_dict['sports'] = sports
     context_dict['sessions'] = sessions
     return render_to_response('view_sessions_by_sport.html', context_dict, context)
+
+@csrf_exempt
+def view_sessions_by_city(request, session_city):
+    context = RequestContext(request)
+    today = datetime.datetime.now().date()
+    sessions = Session.objects.filter(city = session_city)
+    sessions = sessions.annotate(num_offers=Count('offer'))
+    sessions = sessions.order_by('date', 'time')
+    sports = Sport.objects.all()
+    context_dict = get_context_dictionary(request)
+    context_dict['city'] = session_city
+    context_dict['sports'] = sports
+    context_dict['sessions'] = sessions
+    return render_to_response('view_sessions_by_city.html', context_dict, context)
 
 @csrf_exempt
 def add_message_to_session(request):
