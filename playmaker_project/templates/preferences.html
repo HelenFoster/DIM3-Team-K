@@ -1,7 +1,51 @@
 {% extends 'layouts/base.html' %}
 {% block page_title %}Account Preferences{% endblock %}
 {% block page_description %}Manage your PlayMaker account preferences.{% endblock %}
-{% block extra_libraries %}{% endblock %}
+{% block extra_libraries %}
+
+       <script type="text/javascript">
+
+        $(document).ready(function() {
+
+            // Remove red borders on click
+            var $FORM = $( "#preferences-form");
+            $FORM.on("change", "input", function() {
+                $(this).css("border", "none");
+            });
+
+            $FORM.validate({
+                rules: {
+                    first_name: "required",
+                    last_name: "required",
+                    email: {
+                        email: true,
+                        required: "required"
+                    },
+                    password: {
+                        minlength: 8
+                    },
+                    password_confirm: {
+                        minlength: 8,
+                        equalTo: $("#password")
+                    }
+                },
+                messages: {
+                    username: "Please enter your username",
+                    password: "Please enter your password"
+                },
+                errorPlacement: function(error, element) {
+                    element.css("border", "1px solid red")
+                           .attr("title", error.text())
+                           .attr("data-placement", "top")
+                           .attr("data-toggle", "tooltip")
+                           .tooltip();
+                }
+            });
+
+        });
+    </script>
+
+{% endblock %}
 {% block content %}
 
     <h1>Preferences</h1>
@@ -12,15 +56,15 @@
         </div>
     {% endif %}
 
-    <form class="form-horizontal" role="form" id="login-form" method="POST" action="/preferences/">
+    <form class="form-horizontal" role="form" id="preferences-form" method="POST" action="/preferences/">
         <div class="form-group">
             <div class="col-sm-3">
-                <input class="form-control" type="text" placeholder="Name" name="name" value="{{ user.first_name }}" />
+                <input class="form-control" type="text" placeholder="Name" name="first_name" value="{{ user.first_name }}" />
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-3">
-                <input class="form-control" type="text" placeholder="Surname" name="surname" value="{{ user.last_name }}" />
+                <input class="form-control" type="text" placeholder="Surname" name="last_name" value="{{ user.last_name }}" />
             </div>
         </div>
 
@@ -32,13 +76,13 @@
 
         <div class="form-group">
             <div class="col-sm-3">
-                <input class="form-control" type="text" placeholder="New password" name="password" />
+                <input class="form-control" type="text" placeholder="New password" name="password" id="password" />
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-sm-3">
-                <input class="form-control" type="password" placeholder="New password (confirm)" name="password" />
+                <input class="form-control" type="password" placeholder="New password (confirm)" name="password_confirm" />
             </div>
         </div>
 
