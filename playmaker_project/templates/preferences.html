@@ -4,32 +4,53 @@
 {% block extra_libraries %}{% endblock %}
 {% block content %}
 
-<h1>Preferences</h1>
+    <h1>Preferences</h1>
 
+    {% if updated %}
+        <div>
+            Preferences updated!
+        </div>
+    {% endif %}
 
-{% if updated %}
-<div>
-    Preferences updated!
-</div>
-{% endif %}
+    <form class="form-horizontal" role="form" id="login-form" method="POST" action="/preferences/">
+        <div class="form-group">
+            <div class="col-sm-3">
+                <input class="form-control" type="text" placeholder="Name" name="name" value="{{ user.first_name }}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3">
+                <input class="form-control" type="text" placeholder="Surname" name="surname" value="{{ user.last_name }}" />
+            </div>
+        </div>
 
-<div>
-    <form id="preferences_form" method="post" action="/preferences/">
+        <div class="form-group">
+            <div class="col-sm-3">
+                <input class="form-control" type="email" placeholder="E-mail" name="email" value="{{ user.email }}" />
+            </div>
+        </div>
 
-        {% csrf_token %}
-        {% for hidden in form.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
+        <div class="form-group">
+            <div class="col-sm-3">
+                <input class="form-control" type="text" placeholder="New password" name="password" />
+            </div>
+        </div>
 
-        {% for field in form.visible_fields %}
-            {{ field }}
-            {{ field.help_text }}
-            {{ field.errors }}
-            <br>
-        {% endfor %}
+        <div class="form-group">
+            <div class="col-sm-3">
+                <input class="form-control" type="password" placeholder="New password (confirm)" name="password" />
+            </div>
+        </div>
 
-        <input type="submit" name="submit" value="Update" />
+        <div class="form-group">
+            <div class="col-sm-3">
+                <button type="submit" class="btn btn-large btn-primary btn-block" id="submit">Update</button>
+            </div>
+        </div>
+
     </form>
-</div>
+
+
+
 {% endblock %}
 
