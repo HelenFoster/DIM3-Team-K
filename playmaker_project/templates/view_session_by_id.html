@@ -15,7 +15,8 @@
             if (message.trim() != "") {
 
                 $.post("/sendmsg/", {
-                    data: message
+                    // TODO: adjust session id
+                    data: {'message': message, 'session_id': {{ session.id }}}
                 }).done(function() {
                     reloadMessages();
                 }).fail(function() {
