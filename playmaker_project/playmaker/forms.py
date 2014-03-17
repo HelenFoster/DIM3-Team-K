@@ -35,16 +35,8 @@ class PreferencesForm(forms.Form):
 
 
 class AddMessageToSessionForm(forms.Form):
-    #id = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label=_("id"))
-    session = forms.IntegerField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="session")
-    user_op = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="user_op")
-    user_viewer = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="user_viewer")
+    session_id = forms.IntegerField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="session")
     message = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="message")
-
-    def validate_user(self):
-        if 'user_op' == 'user_viewer':
-            raise forms.ValidationError("The host and bidder are the same.")
-        return self.cleaned_data
 
     def validate_message(self):
         if 'message'.__eq__(self, None):

@@ -224,20 +224,25 @@ def view_sessions_by_sport(request, session_sport):
 def add_message_to_session(request):
     context = RequestContext(request)
     #    only accept POST requests
-    if request.POST:
-        #    create form object
-        form = AddMessageToSessionForm(request.POST)
-        #   if form is valid
-        if form.is_valid():
-            form.save(commit=True)
-            return HttpResponse(status=200)
-        else:
-            #   print the problems to the terminal
-            print form.errors
-            #   return 405 response
-            return HttpResponse(status=405)
+    if not request.POST:
+        return HttpResponse("Not a POST", status=400)
+    if not request.user.is_authenticated():
+        return HttpResponse("Not logged in", status=400)
+    form = AddMessageToSessionForm(request.POST)
+    if not form.is_valid():
+        print form.errors
+        return HttpResponse("Form error", status=400)
+    session_id = form.session_id
+    messageText = form.message
+    session = Session.get(id=session_id)
+    #todo: check we are allowed to post on this session
+    #todo: set viewer if session is private
+    #todo: check how to do times
+    message = Message(session, request.user, None, datetime.today(), datetime.today(), messageText)
+    message.save()
+    return HttpResponse(status=200)
 
-    return HttpResponseNotModified
+
 
 @csrf_exempt
 def get_messages(request, session_id):
