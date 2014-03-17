@@ -267,21 +267,25 @@ def add_message_to_session(request):
     context = RequestContext(request)
     #    only accept POST requests
     if not request.POST:
+        print "Not a POST"
         return HttpResponse("Not a POST", status=400)
     if not request.user.is_authenticated():
+        print "Not logged in"
         return HttpResponse("Not logged in", status=400)
     form = AddMessageToSessionForm(request.POST)
     if not form.is_valid():
+        print "Form error"
         print form.errors
         return HttpResponse("Form error", status=400)
-    session_id = form.session_id
-    messageText = form.message
-    session = Session.get(id=session_id)
+    session_id = form.cleaned_data['session_id']
+    messageText = form.cleaned_data['message']
+    session = Session.objects.get(id=session_id)
     #todo: check we are allowed to post on this session
     #todo: set viewer if session is private
-    #todo: check how to do times
-    message = Message(session, request.user, None, datetime.today(), datetime.today(), messageText)
-    message.save()
+    print "3"
+    #problem here
+    message = Message.objects.create(session, request.user, None, datetime.today(), datetime.today(), messageText)
+    print "4"
     return HttpResponse(status=200)
 
 
