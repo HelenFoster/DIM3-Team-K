@@ -23,8 +23,8 @@
                         required: true,
                         email: true
                     },
-                    firstname: "required",
-                    lastname: "required",
+                    first_name: "required",
+                    last_name: "required",
                     city: "required",
                     password: {
                         required: true,
@@ -42,8 +42,8 @@
                         required: "Please enter your e-mail address",
                         email: "Please provide a valid e-mail address"
                     },
-                    firstname: "Please enter your first name",
-                    lastname: "Please enter your last name",
+                    first_name: "Please enter your first name",
+                    last_name: "Please enter your last name",
                     city: "Please select a city",
                     password: {
                         required: "Please enter a password",
@@ -77,7 +77,7 @@
                 <span class="splash-description">...it takes just a few seconds...</span>
             </div>
             <div class="splash-right">
-                <form class="form-horizontal" role="form" id="registration-form" action="/login/" method="POST">
+                <form class="form-horizontal" role="form" id="registration-form" action="/register/" method="POST">
                     <div class="form-group">
                         <div class="col-sm-8">
                             <input class="form-control" type="text" placeholder="Username" name="username" />
@@ -90,11 +90,11 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-4">
-                            <input class="form-control" type="text" placeholder="First Name" name="firstname" />
+                            <input class="form-control" type="text" placeholder="First Name" name="first_name" />
                         </div>
 
                         <div class="col-sm-4">
-                            <input class="form-control" type="text" placeholder="Last Name" name="lastname" />
+                            <input class="form-control" type="text" placeholder="Last Name" name="last_name" />
                         </div>
                     </div>
 
@@ -103,7 +103,7 @@
                             <select class="form-control" name="city">
                                 <option value="" disabled selected>Please select your city...</option>
                                 {% for city in cities %}
-                                    <option value="{{ city }}">{{ city }}</option>
+                                    <option value="{{ city.city }}">{{ city.city }}</option>
                                 {% endfor %}
                             </select>
                         </div>

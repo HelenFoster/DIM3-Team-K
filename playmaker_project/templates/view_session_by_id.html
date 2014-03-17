@@ -6,25 +6,32 @@
     <link href="{% static "css/chat.css" %}" rel="stylesheet" />
 
     <script type="text/javascript">
-        // Send messages via AJAX
-        $(".chat-message-send").click(function() {
 
-            var message = $(".chat-message").val();
+        $(document).ready(function(){
+            // Send messages via AJAX
+            $(".chat-message-send").click(function() {
 
-            // TODO: pick up CSRF token and ship it along with ajax request
-            if (message.trim() != "") {
+                var message = $(".chat-message").val();
+                var url = "/sendmsg/";
 
-                $.post("/sendmsg/", {
-                    // TODO: adjust session id
-                    data: {'message': message, 'session_id': {{ session.id }}}
-                }).done(function() {
-                    reloadMessages();
-                }).fail(function() {
-                    console("Error sending the message via POST");
-                });
-            }
 
+                // TODO: pick up CSRF token and ship it along with ajax request
+                if (message.trim() != "") {
+                    $.post(url, {
+                        data: {'message': message, 'session_id': {{ session.id }}}
+                    }).done(function() {
+
+                    }).fail(function() {
+
+                    });
+                }
+
+            });
+
+            reloadMessages({{ session.id }});
         });
+
+
     </script>
 
 {% endblock %}

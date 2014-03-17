@@ -84,32 +84,49 @@ def register(request):
     # check if the request contains POST data
     # this happens when a user submits a form
     if request.POST:
+        print 'is a post'
         #create form object
-        form = RegistrationForm(request.POST)
+        form = RegistrationForm(data=request.POST)
         if form.is_valid():
-            user = form.save()
-            user.save()
+            print 'form is valid'
+            user = User.objects.create_user(username=form.cleaned_data['username'], first_name=form.cleaned_data['first_name'],
+                                            last_name=form.cleaned_data['last_name'], password=form.cleaned_data['password'],
+                                            email=form.cleaned_data['email'])
+            #user = form.save()
+            print "username is:", user.username
+            #user.save()
             #hash password with the set_password method
-            user.set_password(user.password)
+            user.set_password(form.cleaned_data['password'])
             user.save()
+
+            print 'saved user'
+            upc = UserPreferredCities.objects.create(user=user,
+                                                     city=City.objects.get(city=form.cleaned_data['city']), )
+            upc.save()
+
+            print 'form is saved'
+            if authenticate(username=user.username, password=form.cleaned_data['password']) is None:
+                print 'could not authenticate'
             # return response and redirect user to Bookings page
-            return HttpResponseRedirect('bookings.html', context)
+            return render_to_response('bookings.html', context)
 
     # Show the city selection page if not authenticated.
     cities = []
+    print "Some shit happened"
     all_cities = City.objects.all().order_by('city')
     for city in all_cities:
-        cities.append(city.city)
+        cities.append(city)
     context_dict = get_context_dictionary(request)
     context_dict['cities'] = cities
     return render_to_response('register.html', context_dict, context)
 
 
-
 @csrf_exempt
 def bookings(request):
     context = RequestContext(request)
+    print 'before is authenticated'
     if request.user.is_authenticated():
+        print 'user has been authenticated'
         context_dict = get_context_dictionary(request)
         user = request.user
         sports = Sport.objects.all()
@@ -130,6 +147,7 @@ def bookings(request):
         return render_to_response('bookings.html', context_dict, context)
     else:
         return render_to_response('login.html', context)
+
 
 
 @csrf_exempt
@@ -240,20 +258,25 @@ def view_sessions_by_city(request, session_city):
 def add_message_to_session(request):
     context = RequestContext(request)
     #    only accept POST requests
-    if request.POST:
-        #    create form object
-        form = AddMessageToSessionForm(request.POST)
-        #   if form is valid
-        if form.is_valid():
-            form.save(commit=True)
-            return HttpResponse(status=200)
-        else:
-            #   print the problems to the terminal
-            print form.errors
-            #   return 405 response
-            return HttpResponse(status=405)
+    if not request.POST:
+        return HttpResponse("Not a POST", status=400)
+    if not request.user.is_authenticated():
+        return HttpResponse("Not logged in", status=400)
+    form = AddMessageToSessionForm(request.POST)
+    if not form.is_valid():
+        print form.errors
+        return HttpResponse("Form error", status=400)
+    session_id = form.session_id
+    messageText = form.message
+    session = Session.get(id=session_id)
+    #todo: check we are allowed to post on this session
+    #todo: set viewer if session is private
+    #todo: check how to do times
+    message = Message(session, request.user, None, datetime.today(), datetime.today(), messageText)
+    message.save()
+    return HttpResponse(status=200)
 
-    return HttpResponseNotModified
+
 
 @csrf_exempt
 def get_messages(request, session_id):

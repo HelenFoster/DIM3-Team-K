@@ -4,17 +4,18 @@ from django.contrib.auth.models import User
 from models import *
 from django.core.exceptions import ValidationError
 
-
 class RegistrationForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
-    email = forms.EmailField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
-    first_name = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
-    last_name = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
-    password = forms.CharField(widget=forms.PasswordInput(attrs=dict(required=True, max_length=64, render_value=False)))
+    username = forms.CharField()
+    email = forms.EmailField()
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    password = forms.CharField()
+    city = forms.CharField()
 
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'password')
+
+    #class Meta:
+        #model = User
+        #fields = ('username', 'email', 'first_name', 'last_name', 'password', 'city')
 
     def clean_username(self):
         try:
@@ -22,6 +23,9 @@ class RegistrationForm(forms.Form):
         except User.DoesNotExist:
             return self.cleaned_data['username']
         raise forms.ValidationError("The username already exists. Please try another one.")
+
+
+
 
 
 class PreferencesForm(forms.Form):
@@ -35,16 +39,8 @@ class PreferencesForm(forms.Form):
 
 
 class AddMessageToSessionForm(forms.Form):
-    #id = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label=_("id"))
-    session = forms.IntegerField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="session")
-    user_op = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="user_op")
-    user_viewer = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="user_viewer")
+    session_id = forms.IntegerField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="session")
     message = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)), label="message")
-
-    def validate_user(self):
-        if 'user_op' == 'user_viewer':
-            raise forms.ValidationError("The host and bidder are the same.")
-        return self.cleaned_data
 
     def validate_message(self):
         if 'message'.__eq__(self, None):
