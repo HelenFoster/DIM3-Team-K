@@ -262,6 +262,36 @@ def create_session(request):
     context_dict['user_preferred_city'] = user_preferred_city
     return render_to_response('create_session.html', context_dict, context)
 
+@csrf_exempt
+def make_offer(request):
+    context = RequestContext(request);
+    # Only accept POST requests. Redirect to main if not.
+    if not request.POST:
+        return HttpResponseRedirect('/')
+    # Make sure the user is valid. Redirect to login page if not logged in.
+    if not request.user.is_authenticated() or not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+    # Fetch the session. Return 400 if invalid.
+    session_id = request.POST['session']
+    if session_id is None:
+        return HttpResponseRedirect('/sessions/')
+    session = Session.objects.get(id=session_id)
+    if session is None:
+        return HttpResponseRedirect('/sessions/')
+
+    # Check that the user has not made an offer for this session before. Return 409 if he did.
+    if Offer.objects.filter(session=session, guest=request.user) is not 0:
+        context_dict = get_context_dictionary()
+        context_dict['result'] = 'You have already posted an offer for this session!'
+        return render_to_response('view_session_by_id.html', context_dict, context)
+
+    # Save the offer.
+    Offer.objects.create(session=session, guest=request.user).save()
+
+    # Show the confirmation page.
+    context_dict = get_context_dictionary()
+    context_dict['result'] = 'Your offer has been placed!'
+    return render_to_response('view_session_by_id.html', context_dict, context)
 
 @csrf_exempt
 def attempt_logout(request):
