@@ -111,11 +111,20 @@ def bookings(request):
         context_dict = get_context_dictionary(request)
         user = request.user
         sports = Sport.objects.all()
-        sessions_i_created = Session.objects.filter(hostplayer = user)
-        sessions_i_joined = Session.objects.filter(guestplayer = user)
+        sessions_i_created = Session.objects \
+            .filter(hostplayer = user) \
+            .annotate(num_offers=Count('offer'))
+        sessions_i_joined = Session.objects \
+            .filter(guestplayer = user) \
+            .annotate(num_offers=Count('offer'))
+        sessions_i_offered = Session.objects \
+            .exclude(guestplayer = user) \
+            .filter(offer__guest__exact = user) \
+            .annotate(num_offers=Count('offer'))
         context_dict['sports'] = sports
         context_dict['sessions_i_created'] = sessions_i_created
         context_dict['sessions_i_joined'] = sessions_i_joined
+        context_dict['sessions_i_offered'] = sessions_i_offered
         return render_to_response('bookings.html', context_dict, context)
     else:
         return render_to_response('login.html', context)
