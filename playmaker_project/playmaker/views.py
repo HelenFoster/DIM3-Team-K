@@ -135,6 +135,8 @@ def bookings(request):
 def preferences(request):
     context = RequestContext(request)
     context_dict = get_context_dictionary(request)
+    sports = Sport.objects.all()
+    context_dict['sports'] = sports
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/login/')
     if request.method == 'POST':
