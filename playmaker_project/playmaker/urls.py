@@ -13,4 +13,5 @@ urlpatterns = patterns('',
     url(r'^' + 'sessions/$', views.view_sessions, name='view_sessions'),
     url(r'^' + 'sessions/(?P<session_sport>[\w\-]+)/$', views.view_sessions_by_sport, name='view_sessions_by_sport'),
     url(r'^' + 'logout/$', views.attempt_logout, name='attempt_logout'),
+    url(r'^' + 'create/$', views.create_session, name='create_session'),
 )

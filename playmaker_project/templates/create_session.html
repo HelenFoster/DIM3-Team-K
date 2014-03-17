@@ -1,0 +1,20 @@
+{% extends 'layouts/base.html' %}
+{% block page_title %}Create a new session{% endblock %}
+{% block page_description %}Create a session.{% endblock %}
+{% block extra_libraries %}{% endblock %}
+{% block content %}
+
+<h2>Sports</h2>
+    {% for sport in sports %}
+        {{ sport.sport }}
+    {% endfor %}
+
+<h2>User preferred city</h2>
+    {{ user_preferred_city.city }}
+
+<h2>Cities</h2>
+    {% for city in cities %}
+        {{ city.city }}
+    {% endfor %}
+
+{% endblock %}

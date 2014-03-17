@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 
 
 class RegistrationForm(forms.Form):
- 
     username = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
     first_name = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=64)))
@@ -48,22 +47,15 @@ class AddMessageToSessionForm(forms.Form):
         return self.cleaned_data
 
 
-class CreateSession(forms.Form):
-    print "hello"
-    #sport = forms.CharField(required=True)
-    #hostplayer = forms.IntegerField(required=True)
-    #date = forms.DateTimeField(required=True)
-    #time = forms.TimeField(required=True)
-    #city = forms.Select(required=True)
-    #location = forms.CharField(required=True)
-    #price = forms.FloatField()
-    #details = forms.CharField()
-
-#def clean_sport(self):
- #   sport = self.cleaned_data['sport']
-  #  if Sport.objects.get(sport=sport).DoesNotExist:
-   #     raise ValidationError("This sport does not exist")
-    #return self.cleaned_data
+class CreateSessionForm(forms.Form):
+    sport = forms.Select()
+    hostplayer = forms.IntegerField()
+    date = forms.DateTimeField()
+    time = forms.TimeField()
+    city = forms.Select()
+    location = forms.CharField()
+    price = forms.FloatField()
+    details = forms.CharField()
 
 
 

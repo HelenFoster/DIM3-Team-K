@@ -8,7 +8,7 @@ from django.db.models import Count
 from models import *
 from forms import RegistrationForm
 from forms import AddMessageToSessionForm
-from forms import CreateSession
+from forms import CreateSessionForm
 from django.contrib.auth import authenticate
 import datetime
 from helpers import get_context_dictionary
@@ -228,6 +228,32 @@ def add_message_to_session(request):
             return HttpResponse(status=405)
 
     return HttpResponseNotModified
+
+@csrf_exempt
+def create_session(request):
+    context = RequestContext(request)
+    #    only accept POST requests
+    if request.POST:
+        #    create form object
+        form = CreateSessionForm(request.POST)
+        #   if form is valid
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponse(status=200)
+        else:
+            #   print the problems to the terminal
+            print form.errors
+            #   return 405 response
+            return HttpResponse(status=405)
+
+    context_dict = get_context_dictionary(request)
+    sports = Sport.objects.all()
+    cities = City.objects.all().order_by('city')
+    user_preferred_city = UserPreferredCities.objects.get(user=request.user)
+    context_dict['sports'] = sports
+    context_dict['cities'] = cities
+    context_dict['user_preferred_city'] = user_preferred_city
+    return render_to_response('create_session.html', context_dict, context)
 
 
 @csrf_exempt
