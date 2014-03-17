@@ -298,7 +298,7 @@ h6 {
  */
 
  .session-details {
-
+    margin-left: 0px;
     /*background-color: #f7fbfd;*/
  }
 
@@ -307,13 +307,20 @@ h6 {
  }
 
  .user-wrap {
-     font-size:16px;
+     font-size:24px;
      min-height:36px;
+     text-align: center;
+     margin-bottom: 5px;
 
  }
 
  .detail-wrap {
-     min-height:50px;
+     margin-left: 15px;
+     min-height:60px;
+     text-align: center;
+     margin-bottom:5px;
+     font-size:16px;
+     vertical-align: middle;
  }
 
  .chat-wrap {
