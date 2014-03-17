@@ -17,5 +17,5 @@ urlpatterns = patterns('',
     url(r'^' + 'sessions/$', views.view_sessions, name='view_sessions'),
     url(r'^' + 'sessions/(?P<session_sport>[\w\-]+)/$', views.view_sessions_by_sport, name='view_sessions_by_sport'),
     url(r'^' + 'sendmsg/$', views.add_message_to_session, name='add_message_to_session'),
-    url(r'^' + 'getmsgs/$', views.get_messages, name='get_messages'),
+    url(r'^' + 'getmsgs/(?P<session_id>[\w\-]+)/$', views.get_messages, name='get_messages'),
 )

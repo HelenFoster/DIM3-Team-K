@@ -237,8 +237,11 @@ def add_message_to_session(request):
     return HttpResponseNotModified
 
 @csrf_exempt
-def get_messages(request):
-    return HttpResponse("get_messages stub")
+def get_messages(request, session_id):
+    response = []
+    return HttpResponse("get_messages stub " + session_id)
+
+
 
 @csrf_exempt
 def create_session(request):
