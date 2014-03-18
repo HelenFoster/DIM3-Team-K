@@ -53,11 +53,11 @@
 
     {% if updated and updated != None %}
         <div>
-            Preferences updated!
+            <p class="bg-success">Preferences have been updated.</p>
         </div>
     {% elif not updated and updated != None %}
         <div>
-            Something went wrong... try again
+            <p class="bg-danger">There was an error updating your details.</p>
         </div>
     {% endif %}
 

@@ -19,7 +19,7 @@
                     $.post(url, {
                         'message': message, 'session_id': {{ session.id }}
                     }).done(function() {
-
+                        reloadMessages({{ session.id }}, "{{ session.hostplayer }}");
                     }).fail(function() {
 
                     });
@@ -93,12 +93,15 @@
                         {% if session.details %}
                             <h5>Notes</h5>
                             {{ session.details }}
+                            <hr />
+                        {% else %}
+                            <h5>Join the event</h5>
                         {% endif %}
-                        <hr />
+                        <button type="button" class="btn btn-group-sm btn-primary join-button">Join</button>
                     </div>
 
                     <div class="row">
-                        <button type="button" class="btn btn-group-sm btn-primary join-button">Join</button>
+
                     </div>
                 </div>
             </div>
