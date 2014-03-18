@@ -49,5 +49,12 @@ class AddMessageToSessionForm(forms.Form):
         return self.cleaned_data
 
 
-
+class CreateSessionForm(forms.Form):
+    sport = forms.CharField()
+    date = forms.DateTimeField()
+    time = forms.TimeField()
+    city = forms.CharField()
+    location = forms.CharField()
+    price = forms.FloatField()
+    details = forms.CharField()
 

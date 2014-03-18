@@ -9,6 +9,7 @@ from models import *
 from forms import RegistrationForm
 from forms import AddMessageToSessionForm
 from forms import PreferencesForm
+from forms import CreateSessionForm
 from django.contrib.auth import authenticate
 import datetime
 import json
@@ -351,12 +352,26 @@ def create_session(request):
 
     # Create the session if the method is POST.
     if request.POST:
-        # Create session object.
-        session = Session.objects.create(sport=Sport.objects.get(sport = request.POST['sport']), hostplayer = request.user, guestplayer = None,
-                                         date = request.POST['date'], time = request.POST['time'], city = City.objects.get(city=request.POST['city']),
-                                         location = request.POST['location'], price = request.POST['price'], details = request.POST.get('details', ""))
-        session.save()
-        return HttpResponseRedirect("/session/" + str(session.id) + "/")
+        form = CreateSessionForm(data = request.POST)
+        if form.is_valid():
+            # Create session object.
+            session = Session.objects.create(sport=Sport.objects.get(sport = request.POST['sport']), hostplayer = request.user, guestplayer = None,
+                                             date = request.POST['date'], time = request.POST['time'], city = City.objects.get(city=request.POST['city']),
+                                             location = request.POST['location'], price = request.POST['price'], details = request.POST.get('details', ""))
+            session.save()
+            return HttpResponseRedirect("/session/" + str(session.id) + "/")
+        else:
+            # Display the page if the method is GET.
+            print form.errors
+            context_dict = get_context_dictionary(request)
+            sports = Sport.objects.all()
+            cities = City.objects.all().order_by('city')
+            user_preferred_city = UserPreferredCities.objects.get(user=request.user)
+            context_dict['sports'] = sports
+            context_dict['cities'] = cities
+            context_dict['user_preferred_city'] = user_preferred_city
+            context['session_created'] =False
+            return render_to_response('create_session.html', context_dict, context)
 
     # Display the page if the method is GET.
     context_dict = get_context_dictionary(request)

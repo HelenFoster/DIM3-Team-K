@@ -63,7 +63,7 @@
         </div>
     {% elif not session_created and session_created != None %}
         <div>
-            <p class="bg-danger">There was an error creating your session.</p>
+            <p class="alert alert-danger">There was an error creating your session.</p>
         </div>
     {% endif %}
 
@@ -120,7 +120,7 @@
 
         <div class="form-group">
             <div class="col-sm-3">
-                <textarea class="form-control" rows="3" placeholder="Any additional details?"></textarea>
+                <textarea class="form-control" rows="3" placeholder="Any additional details?" name="details"></textarea>
             </div>
         </div>
 
