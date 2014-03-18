@@ -56,13 +56,17 @@
                 <div class="col-md-6">
                     <div class="user-wrap">
                         <span class="sport-icon user-icon"></span>
-                        {{ session.hostplayer }}
+                        <a href="/profile/{{session.hostplayer}}" class="colourless">{{session.hostplayer}}</a>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="user-wrap">
                         <span class="sport-icon user-icon"></span>
-                        {{ session.guestplayer }}
+                        {% if session.guestplayer %}
+                        <a href="/profile/{{session.guestplayer}}" class="colourless">{{session.guestplayer}}</a>
+                        {% else %}
+                        None
+                        {% endif %}
                     </div>
                 </div>
             </div>

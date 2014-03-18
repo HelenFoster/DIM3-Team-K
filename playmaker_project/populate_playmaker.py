@@ -109,6 +109,8 @@ def populate():
     add_session(1, "Squash", "vlad", "raluca", "2015-03-11", "18:45", "Glasgow", "Stevenson Court 2", 0.65, "Bring your own racquet!")
     add_session(2, "Tennis", "tomasz", None, "2015-03-12", "19:00", "Glasgow", "Stevenson Court 2", 0.65, "")
     add_session(3, "Tennis", "helen", None, "2015-03-13", "19:30", "Glasgow", "Stevenson Court 2", 0.65, "")
+    add_session(4, "Squash", "jack", None, "2015-03-14", "18:00", "London", "?", 1.50, "")
+    add_session(5, "Chess", "leif", None, "2015-03-15", "19:15", "Glasgow", "Round reading room", 0, "")
 
     # Offers.
     add_offer(1, "john")
