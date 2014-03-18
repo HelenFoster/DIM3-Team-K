@@ -365,6 +365,7 @@ def make_offer(request):
     if not request.user.is_authenticated() or not request.user.is_active:
         return HttpResponseRedirect('/login/')
     # Fetch the session. Return 400 if invalid.
+
     session_id = request.POST['session']
     if session_id is None:
         return HttpResponseRedirect('/sessions/')
@@ -373,17 +374,17 @@ def make_offer(request):
         return HttpResponseRedirect('/sessions/')
 
     # Check that the user has not made an offer for this session before. Return 409 if he did.
-    if Offer.objects.filter(session=session, guest=request.user) is not 0:
-        context_dict = get_context_dictionary()
+    if Offer.objects.filter(session=session, guest=request.user).count() is not 0:
+        context_dict = get_context_dictionary(request)
         context_dict['result'] = 'You have already posted an offer for this session!'
         return render_to_response('view_session_by_id.html', context_dict, context)
 
     # Save the offer.
     Offer.objects.create(session=session, guest=request.user).save()
-
     # Show the confirmation page.
-    context_dict = get_context_dictionary()
+    context_dict = get_context_dictionary(request)
     context_dict['result'] = 'Your offer has been placed!'
+
     return render_to_response('view_session_by_id.html', context_dict, context)
 
 @csrf_exempt
