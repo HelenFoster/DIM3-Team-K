@@ -418,11 +418,11 @@ def accept_offer(request):
     # If the user is not the op, this is very likely a hack attempt.
     # Take revenge by redirecting to main page.
     offer = Offer.objects.get(id=offer_id)
-    if request.user != Offer.objects.get(id=offer).session.hostplayer:
+    if request.user != offer.session.hostplayer:
         return HttpResponseRedirect('/')
 
     offer.session.guestplayer = offer.guest
-    offer.save()
+    offer.session.save()
 
     # Reload the page.
     return render_to_response('view_session_by_id.html', context)
