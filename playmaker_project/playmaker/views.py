@@ -25,7 +25,7 @@ def mainpage(request):
         edit = city.city.__str__().capitalize()
         city = edit
         today = datetime.datetime.now().date()
-        sessions = Session.objects.filter(city=city, date__gte=today)
+        sessions = Session.objects.filter(city=city, date__gte=today, guestplayer=None)
         sessions=sessions.annotate(num_offers=Count('offer'))
         sessions = sessions.order_by('date', 'time')
         context_dict = get_context_dictionary(request)
@@ -48,7 +48,7 @@ def mainpage(request):
 # Will attempt to authenticate the user.
 # If the credentials are valid, redirect to the main page, where the user should now see the activities.
 # If the credentials are invalid, render the login_failed page with the proper failure reason.
-@csrf_protect
+@csrf_exempt
 def attempt_login(request):
     context = RequestContext(request)
     failure_reason = 'OK'
@@ -79,7 +79,7 @@ def attempt_login(request):
     context_dict['result'] = failure_reason
     return render_to_response('login_failed.html', context_dict, context, )
 
-@csrf_protect
+@csrf_exempt
 def register(request):
     context = RequestContext(request)
 
@@ -139,7 +139,7 @@ def bookings(request):
             .filter(guestplayer = user) \
             .annotate(num_offers=Count('offer'))
         sessions_i_offered = Session.objects \
-            .exclude(guestplayer = user) \
+            .filter(guestplayer = None) \
             .filter(offer__guest__exact = user) \
             .annotate(num_offers=Count('offer'))
         context_dict['sports'] = sports
@@ -152,7 +152,7 @@ def bookings(request):
 
 
 
-@csrf_protect
+@csrf_exempt
 def preferences(request):
     context = RequestContext(request)
     context_dict = get_context_dictionary(request)
@@ -240,13 +240,14 @@ def view_session_by_id(request, session_id):
     context_dict['offers'] = offers
     context_dict['offer_count'] = offer_count
     context_dict['offer_accepted'] = offer_accepted
+    context_dict['joined'] = Offer.objects.filter(session=session, guest=request.user)
     return render_to_response('view_session_by_id.html', context_dict, context)
 
 @csrf_exempt
 def view_sessions_by_sport(request, session_sport):
     context = RequestContext(request)
     today = datetime.datetime.now().date()
-    sessions = Session.objects.filter(sport=Sport.objects.get(sport_slug=session_sport).sport, date__gte=today)
+    sessions = Session.objects.filter(sport=Sport.objects.get(sport_slug=session_sport).sport, date__gte=today, guestplayer=None)
     sessions = sessions.annotate(num_offers=Count('offer'))
     sessions = sessions.order_by('date', 'time')
     sports = Sport.objects.all()
@@ -260,7 +261,7 @@ def view_sessions_by_sport(request, session_sport):
 def view_sessions_by_city(request, session_city):
     context = RequestContext(request)
     today = datetime.datetime.now().date()
-    sessions = Session.objects.filter(city = session_city)
+    sessions = Session.objects.filter(city=session_city, guestplayer=None)
     sessions = sessions.annotate(num_offers=Count('offer'))
     sessions = sessions.order_by('date', 'time')
     sports = Sport.objects.all()
@@ -274,12 +275,14 @@ def view_sessions_by_city(request, session_city):
 
 @csrf_exempt
 def add_message_to_session(request):
-    # Only accept POST requests. Redirect to main if not.
+    # Only accept POST requests. Return an error if not, since this is an AJAX call.
     if not request.POST:
-        return HttpResponseRedirect('/')
-    # Make sure the user is valid. Redirect to login page if not logged in.
+        print "Not a POST"
+        return HttpResponse("Not a POST", status=400)
+    # Make sure the user is valid. Return an error if not, since this is an AJAX call.
     if not request.user.is_authenticated() or not request.user.is_active:
-        return HttpResponseRedirect('/login/')
+        print "Not logged in"
+        return HttpResponse("Not logged in", status=400)
     form = AddMessageToSessionForm(request.POST)
     if not form.is_valid():
         print "Form error"
@@ -291,13 +294,15 @@ def add_message_to_session(request):
     # Determine if the message is public or private.
     # If private, determine who should be able to view it.
     viewer = None
+    print session.guestplayer
     if session.guestplayer is not None:
         if session.hostplayer is request.user:
             viewer = session.guestplayer
         elif session.guestplayer is request.user:
             viewer = session.hostplayer
         else: # Not host or guest in private session, refuse.
-            return HttpResponse(status=400)
+            print "Access denied"
+            return HttpResponse("Access denied", status=400)
 
     # Store the message to the database.
     message = Message.objects.create(session=session, user_op=request.user, user_viewer=viewer,
@@ -329,7 +334,7 @@ def get_messages(request, session_id):
 
 
 
-@csrf_protect
+@csrf_exempt
 def create_session(request):
     context = RequestContext(request)
     if not request.user.is_authenticated():
@@ -341,27 +346,12 @@ def create_session(request):
         #   if form is valid
         if form.is_valid():
             form.save(commit=True)
-            context_dict = get_context_dictionary(request)
-            sports = Sport.objects.all()
-            cities = City.objects.all().order_by('city')
-            user_preferred_city = UserPreferredCities.objects.get(user=request.user)
-            context_dict['sports'] = sports
-            context_dict['cities'] = cities
-            context_dict['user_preferred_city'] = user_preferred_city
-            context_dict['session_created'] = True
-            return render_to_response('create_session.html', context_dict, context)
+            return HttpResponse(status=200)
         else:
             #   print the problems to the terminal
             print form.errors
-            context_dict = get_context_dictionary(request)
-            sports = Sport.objects.all()
-            cities = City.objects.all().order_by('city')
-            user_preferred_city = UserPreferredCities.objects.get(user=request.user)
-            context_dict['sports'] = sports
-            context_dict['cities'] = cities
-            context_dict['user_preferred_city'] = user_preferred_city
-            context_dict['session_created'] = False
-            return render_to_response('create_session.html', context_dict, context)
+            #   return 405 response
+            return HttpResponse(status=405)
 
     context_dict = get_context_dictionary(request)
     sports = Sport.objects.all()
@@ -372,7 +362,7 @@ def create_session(request):
     context_dict['user_preferred_city'] = user_preferred_city
     return render_to_response('create_session.html', context_dict, context)
 
-@csrf_exempt # TODO should be csrf_proect
+@csrf_exempt
 def make_offer(request):
     context = RequestContext(request);
     # Only accept POST requests. Redirect to main if not.
@@ -382,6 +372,7 @@ def make_offer(request):
     if not request.user.is_authenticated() or not request.user.is_active:
         return HttpResponseRedirect('/login/')
     # Fetch the session. Return 400 if invalid.
+
     session_id = request.POST['session']
     if session_id is None:
         return HttpResponseRedirect('/sessions/')
@@ -390,20 +381,20 @@ def make_offer(request):
         return HttpResponseRedirect('/sessions/')
 
     # Check that the user has not made an offer for this session before. Return 409 if he did.
-    if Offer.objects.filter(session=session, guest=request.user) is not 0:
-        context_dict = get_context_dictionary()
+    if Offer.objects.filter(session=session, guest=request.user).count() is not 0:
+        context_dict = get_context_dictionary(request)
         context_dict['result'] = 'You have already posted an offer for this session!'
         return render_to_response('view_session_by_id.html', context_dict, context)
 
     # Save the offer.
     Offer.objects.create(session=session, guest=request.user).save()
-
     # Show the confirmation page.
-    context_dict = get_context_dictionary()
+    context_dict = get_context_dictionary(request)
     context_dict['result'] = 'Your offer has been placed!'
+
     return render_to_response('view_session_by_id.html', context_dict, context)
 
-@csrf_exempt # TODO should be csrf_proect
+@csrf_exempt
 def accept_offer(request):
     context = RequestContext(request);
     # Only accept POST requests. Redirect to main if not.
