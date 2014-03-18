@@ -130,20 +130,18 @@
                             {{ session.details }}
                             <hr />
                         {% endif %}
-                        {% if not joined %}
+                        
+                        {% if session.hostplayer == user %}
+                            <h5>Cancel the session</h5>
+                            <button type="button" class="btn btn-group-sm btn-danger cancel-button">Cancel session</button>
+                        {% elif joined %}
+                            <h5>Withdraw offer</h5>
+                            <button type="button" class="btn btn-group-sm btn-danger withdraw-button">Withdraw</button>
+                        {% else %}
                             <h5>Join the event</h5>
                             <button type="button" class="btn btn-group-sm btn-primary join-button">Join</button>
-                        {% elif session.hostplayer == user %}
-                            <h5>Cancel the session</h5>
-                            <button type="button" class="btn btn-group-sm btn-danger cancel-button">Cancel</button>
-                        {% else %}
-                            <h5>Withdraw offer</h5>
-                            <button type="button" class="btn btn-group-sm btn-danger withdraw-button">Cancel</button>
                         {% endif  %}
-                    </div>
-
-                    <div class="row">
-
+                        
                     </div>
                 </div>
             </div>

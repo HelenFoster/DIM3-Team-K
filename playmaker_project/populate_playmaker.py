@@ -123,6 +123,7 @@ def populate():
     add_session(15, "Pool", "leif", None, "2015-03-20", "19:15", "London", "Round reading room", 0, "")
 
     # Offers.
+    add_offer(1, "raluca")
     add_offer(1, "john")
     add_offer(1, "martynas")
     add_offer(1, "tomasz")
