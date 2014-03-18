@@ -62,6 +62,7 @@
     {% endif %}
 
     <form class="form-horizontal" role="form" id="preferences-form" method="POST" action="/preferences/">
+        {% csrf_token %}
         <div class="form-group">
             <div class="col-sm-3">
                 <input class="form-control" type="text" placeholder="Name" name="first_name" value="{{ user.first_name }}" />

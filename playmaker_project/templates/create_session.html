@@ -68,6 +68,7 @@
     {% endif %}
 
     <form class="form-horizontal" role="form" id="preferences-form" method="POST" action="/create/">
+        {% csrf_token %}
         <div class="form-group">
             <div class="col-sm-3">
                 <select class="form-control" name="sport">
