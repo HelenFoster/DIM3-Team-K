@@ -234,6 +234,7 @@ def view_session_by_id(request, session_id):
     context_dict['offers'] = offers
     context_dict['offer_count'] = offer_count
     context_dict['offer_accepted'] = offer_accepted
+    context_dict['joined'] = Offer.objects.filter(session=session, guest=request.user)
     return render_to_response('view_session_by_id.html', context_dict, context)
 
 @csrf_exempt
