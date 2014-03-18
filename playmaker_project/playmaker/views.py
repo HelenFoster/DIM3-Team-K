@@ -9,7 +9,6 @@ from models import *
 from forms import RegistrationForm
 from forms import AddMessageToSessionForm
 from forms import PreferencesForm
-from forms import CreateSessionForm
 from django.contrib.auth import authenticate
 import datetime
 import json
@@ -347,22 +346,19 @@ def get_messages(request, session_id):
 @csrf_exempt
 def create_session(request):
     context = RequestContext(request)
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated() or not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    #    only accept POST requests
-    if request.POST:
-        #    create form object
-        form = CreateSessionForm(request.POST)
-        #   if form is valid
-        if form.is_valid():
-            form.save(commit=True)
-            return HttpResponse(status=200)
-        else:
-            #   print the problems to the terminal
-            print form.errors
-            #   return 405 response
-            return HttpResponse(status=405)
 
+    # Create the session if the method is POST.
+    if request.POST:
+        # Create session object.
+        session = Session.objects.create(sport=Sport.objects.get(sport = request.POST['sport']), hostplayer = request.user, guestplayer = None,
+                                         date = request.POST['date'], time = request.POST['time'], city = City.objects.get(city=request.POST['city']),
+                                         location = request.POST['location'], price = request.POST['price'], details = request.POST.get('details', ""))
+        session.save()
+        return HttpResponseRedirect("/session/" + str(session.id) + "/")
+
+    # Display the page if the method is GET.
     context_dict = get_context_dictionary(request)
     sports = Sport.objects.all()
     cities = City.objects.all().order_by('city')
