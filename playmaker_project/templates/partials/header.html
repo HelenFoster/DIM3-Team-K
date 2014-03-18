@@ -1,10 +1,21 @@
 <div class="row clearfix header-mobile">
     <nav id="menu">
         <ul>
-            <li class="Selected"><a href="index.html">Introduction</a></li>
-            <li><a href="horizontal-submenus.html">Horizontal submenus example</a></li>
-            <li><a href="vertical-submenus.html">Vertical submenus example</a></li>
-            <li><a href="jqmobile/index.html">jQuery Mobile example</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/bookings/">Bookings</a></li>
+            <li><a href="/preferences/">Preferences</a></li>
+            <li><a href="/create/">Create a session</a></li>
+            <li>
+                <a href="#">Sessions by Sport</a>
+                <ul>
+                    {% for sport in sports %}
+                        <li><a href="/sessions/{{ sport.sport_slug }}/">{{ sport.sport }}</a></li>
+                    {% endfor %}
+
+                </ul>
+            </li>
+
+
         </ul>
     </nav>
 </div>

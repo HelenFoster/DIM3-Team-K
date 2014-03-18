@@ -430,6 +430,11 @@ td {
     font-size:12px;
 }
 
+  .header-mobile-bar {
+ 	display:none;
+    visibility: none;
+ }
+
 /* small screens */
 @media screen and (max-width: 992px) {
 
@@ -450,6 +455,7 @@ td {
     left:0;
     right:0;
     z-index: 999;
+      display: block;
  }
   .header-mobile-bar button {
       margin: 0 auto;
