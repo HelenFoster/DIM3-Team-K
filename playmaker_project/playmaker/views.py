@@ -163,6 +163,12 @@ def preferences(request):
     if request.method == "POST":
         form = PreferencesForm(data = request.POST)
         if form.is_valid():
+            user = User.objects.get(username = request.user.username)
+            user.last_name = request.POST['last_name']
+            user.first_name = request.POST['first_name']
+            user.email = request.POST['email']
+            user.set_password(request.POST['password'])
+            user.save()
             form_initial = {}
             form_initial['email'] = request.user.email
             form_initial['first_name'] = request.user.first_name

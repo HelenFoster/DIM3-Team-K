@@ -19,7 +19,7 @@ def add_sports(sports):
 
 def add_user(username, email, firstname, lastname, city):
     print "User: " + username
-    user = User.objects.create_user(username, email, password=username)
+    user = User.objects.create_user(username,email, password=username)
     user.first_name = firstname
     user.last_name = lastname
     user.save()

@@ -54,11 +54,11 @@ class AddMessageToSessionForm(forms.Form):
 
 
 class CreateSessionForm(forms.Form):
-    sport = forms.Select()
+    sport = forms.CharField()
     hostplayer = forms.IntegerField()
     date = forms.DateTimeField()
     time = forms.TimeField()
-    city = forms.Select()
+    city = forms.CharField()
     location = forms.CharField()
     price = forms.FloatField()
     details = forms.CharField()
