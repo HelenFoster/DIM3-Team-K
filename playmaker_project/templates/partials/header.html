@@ -2,20 +2,20 @@
     <nav id="menu">
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/bookings/">Bookings</a></li>
-            <li><a href="/preferences/">Preferences</a></li>
-            <li><a href="/create/">Create a session</a></li>
-            <li>
-                <a href="#">Sessions by Sport</a>
-                <ul>
-                    {% for sport in sports %}
-                        <li><a href="/sessions/{{ sport.sport_slug }}/">{{ sport.sport }}</a></li>
-                    {% endfor %}
-
-                </ul>
-            </li>
-            <li><a href="/create/">Create a session</a></li>
             {% if username %}
+                <li><a href="/bookings/">Bookings</a></li>
+                <li><a href="/preferences/">Preferences</a></li>
+                <li><a href="/create/">Create a session</a></li>
+                <li>
+                    <a href="#">Sessions by Sport</a>
+                    <ul>
+                        {% for sport in sports %}
+                            <li><a href="/sessions/{{ sport.sport_slug }}/">{{ sport.sport }}</a></li>
+                        {% endfor %}
+
+                    </ul>
+                </li>
+                <li><a href="/create/">Create a session</a></li>
                 <li><a href="/logout/">Logout</a></li>
             {% else %}
                 <li><a href="/login/">Login</a></li>
