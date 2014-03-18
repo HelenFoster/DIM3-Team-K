@@ -427,7 +427,6 @@ def accept_offer(request):
 
 @csrf_exempt # TODO Change to csrf_protect
 def cancel_session(request):
-    context = RequestContext(request)
     # Only accept POST requests. Redirect to main if not.
     if not request.POST:
         return HttpResponseRedirect('/')
@@ -458,7 +457,36 @@ def cancel_session(request):
 
 @csrf_exempt # TODO Change to csrf_proect
 def withdraw_offer(request):
-    pass #TODO
+    # Only accept POST requests. Redirect to main if not.
+    if not request.POST:
+        return HttpResponseRedirect('/')
+    # Make sure the user is valid. Redirect to login page if not logged in.
+    if not request.user.is_authenticated() or not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+
+    # Fetch the session. Return 400 if invalid.
+    session_id = request.POST['session']
+    if session_id is None:
+        return HttpResponseRedirect('/sessions/')
+    session = Session.objects.get(id=session_id)
+    if session is None:
+        return HttpResponseRedirect('/sessions/')
+
+    # Get the offer. If null, reload the page.
+    offer = Offer.objects.get(session=session, guest=request.user)
+    if offer is None:
+        return HttpResponseRedirect('/session/' + str(session.id) + '/')
+
+    # Remove the guest from the session.
+    session.guestplayer = None
+    session.save()
+
+    # Remove the offer.
+    offer.delete()
+
+    # Reload the page.
+    return HttpResponseRedirect('/session/' + str(session.id) + '/')
+
 
 @csrf_exempt
 def attempt_logout(request):
