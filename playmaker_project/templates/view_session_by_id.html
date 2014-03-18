@@ -49,11 +49,12 @@
             });
 
             $(".cancel-button").click(function() {
-                var url = "/cancel-offer/";
+                var url = "/cancel-session/";
                 $.post(url, {
                     'session': {{ session.id }},
                     'csrf_token': $("#csrfmiddlewaretoken").val()
                 }).done(function() {
+                    alert("Session canceled!");
                     $(this).hide();
                 });
             });
