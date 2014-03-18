@@ -268,32 +268,38 @@ def view_sessions_by_city(request, session_city):
 
 @csrf_exempt
 def add_message_to_session(request):
-    context = RequestContext(request)
-    #    only accept POST requests
+    # Only accept POST requests. Redirect to main if not.
     if not request.POST:
-        print "Not a POST"
-        return HttpResponse("Not a POST", status=400)
-    if not request.user.is_authenticated():
-        print "Not logged in"
-        return HttpResponse("Not logged in", status=400)
+        return HttpResponseRedirect('/')
+    # Make sure the user is valid. Redirect to login page if not logged in.
+    if not request.user.is_authenticated() or not request.user.is_active:
+        return HttpResponseRedirect('/login/')
     form = AddMessageToSessionForm(request.POST)
     if not form.is_valid():
         print "Form error"
         print form.errors
         return HttpResponse("Form error", status=400)
-    session_id = form.cleaned_data['session_id']
-    messageText = form.cleaned_data['message']
-    session = Session.objects.get(id=session_id)
-    #todo: check we are allowed to post on this session
-    #todo: set viewer if session is private
-    print "3"
-    #problem here
-    message = Message.objects.create(session=session, user_op=request.user, user_viewer=None, date=datetime.datetime.now(), time=datetime.datetime.now(), message=messageText)
+
+    session = Session.objects.get(id=form.cleaned_data['session_id'])
+
+    # Determine if the message is public or private.
+    # If private, determine who should be able to view it.
+    viewer = None
+    if session.guestplayer is not None:
+        if session.hostplayer is request.user:
+            viewer = session.guestplayer
+        elif session.guestplayer is request.user:
+            viewer = session.hostplayer
+        else: # Not host or guest in private session, refuse.
+            return HttpResponse(status=400)
+
+    # Store the message to the database.
+    message = Message.objects.create(session=session, user_op=request.user, user_viewer=viewer,
+                                     date=datetime.datetime.now(), time=datetime.datetime.now(), message=form.cleaned_data['message'])
     message.save()
-    print "4"
+
+    # Confirm addition.
     return HttpResponse(status=200)
-
-
 
 @csrf_exempt
 def get_messages(request, session_id):
