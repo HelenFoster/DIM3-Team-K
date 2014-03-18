@@ -18,4 +18,6 @@ urlpatterns = patterns('',
     url(r'^' + 'sessions/city/(?P<session_city>[\w\-]+)/$', views.view_sessions_by_city, name='view_sessions_by_city'),
     url(r'^' + 'sendmsg/$', views.add_message_to_session, name='add_message_to_session'),
     url(r'^' + 'getmsgs/(?P<session_id>[\w\-]+)/$', views.get_messages, name='get_messages'),
+    url(r'^' + 'cancel-session/$', views.cancel_session, name='cancel_session'),
+    url(r'^' + 'withdraw-offer/$', views.withdraw_offer, name='withdraw_offer'),
 )

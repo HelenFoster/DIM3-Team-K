@@ -364,15 +364,15 @@ def create_session(request):
 
 @csrf_exempt
 def make_offer(request):
-    context = RequestContext(request);
+    context = RequestContext(request)
     # Only accept POST requests. Redirect to main if not.
     if not request.POST:
         return HttpResponseRedirect('/')
     # Make sure the user is valid. Redirect to login page if not logged in.
     if not request.user.is_authenticated() or not request.user.is_active:
         return HttpResponseRedirect('/login/')
-    # Fetch the session. Return 400 if invalid.
 
+    # Fetch the session. Return 400 if invalid.
     session_id = request.POST['session']
     if session_id is None:
         return HttpResponseRedirect('/sessions/')
@@ -396,7 +396,7 @@ def make_offer(request):
 
 @csrf_exempt
 def accept_offer(request):
-    context = RequestContext(request);
+    context = RequestContext(request)
     # Only accept POST requests. Redirect to main if not.
     if not request.POST:
         return HttpResponseRedirect('/')
@@ -420,6 +420,41 @@ def accept_offer(request):
 
     # Reload the page.
     return render_to_response('view_session_by_id.html', context)
+
+@csrf_exempt # TODO Change to csrf_protect
+def cancel_session(request):
+    context = RequestContext(request)
+    # Only accept POST requests. Redirect to main if not.
+    if not request.POST:
+        return HttpResponseRedirect('/')
+    # Make sure the user is valid. Redirect to login page if not logged in.
+    if not request.user.is_authenticated() or not request.user.is_active:
+        return HttpResponseRedirect('/login/')
+
+    # Fetch the session. Return 400 if invalid.
+    session_id = request.POST['session']
+    if session_id is None:
+        return HttpResponseRedirect('/sessions/')
+    session = Session.objects.get(id=session_id)
+    if session is None:
+        return HttpResponseRedirect('/sessions/')
+
+    # If the user is not the host, this is very likely a hack attempt.
+    # Take revenge by redirecting to main page.
+    if request.user is not session.hostplayer:
+        return HttpResponseRedirect('/')
+
+    # Remove the offers.
+    Offer.objects.filter(session=session).delete()
+
+    # Remove the session.
+    session.delete()
+
+    return HttpResponseRedirect('/sessions/')
+
+@csrf_exempt # TODO Change to csrf_proect
+def withdraw_offer(request):
+    pass #TODO
 
 @csrf_exempt
 def attempt_logout(request):
