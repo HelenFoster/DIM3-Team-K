@@ -58,6 +58,17 @@
                 });
             });
 
+            $(".accept-button").click(function() {
+                var url = "/accept-offer/";
+                $.post(url, {
+                    'session': {{ session.id }},
+                    'offer': $(this).data("id"),
+                    'csrf_token': $("#csrfmiddlewaretoken").val()
+                }).done(function() {
+                    location.reload();
+                });
+            });
+
         });
 
 
@@ -83,9 +94,9 @@
                     <div class="user-wrap">
                         <span class="sport-icon user-icon"></span>
                         {% if session.guestplayer %}
-                        <a href="/profile/{{session.guestplayer}}" class="colourless">{{session.guestplayer}}</a>
+                            <a href="/profile/{{session.guestplayer}}" class="colourless">{{session.guestplayer}}</a>
                         {% else %}
-                        None
+                            None
                         {% endif %}
                     </div>
                 </div>
@@ -129,7 +140,7 @@
                             {{ session.details }}
                             <hr />
                         {% endif %}
-                        
+
                         {% if session.hostplayer == user %}
                             <h5>Cancel the session</h5>
                             <button type="button" class="btn btn-group-sm btn-danger cancel-button">Cancel session</button>
@@ -140,7 +151,7 @@
                             <h5>Join the event</h5>
                             <button type="button" class="btn btn-group-sm btn-primary join-button">Join</button>
                         {% endif  %}
-                        
+
                     </div>
                 </div>
             </div>
@@ -153,6 +164,28 @@
                 {% include 'partials/chat.html' %}
             </div>
         </div>
+        {% if session.hostplayer == user %}
+            <div class="clearfix"></div>
+            <div class="col-md-12">
+                <h3>View offers</h3>
+                <table>
+                    <tr>
+                        <th>Username</th>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Actions</th>
+                    </tr>
+                    {% for offer in offers %}
+                        <tr>
+                            <td>{{ offer.guest.username  }}</td>
+                            <td>{{ offer.guest.first_name  }}</td>
+                            <td>{{ offer.guest.last_name  }}</td>
+                            <td><button type="button" class="btn btn-group-sm btn-primary accept-button" data-id="{{ offer.id }}">Accept</button></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
     </div>
     <div class="clearfix"></div>
 
