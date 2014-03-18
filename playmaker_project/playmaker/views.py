@@ -268,12 +268,14 @@ def view_sessions_by_city(request, session_city):
 
 @csrf_exempt
 def add_message_to_session(request):
-    # Only accept POST requests. Redirect to main if not.
+    # Only accept POST requests. Return an error if not, since this is an AJAX call.
     if not request.POST:
-        return HttpResponseRedirect('/')
-    # Make sure the user is valid. Redirect to login page if not logged in.
+        print "Not a POST"
+        return HttpResponse("Not a POST", status=400)
+    # Make sure the user is valid. Return an error if not, since this is an AJAX call.
     if not request.user.is_authenticated() or not request.user.is_active:
-        return HttpResponseRedirect('/login/')
+        print "Not logged in"
+        return HttpResponse("Not logged in", status=400)
     form = AddMessageToSessionForm(request.POST)
     if not form.is_valid():
         print "Form error"
@@ -285,13 +287,15 @@ def add_message_to_session(request):
     # Determine if the message is public or private.
     # If private, determine who should be able to view it.
     viewer = None
+    print session.guestplayer
     if session.guestplayer is not None:
         if session.hostplayer is request.user:
             viewer = session.guestplayer
         elif session.guestplayer is request.user:
             viewer = session.hostplayer
         else: # Not host or guest in private session, refuse.
-            return HttpResponse(status=400)
+            print "Access denied"
+            return HttpResponse("Access denied", status=400)
 
     # Store the message to the database.
     message = Message.objects.create(session=session, user_op=request.user, user_viewer=viewer,
