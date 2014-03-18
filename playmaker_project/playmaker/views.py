@@ -227,10 +227,13 @@ def view_session_by_id(request, session_id):
     guestplayer = session.guestplayer
     sports = Sport.objects.all()
 
-    if username != session.hostplayer:
+    if username != session.hostplayer.username:
         host_viewing = False
 
     if guestplayer is not None:
+        if (not host_viewing) and (guestplayer.username != username):
+            #it's private
+            return HttpResponseRedirect('/')
         offer_accepted = True
     context_dict = get_context_dictionary(request)
     context_dict['sports'] = sports
@@ -241,7 +244,7 @@ def view_session_by_id(request, session_id):
     context_dict['offers'] = offers
     context_dict['offer_count'] = offer_count
     context_dict['offer_accepted'] = offer_accepted
-    context_dict['joined'] = Offer.objects.filter(session=session, guest=request.user)
+    context_dict['joined'] = offers.filter(guest=request.user).exists()
     return render_to_response('view_session_by_id.html', context_dict, context)
 
 @csrf_exempt
