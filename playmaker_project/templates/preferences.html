@@ -52,15 +52,15 @@
     <h1>Preferences</h1>
 
     {% if updated and updated != None %}
-        <div>
-            <p class="bg-success">Preferences have been updated.</p>
-        </div>
+        <div class="col-sm-3">
+            <p class="alert alert-success">Preferences have been updated.</p>
+        </div class="col-sm-3">
     {% elif not updated and updated != None %}
         <div>
-            <p class="bg-danger">There was an error updating your details.</p>
+            <p class="alert alert-danger">There was an error updating your details.</p>
         </div>
     {% endif %}
-
+    <div class="clearfix"></div>
     <form class="form-horizontal" role="form" id="preferences-form" method="POST" action="/preferences/">
         {% csrf_token %}
         <div class="form-group">

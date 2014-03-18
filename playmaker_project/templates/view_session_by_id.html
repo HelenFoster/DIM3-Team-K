@@ -17,7 +17,8 @@
                 // TODO: pick up CSRF token and ship it along with ajax request
                 if (message.trim() != "") {
                     $.post(url, {
-                        'message': message, 'session_id': {{ session.id }}
+                        'message': message,
+                        'session_id': {{ session.id }}
                     }).done(function() {
                         reloadMessages({{ session.id }}, "{{ session.hostplayer }}");
                     }).fail(function() {
@@ -27,7 +28,16 @@
 
             });
 
-            reloadMessages({{ session.id }}, "{{ session.hostplayer }}");
+            $(".join-button").click(function() {
+                alert("asdasd");
+                var url = "/make-offer/";
+                $.post(url, {
+                    'session_id': {{ session.id }},
+                    'csrf_token': $("#csrfmiddlewaretoken").val()
+                }).done(function() {
+                    alert("Success join!");
+                });
+            });
         });
 
 

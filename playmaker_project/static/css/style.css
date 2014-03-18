@@ -418,3 +418,24 @@ td {
  	display:block;
      display:none;
  }
+
+ /* normal screens */
+.nav-button {
+    display:block;
+    clear:both;
+  }
+.nav-button span{
+    font-size:12px;
+}
+
+/* small screens */
+@media screen and (max-width: 767px) {
+  .nav-button {
+    display:block;
+    float:left;
+    clear:none;
+  }
+  .nav-button span{
+    display:none;
+  }
+}
