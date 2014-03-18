@@ -34,7 +34,7 @@
                     'session': {{ session.id }},
                     'csrf_token': $("#csrfmiddlewaretoken").val()
                 }).done(function() {
-                    $(this).hide();
+                    location.reload();
                 });
             });
 
@@ -44,7 +44,7 @@
                     'session': {{ session.id }},
                     'csrf_token': $("#csrfmiddlewaretoken").val()
                 }).done(function() {
-                    $(this).hide();
+                    location.reload();
                 });
             });
 
@@ -54,8 +54,7 @@
                     'session': {{ session.id }},
                     'csrf_token': $("#csrfmiddlewaretoken").val()
                 }).done(function() {
-                    alert("Session canceled!");
-                    $(this).hide();
+                    location.reload();
                 });
             });
 
