@@ -335,12 +335,27 @@ def create_session(request):
         #   if form is valid
         if form.is_valid():
             form.save(commit=True)
-            return HttpResponse(status=200)
+            context_dict = get_context_dictionary(request)
+            sports = Sport.objects.all()
+            cities = City.objects.all().order_by('city')
+            user_preferred_city = UserPreferredCities.objects.get(user=request.user)
+            context_dict['sports'] = sports
+            context_dict['cities'] = cities
+            context_dict['user_preferred_city'] = user_preferred_city
+            context_dict['session_created'] = True
+            return render_to_response('create_session.html', context_dict, context)
         else:
             #   print the problems to the terminal
             print form.errors
-            #   return 405 response
-            return HttpResponse(status=405)
+            context_dict = get_context_dictionary(request)
+            sports = Sport.objects.all()
+            cities = City.objects.all().order_by('city')
+            user_preferred_city = UserPreferredCities.objects.get(user=request.user)
+            context_dict['sports'] = sports
+            context_dict['cities'] = cities
+            context_dict['user_preferred_city'] = user_preferred_city
+            context_dict['session_created'] = False
+            return render_to_response('create_session.html', context_dict, context)
 
     context_dict = get_context_dictionary(request)
     sports = Sport.objects.all()

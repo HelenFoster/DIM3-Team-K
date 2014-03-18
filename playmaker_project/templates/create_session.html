@@ -57,6 +57,16 @@
 
     <h1>Create a session</h1>
 
+    {% if session_created and session_created != None %}
+        <div>
+            <p class="bg-success">Your session has been created.</p>
+        </div>
+    {% elif not session_created and session_created != None %}
+        <div>
+            <p class="bg-danger">There was an error creating your session.</p>
+        </div>
+    {% endif %}
+
     <form class="form-horizontal" role="form" id="preferences-form" method="POST" action="/create/">
         <div class="form-group">
             <div class="col-sm-3">
