@@ -32,7 +32,7 @@
                 alert("asdasd");
                 var url = "/make-offer/";
                 $.post(url, {
-                    'session_id': {{ session.id }},
+                    'session': {{ session.id }},
                     'csrf_token': $("#csrfmiddlewaretoken").val()
                 }).done(function() {
                     alert("Success join!");
