@@ -48,7 +48,7 @@ def mainpage(request):
 # Will attempt to authenticate the user.
 # If the credentials are valid, redirect to the main page, where the user should now see the activities.
 # If the credentials are invalid, render the login_failed page with the proper failure reason.
-@csrf_exempt
+@csrf_protect
 def attempt_login(request):
     context = RequestContext(request)
     failure_reason = 'OK'
@@ -79,7 +79,7 @@ def attempt_login(request):
     context_dict['result'] = failure_reason
     return render_to_response('login_failed.html', context_dict, context, )
 
-@csrf_exempt
+@csrf_protect
 def register(request):
     context = RequestContext(request)
 
@@ -152,7 +152,7 @@ def bookings(request):
 
 
 
-@csrf_exempt
+@csrf_protect
 def preferences(request):
     context = RequestContext(request)
     context_dict = get_context_dictionary(request)
@@ -323,7 +323,7 @@ def get_messages(request, session_id):
 
 
 
-@csrf_exempt
+@csrf_protect
 def create_session(request):
     context = RequestContext(request)
     if not request.user.is_authenticated():
@@ -351,7 +351,7 @@ def create_session(request):
     context_dict['user_preferred_city'] = user_preferred_city
     return render_to_response('create_session.html', context_dict, context)
 
-@csrf_exempt
+@csrf_exempt # TODO should be csrf_proect
 def make_offer(request):
     context = RequestContext(request);
     # Only accept POST requests. Redirect to main if not.
@@ -382,7 +382,7 @@ def make_offer(request):
     context_dict['result'] = 'Your offer has been placed!'
     return render_to_response('view_session_by_id.html', context_dict, context)
 
-@csrf_exempt
+@csrf_exempt # TODO should be csrf_proect
 def accept_offer(request):
     context = RequestContext(request);
     # Only accept POST requests. Redirect to main if not.
