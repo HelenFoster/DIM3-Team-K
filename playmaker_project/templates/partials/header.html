@@ -14,7 +14,13 @@
 
                 </ul>
             </li>
-
+            <li><a href="/create/">Create a session</a></li>
+            {% if username %}
+                <li><a href="/logout/">Logout</a></li>
+            {% else %}
+                <li><a href="/login/">Login</a></li>
+                <li><a href="/register/">Register</a></li>
+            {% endif %}
 
         </ul>
     </nav>
