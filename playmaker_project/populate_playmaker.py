@@ -113,14 +113,14 @@ def populate():
     add_session(5, "Chess", "leif", None, "2015-03-20", "19:15", "Glasgow", "Round reading room", 0, "")
     add_session(6, "Chess", "martynas", None, "2015-03-22", "19:15", "Glasgow", "The non existent undergrad common room", 0, "")
     add_session(7, "Chess", "vlad", None, "2015-03-22", "19:15", "Edinburgh", "The non existent undergrad common room", 0, "")
-    add_session(8, "Squash", "leif", None, "2015-03-20", "19:15", "Aberdeen", "Round reading room", 0, "")
-    add_session(9, "Badminton", "leif", None, "2015-03-21", "19:15", "London", "Round reading room", 0, "")
-    add_session(10, "Badminton", "john", None, "2015-03-21", "19:15", "Glasgow", "Round reading room", 0, "")
+    add_session(8, "Squash", "leif", None, "2015-03-20", "19:15", "Aberdeen", "Level 3 LAB", 0.5, "")
+    add_session(9, "Badminton", "leif", None, "2015-03-21", "19:15", "London", "Level1 Lab", 0.5, "")
+    add_session(10, "Badminton", "john", None, "2015-03-21", "19:15", "Glasgow", "My Computer studio", 1.05, "")
     add_session(11, "Chess", "raluca", None, "2015-03-22", "19:15", "London", "Round reading room", 0, "")
-    add_session(12, "Pool", "leif", None, "2015-03-23", "19:15", "Aberdeen", "Round reading room", 0, "")
-    add_session(13, "Pool", "jack", None, "2015-03-20", "19:15", "London", "Round reading room", 0, "")
-    add_session(14, "Chess", "john", None, "2015-03-19", "19:15", "Edinburgh", "Round reading room", 0, "")
-    add_session(15, "Pool", "leif", None, "2015-03-20", "19:15", "London", "Round reading room", 0, "")
+    add_session(12, "Pool", "leif", None, "2015-03-23", "19:15", "Aberdeen", "QM", 0, "")
+    add_session(13, "Pool", "jack", None, "2015-03-20", "19:15", "London", "O2 Arena", 1, "")
+    add_session(14, "Chess", "john", None, "2015-03-19", "19:15", "Edinburgh", "Tesco Arena", 0, "")
+    add_session(15, "Pool", "leif", None, "2015-03-20", "19:15", "London", "GUU", 1, "")
 
     # Offers.
     add_offer(1, "raluca")
@@ -154,8 +154,22 @@ def populate():
     add_message(1, "john", None, "2014-02-19", "18:21", "Hey mate, can you do 20:00?")
     add_message(1, "martynas", None, "2014-02-21", "19:13", "Do you have a racquet I could borrow?")
     add_message(1, "vlad", None, "2014-02-20", "12:21", "@john, naah, sorry, gotta be somewhere else by then...")
-    add_message(1, "vlad", None, "2014-02-20", "16.33", "@martynas, you can borrow one from the desk, it's 1 pound.")
+    add_message(1, "vlad", None, "2014-02-22", "16:33", "@martynas, you can borrow one from the desk, it's 1 pound.")
 
+    add_message(2, "john", None, "2014-02-19", "18:21", "Hey mate, can we play a double? I could bring two of my friends(seriously hot)")
+    add_message(2, "martynas", None, "2014-02-20", "19:13", "How long do you play man?")
+    add_message(2, "tomasz", None, "2014-02-20", "12:21", "@john, ou yeee :D sure thing, bring them!")
+    add_message(2, "tomasz", None, "2014-02-20", "21:33", "@martynas, around 2 years. Looking for someone skilled? I can ask a friend who's played for the past 10 years")
+
+    add_message(3, "john", None, "2014-02-19", "18:21", "Hey, can you do 23:45?")
+    add_message(3, "tomasz", None, "2014-02-21", "19:13", "Do you have a racquet I could borrow?")
+    add_message(3, "helen", None, "2014-02-20", "12:21", "@john, naah, sorry, people tend to go to sleep at those times")
+    add_message(3, "helen", None, "2014-02-21", "20:33", "@martynas, you can borrow one from the desk, it's 100 pounds")
+
+    add_message(4, "john", None, "2014-02-19", "18:21", "Hey mate, do you have squash balls?")
+    add_message(4, "martynas", None, "2014-02-21", "19:13", "Do you have a racquet I could borrow?")
+    add_message(5, "vlad", None, "2014-02-20", "12:21", "I played with Kasparov. Can I join?")
+    add_message(5, "leif", None, "2014-02-21", "16:33", "@vlad, I won with WATSON. You are no match for me")
 
 # Start execution here!
 if __name__ ==  '__main__':
