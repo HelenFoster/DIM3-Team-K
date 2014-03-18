@@ -73,6 +73,8 @@ h6 {
     z-index: 999;
  }
 
+
+
  .logo-wrap { 	
  }
 
@@ -429,13 +431,36 @@ td {
 }
 
 /* small screens */
-@media screen and (max-width: 767px) {
-  .nav-button {
-    display:block;
-    float:left;
-    clear:none;
+@media screen and (max-width: 992px) {
+
+  .sidebar-wrap {
+      display:none;
+      visibility: none;
   }
-  .nav-button span{
-    display:none;
+  .header-mobile {
+      display:block;
+      visibility: visible;
   }
+
+  .header-mobile-bar {
+ 	height: 40px;
+ 	background-color: #336699;
+ 	color: #fff;
+    top:0;
+    left:0;
+    right:0;
+    z-index: 999;
+ }
+  .header-mobile-bar button {
+      margin: 0 auto;
+      text-align: center;
+      width: 100%;
+      margin-top:5px;
+  }
+
+  .header {
+      display:none;
+      visibility:none;
+  }
+
 }

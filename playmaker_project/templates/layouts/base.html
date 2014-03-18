@@ -18,13 +18,23 @@
 <body>
 <div class="container-full">
 
+   <div class="row clearfix">
+        <div class="col-md-12 column header-mobile-bar">
+            <!-- MOBILE HEADER NAV -->
+                <button type="button" class="btn btn-sm btn-primary menu-mobile-button">MENU</button>
+            <!-- END: MOBILE HEADER NAV -->
+        </div>
+    </div>
     <div class="row clearfix">
         <div class="col-md-12 column header">
             <!-- HEADER -->
             {% include 'partials/header.html' %}
             <!-- END: HEADER -->
         </div>
+
     </div>
+
+
 
     <div class="row clearfix">
 
@@ -39,7 +49,6 @@
             {% block content %}{% endblock %}
             <!-- END: CONTENT -->
         </div>
-
 
     </div>
 

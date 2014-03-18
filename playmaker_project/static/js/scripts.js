@@ -7,6 +7,18 @@ $(document).ready(function() {
     var preferedHeight = $(window).height() - $(".header").css("height").slice(0,-2);
     $(".sidebar-wrap").css("height", preferedHeight);
 
+    // Set up mobile navigation menu
+    $("#menu").mmenu({
+        slidingSubmenus: false,
+        classes: "mm-light"
+    });
+
+    // Trigger the menu on click
+    $(".menu-mobile-button").click(function() {
+        $("#menu").trigger( "open.mm" );
+    });
+
+
 });
 
 /*
