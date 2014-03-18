@@ -1,20 +1,126 @@
 {% extends 'layouts/base.html' %}
+{% load staticfiles %}
 {% block page_title %}Create a new session{% endblock %}
 {% block page_description %}Create a session.{% endblock %}
-{% block extra_libraries %}{% endblock %}
+{% block extra_libraries %}
+
+    <!-- Include jQuery UI -->
+    <script type="text/javascript" src="{% static "js/jquery-ui.min.js" %}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#date").datepicker({
+                dateFormat: 'yy-mm-dd',
+                beforeShow: function(input, inst) {
+                    inst.dpDiv.css({marginTop: input.offsetHeight + 'px', marginLeft: input.offsetWidth + 'px'});
+                }
+            });
+
+            // Remove red borders on click
+            var $FORM = $( "#preferences-form");
+            $FORM.on("change", "input", function() {
+                $(this).css("border", "none");
+            });
+
+            $FORM.validate({
+                rules: {
+                    sport: "required",
+                    city: "required",
+                    date: "required",
+                    time: "required",
+                    location: "required"
+                },
+                messages: {
+                    sport: "Please choose a sport",
+                    city: "Please choose a city",
+                    location: "Please choose a location",
+                    date: "Please choose a date",
+                    time: "Please choose a time"
+                },
+                errorPlacement: function(error, element) {
+                    element.css("border", "1px solid red")
+                            .attr("title", error.text())
+                            .attr("data-placement", "top")
+                            .attr("data-toggle", "tooltip")
+                            .tooltip();
+                }
+            });
+
+
+
+        });
+
+    </script>
+
+{% endblock %}
 {% block content %}
 
-<h2>Sports</h2>
-    {% for sport in sports %}
-        {{ sport.sport }}
-    {% endfor %}
+    <h1>Create a session</h1>
 
-<h2>User preferred city</h2>
-    {{ user_preferred_city.city }}
+    <form class="form-horizontal" role="form" id="preferences-form" method="POST" action="/create/">
+        <div class="form-group">
+            <div class="col-sm-3">
+                <select class="form-control" name="sport">
+                    <option value="">Start the sport...</option>
+                    {% for sport in sports %}
+                        <option value="{{ sport }}">{{ sport }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3">
+                <select class="form-control" name="city">
+                    <option value="">Select the city...</option>
+                    {% for city in cities %}
+                        {% if city == user_preferred_city.city %}
+                            <option value="{{ city }}" selected>{{ city }}</option>
+                        {% else %}
+                            <option value="{{ city }}">{{ city }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
-<h2>Cities</h2>
-    {% for city in cities %}
-        {{ city.city }}
-    {% endfor %}
+        <div class="form-group">
+            <div class="col-sm-3">
+                <input class="form-control" type="text" placeholder="Location" name="location" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-3">
+                <input class="form-control" type="text" placeholder="Date" name="date" id="date" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-3">
+                <input class="form-control" type="text" placeholder="Time (i.e. 16:00)" name="time" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-3">
+                <input class="form-control" type="text" placeholder="Price (i.e. 5.00)" name="price" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-3">
+                <textarea class="form-control" rows="3" placeholder="Any additional details?"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-3">
+                <button type="submit" class="btn btn-large btn-primary btn-block" id="submit">Create</button>
+            </div>
+        </div>
+
+
+    </form>
+
 
 {% endblock %}
