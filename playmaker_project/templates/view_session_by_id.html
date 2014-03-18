@@ -29,15 +29,35 @@
             });
 
             $(".join-button").click(function() {
-                alert("asdasd");
                 var url = "/make-offer/";
                 $.post(url, {
                     'session': {{ session.id }},
                     'csrf_token': $("#csrfmiddlewaretoken").val()
                 }).done(function() {
-                    alert("Success join!");
+                    $(this).hide();
                 });
             });
+
+            $(".withdraw-button").click(function() {
+                var url = "/withdraw-offer/";
+                $.post(url, {
+                    'session': {{ session.id }},
+                    'csrf_token': $("#csrfmiddlewaretoken").val()
+                }).done(function() {
+                    $(this).hide();
+                });
+            });
+
+            $(".cancel-button").click(function() {
+                var url = "/cancel-offer/";
+                $.post(url, {
+                    'session': {{ session.id }},
+                    'csrf_token': $("#csrfmiddlewaretoken").val()
+                }).done(function() {
+                    $(this).hide();
+                });
+            });
+
         });
 
 
@@ -108,10 +128,17 @@
                             <h5>Notes</h5>
                             {{ session.details }}
                             <hr />
-                        {% else %}
-                            <h5>Join the event</h5>
                         {% endif %}
-                        <button type="button" class="btn btn-group-sm btn-primary join-button">Join</button>
+                        {% if not joined %}
+                            <h5>Join the event</h5>
+                            <button type="button" class="btn btn-group-sm btn-primary join-button">Join</button>
+                        {% elif session.hostplayer == user %}
+                            <h5>Cancel the session</h5>
+                            <button type="button" class="btn btn-group-sm btn-danger cancel-button">Cancel</button>
+                        {% else %}
+                            <h5>Withdraw offer</h5>
+                            <button type="button" class="btn btn-group-sm btn-danger withdraw-button">Cancel</button>
+                        {% endif  %}
                     </div>
 
                     <div class="row">
