@@ -1,4 +1,3 @@
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth import login
@@ -15,8 +14,6 @@ import datetime
 import json
 from helpers import get_context_dictionary
 
-# Create your views here.
-@csrf_exempt
 def mainpage(request):
     context = RequestContext(request)
     if request.user.is_authenticated():
@@ -43,12 +40,10 @@ def mainpage(request):
         context_dict['cities'] = cities
         return render_to_response('mainpage.html', context_dict, context)
 
-
 # To be called when the user clicks the login button.
 # Will attempt to authenticate the user.
 # If the credentials are valid, redirect to the main page, where the user should now see the activities.
 # If the credentials are invalid, render the login_failed page with the proper failure reason.
-@csrf_exempt
 def attempt_login(request):
     context = RequestContext(request)
     failure_reason = 'OK'
@@ -79,7 +74,6 @@ def attempt_login(request):
     context_dict['result'] = failure_reason
     return render_to_response('login_failed.html', context_dict, context, )
 
-@csrf_exempt
 def register(request):
     context = RequestContext(request)
 
@@ -122,8 +116,6 @@ def register(request):
     context_dict['cities'] = cities
     return render_to_response('register.html', context_dict, context)
 
-
-@csrf_exempt
 def bookings(request):
     context = RequestContext(request)
     print 'before is authenticated'
@@ -150,9 +142,6 @@ def bookings(request):
     else:
         return render_to_response('login.html', context)
 
-
-
-@csrf_exempt
 def preferences(request):
     context = RequestContext(request)
     context_dict = get_context_dictionary(request)
@@ -196,8 +185,6 @@ def preferences(request):
     context_dict['form'] = PreferencesForm(initial=form_initial)
     return render_to_response('preferences.html', context_dict, context)
 
-
-@csrf_exempt
 def user_profile(request, username):
     context = RequestContext(request)
     context_dict = get_context_dictionary(request)
@@ -212,7 +199,6 @@ def user_profile(request, username):
         context_dict['city'] = UserPreferredCities.objects.get(user=user).city
     return render_to_response('user_profile.html', context_dict, context)
 
-@csrf_exempt
 def view_session_by_id(request, session_id):
     context = RequestContext(request)
     if not request.user.is_authenticated() or not request.user.is_active:
@@ -261,7 +247,6 @@ def view_session_by_id(request, session_id):
     context_dict['offer_accepted'] = offer_accepted
     return render_to_response('view_session_by_id.html', context_dict, context)
 
-@csrf_exempt
 def view_sessions_by_sport(request, session_sport):
     context = RequestContext(request)
     today = datetime.datetime.now().date()
@@ -275,7 +260,6 @@ def view_sessions_by_sport(request, session_sport):
     context_dict['sessions'] = sessions
     return render_to_response('view_sessions_by_sport.html', context_dict, context)
 
-@csrf_exempt
 def view_sessions_by_city(request, session_city):
     context = RequestContext(request)
     today = datetime.datetime.now().date()
@@ -291,7 +275,6 @@ def view_sessions_by_city(request, session_city):
     context_dict['sessions'] = sessions
     return render_to_response('view_sessions_by_city.html', context_dict, context)
 
-@csrf_exempt
 def add_message_to_session(request):
     # Only accept POST requests. Return an error if not, since this is an AJAX call.
     if not request.POST:
@@ -330,7 +313,6 @@ def add_message_to_session(request):
     # Confirm addition.
     return HttpResponse(status=200)
 
-@csrf_exempt
 def get_messages(request, session_id):
     response = []
     messages_all = Message.objects.filter(session=session_id)
@@ -350,9 +332,6 @@ def get_messages(request, session_id):
         })
     return HttpResponse(json.dumps(response, indent=4))
 
-
-
-@csrf_exempt
 def create_session(request):
     context = RequestContext(request)
     if not request.user.is_authenticated() or not request.user.is_active:
@@ -391,7 +370,6 @@ def create_session(request):
     context_dict['user_preferred_city'] = user_preferred_city
     return render_to_response('create_session.html', context_dict, context)
 
-@csrf_exempt
 def make_offer(request):
     context = RequestContext(request)
     # Only accept POST requests. Redirect to main if not.
@@ -423,7 +401,6 @@ def make_offer(request):
 
     return render_to_response('view_session_by_id.html', context_dict, context)
 
-@csrf_exempt
 def accept_offer(request):
     context = RequestContext(request)
     # Only accept POST requests. Redirect to main if not.
@@ -450,7 +427,6 @@ def accept_offer(request):
     # Reload the page.
     return render_to_response('view_session_by_id.html', context)
 
-@csrf_exempt # TODO Change to csrf_protect
 def cancel_session(request):
     # Only accept POST requests. Redirect to main if not.
     if not request.POST:
@@ -480,7 +456,6 @@ def cancel_session(request):
 
     return HttpResponseRedirect('/')
 
-@csrf_exempt # TODO Change to csrf_proect
 def withdraw_offer(request):
     # Only accept POST requests. Redirect to main if not.
     if not request.POST:
@@ -512,8 +487,6 @@ def withdraw_offer(request):
     # Reload the page.
     return HttpResponseRedirect('/session/' + str(session.id) + '/')
 
-
-@csrf_exempt
 def attempt_logout(request):
     logout(request)
     return HttpResponseRedirect('/')

@@ -14,25 +14,24 @@
                 var message = $(".chat-message").val();
                 var url = "/sendmsg/";
 
-                // TODO: pick up CSRF token and ship it along with ajax request
                 if (message.trim() != "") {
                     $.post(url, {
                         'message': message,
-                        'session_id': {{ session.id }}
+                        'session_id': {{ session.id }},
+                        'csrfmiddlewaretoken': $('[name="csrfmiddlewaretoken"]').val()
                     }).done(function() {
                         reloadMessages({{ session.id }}, "{{ session.hostplayer }}");
                     }).fail(function() {
 
                     });
                 }
-
             });
 
             $(".join-button").click(function() {
                 var url = "/make-offer/";
                 $.post(url, {
                     'session': {{ session.id }},
-                    'csrf_token': $("#csrfmiddlewaretoken").val()
+                    'csrfmiddlewaretoken': $('[name="csrfmiddlewaretoken"]').val()
                 }).done(function() {
                     location.reload();
                 });
@@ -42,7 +41,7 @@
                 var url = "/withdraw-offer/";
                 $.post(url, {
                     'session': {{ session.id }},
-                    'csrf_token': $("#csrfmiddlewaretoken").val()
+                    'csrfmiddlewaretoken': $('[name="csrfmiddlewaretoken"]').val()
                 }).done(function() {
                     location.reload();
                 });
@@ -52,7 +51,7 @@
                 var url = "/cancel-session/";
                 $.post(url, {
                     'session': {{ session.id }},
-                    'csrf_token': $("#csrfmiddlewaretoken").val()
+                    'csrfmiddlewaretoken': $('[name="csrfmiddlewaretoken"]').val()
                 }).done(function() {
                     location.reload();
                 });
@@ -63,7 +62,7 @@
                 $.post(url, {
                     'session': {{ session.id }},
                     'offer': $(this).data("id"),
-                    'csrf_token': $("#csrfmiddlewaretoken").val()
+                    'csrfmiddlewaretoken': $('[name="csrfmiddlewaretoken"]').val()
                 }).done(function() {
                     location.reload();
                 });
@@ -76,7 +75,7 @@
 
 {% endblock %}
 {% block content %}
-
+    {% csrf_token %}
     <div class="row session-details">
         <div class="col-md-8">
             <div class="row">
