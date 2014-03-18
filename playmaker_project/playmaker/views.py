@@ -228,12 +228,16 @@ def view_session_by_id(request, session_id):
     host_viewing = True
     offer_accepted = False
 
+    context_dict = get_context_dictionary(request)
+
     # Fetch the offer status. Will be null with count 0 if the user is not the host.
     offers = None
-    offer_count = Offer.objects.filter(session = session_id).count()
+    context_dict['joined'] = False
+    offer_count = Offer.objects.filter(session=Session.objects.get(id=session_id)).count()
     if offer_count > 0:
-        offers = Offer.objects.filter(session = session_id)
-    messages = Message.objects.filter(session = session_id)
+        offers = Offer.objects.filter(session=Session.objects.get(id=session_id))
+        context_dict['joined'] = offers.filter(guest=request.user).exists()
+    messages = Message.objects.filter(session=Session.objects.get(id=session_id))
     guestplayer = session.guestplayer
     sports = Sport.objects.all()
 
@@ -246,8 +250,7 @@ def view_session_by_id(request, session_id):
             return HttpResponseRedirect('/')
         offer_accepted = True
 
-    # Add the parameters to the context dictionary and render it.
-    context_dict = get_context_dictionary(request)
+    # Add the parameters to the context dictionary and render it.)
     context_dict['sports'] = sports
     context_dict['current_viewer'] = username
     context_dict['session'] = session
@@ -256,7 +259,6 @@ def view_session_by_id(request, session_id):
     context_dict['offers'] = offers
     context_dict['offer_count'] = offer_count
     context_dict['offer_accepted'] = offer_accepted
-    context_dict['joined'] = offers.filter(guest=request.user).exists()
     return render_to_response('view_session_by_id.html', context_dict, context)
 
 @csrf_exempt
