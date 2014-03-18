@@ -215,12 +215,17 @@ def user_profile(request, username):
 @csrf_exempt
 def view_session_by_id(request, session_id):
     context = RequestContext(request)
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated() or not request.user.is_active:
         return HttpResponseRedirect('/login/')
+
+    # Ensure the session exists. If not, redirect to sessions list.
+    if Session.objects.filter(id = session_id).count() == 0:
+        return HttpResponseRedirect('/')
+
+    session = Session.objects.get(id = session_id)
     username = request.user.username
     host_viewing = True
     offer_accepted = False
-    session = Session.objects.get(id = session_id)
     offers = Offer.objects.select_related().filter(session = session_id)
     offer_count = offers.__len__()
     messages = Message.objects.filter(session = session_id)
@@ -235,6 +240,7 @@ def view_session_by_id(request, session_id):
             #it's private
             return HttpResponseRedirect('/')
         offer_accepted = True
+
     context_dict = get_context_dictionary(request)
     context_dict['sports'] = sports
     context_dict['current_viewer'] = username
@@ -379,10 +385,10 @@ def make_offer(request):
     # Fetch the session. Return 400 if invalid.
     session_id = request.POST['session']
     if session_id is None:
-        return HttpResponseRedirect('/sessions/')
+        return HttpResponseRedirect('/')
     session = Session.objects.get(id=session_id)
     if session is None:
-        return HttpResponseRedirect('/sessions/')
+        return HttpResponseRedirect('/')
 
     # Check that the user has not made an offer for this session before. Return 409 if he did.
     if Offer.objects.filter(session=session, guest=request.user).count() is not 0:
@@ -411,12 +417,12 @@ def accept_offer(request):
     # If no offer id submitted, redirect to sessions page.
     offer_id = request.POST['offer']
     if offer_id is None:
-        return HttpResponseRedirect('/sessions/')
+        return HttpResponseRedirect('/')
 
     # If the user is not the op, this is very likely a hack attempt.
     # Take revenge by redirecting to main page.
     offer = Offer.objects.get(id=offer_id)
-    if request.user is not Offer.objects.get(id=offer).session.hostplayer:
+    if request.user != Offer.objects.get(id=offer).session.hostplayer:
         return HttpResponseRedirect('/')
 
     offer.session.guestplayer = offer.guest
@@ -437,14 +443,14 @@ def cancel_session(request):
     # Fetch the session. Return 400 if invalid.
     session_id = request.POST['session']
     if session_id is None:
-        return HttpResponseRedirect('/sessions/')
+        return HttpResponseRedirect('/')
     session = Session.objects.get(id=session_id)
     if session is None:
-        return HttpResponseRedirect('/sessions/')
+        return HttpResponseRedirect('/')
 
     # If the user is not the host, this is very likely a hack attempt.
     # Take revenge by redirecting to main page.
-    if request.user is not session.hostplayer:
+    if request.user != session.hostplayer:
         return HttpResponseRedirect('/')
 
     # Remove the offers.
@@ -453,7 +459,7 @@ def cancel_session(request):
     # Remove the session.
     session.delete()
 
-    return HttpResponseRedirect('/sessions/')
+    return HttpResponseRedirect('/')
 
 @csrf_exempt # TODO Change to csrf_proect
 def withdraw_offer(request):
@@ -467,10 +473,10 @@ def withdraw_offer(request):
     # Fetch the session. Return 400 if invalid.
     session_id = request.POST['session']
     if session_id is None:
-        return HttpResponseRedirect('/sessions/')
+        return HttpResponseRedirect('/')
     session = Session.objects.get(id=session_id)
     if session is None:
-        return HttpResponseRedirect('/sessions/')
+        return HttpResponseRedirect('/')
 
     # Get the offer. If null, reload the page.
     offer = Offer.objects.get(session=session, guest=request.user)
@@ -483,7 +489,7 @@ def withdraw_offer(request):
 
     # Remove the offer.
     offer.delete()
-
+    print 'deleted offer'
     # Reload the page.
     return HttpResponseRedirect('/session/' + str(session.id) + '/')
 
