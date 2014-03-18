@@ -70,7 +70,7 @@ h6 {
     top:0;
     left:0;
     right:0;
-    z-index: 100;
+    z-index: 999;
  }
 
  .logo-wrap { 	
@@ -245,7 +245,7 @@ h6 {
  	border-left: 1px solid #ececec;
  	background-color: #f7fbfd;
  	padding-top:25px;
-    position: fixed;
+    /*position: fixed;*/
     margin-top:40px;
  }
 
@@ -291,7 +291,7 @@ h6 {
  */
 
  .content-wrap-sidebar {
-     margin-left: 233px;
+     /*margin-left: 233px;*/
      margin-top:40px;
  }
 
