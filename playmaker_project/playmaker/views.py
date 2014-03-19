@@ -84,7 +84,7 @@ def register(request):
     # this happens when a user submits a form
     if request.method == "POST":
         #create form object
-        form = RegistrationForm(data=request.method == "POST")
+        form = RegistrationForm(data=request.POST)
         if form.is_valid():
             user = User.objects.create_user(username=form.cleaned_data['username'], first_name=form.cleaned_data['first_name'],
                                             last_name=form.cleaned_data['last_name'], password=form.cleaned_data['password'],
@@ -146,30 +146,21 @@ def preferences(request):
         return HttpResponse(status=401)
 
     if request.method == "POST":
-        form = PreferencesForm(data = request.method == "POST")
+        form = PreferencesForm(data = request.POST)
         if form.is_valid():
-            user = User.objects.get(username = request.user.username)
+            user = request.user
             user.last_name = request.POST['last_name']
             user.first_name = request.POST['first_name']
             user.email = request.POST['email']
             user.set_password(request.POST['password'])
             user.save()
-            form_initial = {}
-            form_initial['email'] = user.email
-            form_initial['first_name'] = user.first_name
-            form_initial['last_name'] = user.last_name
-            form_initial['city'] = UserPreferredCities.objects.get(user=user).city
-            context_dict['form'] = PreferencesForm(initial=form_initial)
+
             context_dict['updated'] = True
             # Form is invalid, return 400 Bad Request.
-            return HttpResponse(status=400)
+            return render_to_response('preferences.html', context_dict, context)
+        else:
+            context_dict['updated'] = False
 
-    form_initial = {}
-    form_initial['email'] = request.user.email
-    form_initial['first_name'] = request.user.first_name
-    form_initial['last_name'] = request.user.last_name
-    form_initial['city'] = UserPreferredCities.objects.get(user=request.user).city
-    context_dict['form'] = PreferencesForm(initial=form_initial)
     return render_to_response('preferences.html', context_dict, context)
 
 def user_profile(request, username):
@@ -269,7 +260,7 @@ def add_message_to_session(request):
     if not request.user.is_authenticated() or not request.user.is_active:
         return HttpResponse(status=401)
 
-    form = AddMessageToSessionForm(request.method == "POST")
+    form = AddMessageToSessionForm(request.POST)
     if not form.is_valid():
         print "Form error"
         print form.errors
@@ -328,7 +319,7 @@ def create_session(request):
 
     # Create the session if the method is POST.
     if request.method == "POST":
-        form = CreateSessionForm(data = request.method == "POST")
+        form = CreateSessionForm(data = request.POST)
         if form.is_valid():
             # Create session object.
             session = Session.objects.create(sport=Sport.objects.get(sport = request.POST['sport']), hostplayer = request.user, guestplayer = None,
