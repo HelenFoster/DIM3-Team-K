@@ -100,8 +100,8 @@ def register(request):
 
             if authenticate(username=user.username, password=form.cleaned_data['password']) is None:
                 print 'Could not authenticate after registering.'
-            # Return 200 OK to signal success.
-            return HttpResponse(status=200)
+            # Redirect to mainpage if successful.
+            HttpResponseRedirect('/')
 
     # Show the city selection page if not authenticated.
     cities = []
@@ -320,8 +320,8 @@ def create_session(request):
                                              date = request.POST['date'], time = request.POST['time'], city = City.objects.get(city=request.POST['city']),
                                              location = request.POST['location'], price = request.POST['price'], details = request.POST.get('details', ""))
             session.save()
-            # Return 200 OK to signal success.
-            return HttpResponse(status=200)
+            # Return to the session page if successful.
+            return HttpResponseRedirect('/session/' + str(session.id) + '/')
         else:
             # Display the page if the method is GET.
             context_dict = get_context_dictionary(request)
