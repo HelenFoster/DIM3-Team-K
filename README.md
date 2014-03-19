@@ -36,4 +36,10 @@ Regular users: "vlad", "tomasz", "helen", "leif"...
 
 Passwords are currently the same as the usernames.
 
+External libraries and frameworks
+----
+- jQuery
+- jQuery UI
+- Bootstrap
+- mmenu (http://mmenu.frebsite.nl/)
 
