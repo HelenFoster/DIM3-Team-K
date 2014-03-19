@@ -11,7 +11,10 @@
 
             var $sendButton = $(".chat-message-send");
             var $messageField = $(".chat-message");
+            var $discussion = $(".discussion");
 
+            // Adjust sidebar height to the max height of all containers
+            $discussion.css("height", $(".uneven-heights").css("height").slice(0,-2)-34);
             // Send messages via AJAX
             $sendButton.click(function() {
 
@@ -24,7 +27,7 @@
                         'session_id': {{ session.id }},
                         'csrfmiddlewaretoken': $('[name="csrfmiddlewaretoken"]').val()
                     }).done(function() {
-                        $messageField.empty();
+                        $messageField.val("");
                         reloadMessages({{ session.id }}, "{{ session.hostplayer }}");
                     });
                 }
@@ -33,7 +36,7 @@
             // Send chat message on
             $messageField.keypress(function(e) {
                 if (e.which == 13) {
-                    $sendButton.trigger();
+                    $sendButton.click();
                 }
             });
 
@@ -178,19 +181,11 @@
                     </div>
                 </div>
             </div>
-
-            <hr />
-
-        </div>
-        <div class="col-md-4">
-            <div class="row">
-                {% include 'partials/chat.html' %}
-            </div>
-        </div>
-        {% if session.hostplayer == user %}
+<hr />
+                    {% if session.hostplayer == user %}
             <div class="clearfix"></div>
             <div class="col-md-12">
-                <h3>View offers</h3>
+                <h3>Accept an offer</h3>
                 <table>
                     <tr>
                         <th>Username</th>
@@ -209,8 +204,14 @@
                 </table>
             </div>
         {% endif %}
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                {% include 'partials/chat.html' %}
+            </div>
+        </div>
     </div>
     {% csrf_token %}
 
-
+<br /><br />
 {% endblock %}

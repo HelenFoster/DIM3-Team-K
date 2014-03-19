@@ -83,6 +83,7 @@
   background: #f7fbfd;
   margin: 0;
   padding: 0 0 50px 0;
+  overflow-y: scroll;
 }
 .discussion li {
   /*padding: 0.5rem;*/

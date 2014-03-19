@@ -72,6 +72,8 @@ function reloadMessages(id, hostplayer) {
         });
 
         $target.append(output.join(''));
+        $(".discussion").scrollTop($(".discussion")[0].scrollHeight);
+
     }).fail(function() {
         console.log("Could not reload the messages");
     });
