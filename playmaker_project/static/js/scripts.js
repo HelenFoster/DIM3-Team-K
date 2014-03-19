@@ -18,8 +18,6 @@ $(document).ready(function() {
         $("#menu").trigger( "open.mm" );
     });
 
-
-
 });
 
 /*
@@ -37,6 +35,10 @@ $.fn.setAllToMaxHeight = function(){
     return this.height(Math.max.apply(this,$.map(this,function(e){return $(e).height()})));
 }
 
+/*
+ *  Reloads messages in the chat
+ *
+ */
 function reloadMessages(id, hostplayer) {
 
     var $target = $(".message-container");
@@ -59,11 +61,8 @@ function reloadMessages(id, hostplayer) {
 
             var current = $(this)[0];
 
-            if (hostplayer == current.user_op) {
-                output.push('<li class="self">');
-            } else {
-                output.push('<li class="other">');
-            }
+            if (hostplayer == current.user_op) output.push('<li class="self">');
+            else output.push('<li class="other">');
             output.push('<div class="avatar"></div>');
             output.push('<div class="messages">');
             output.push('<p>' + current.message + '</p>');
@@ -74,7 +73,6 @@ function reloadMessages(id, hostplayer) {
 
         $target.append(output.join(''));
     }).fail(function() {
-        alert("Could not reload messages!");
+        console.log("Could not reload the messages");
     });
-
 }

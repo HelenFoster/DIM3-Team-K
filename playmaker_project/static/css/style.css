@@ -130,7 +130,6 @@ h6 {
 
 .splash {
 	width: 100%;
-	min-width: 1000px;
 	height: 576px;
 	/*background: url('http://img2.wsimg.com/fos/hp/rebrand/img/sb/domains.jpg') no-repeat top center;*/
     background: url('/static/img/cover.jpg') no-repeat top center;
