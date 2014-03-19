@@ -175,7 +175,9 @@ def user_profile(request, username):
         context_dict['profile_username'] = user.username
         context_dict['first_name'] = user.first_name
         context_dict['last_name'] = user.last_name
-        context_dict['city'] = UserProfile.objects.get(user=user).city
+        profile = UserProfile.objects.get(user=user)
+        context_dict['city'] = profile.city
+        context_dict['about'] = profile.about
     return render_to_response('user_profile.html', context_dict, context)
 
 def view_session_by_id(request, session_id):

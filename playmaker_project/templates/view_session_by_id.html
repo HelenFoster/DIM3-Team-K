@@ -112,13 +112,13 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="user-wrap">
-                        <span class="sport-icon user-icon"></span>
+                        <span title="Host" class="sport-icon user-icon"></span>
                         <a href="/profile/{{session.hostplayer}}" class="colourless">{{session.hostplayer}}</a>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="user-wrap">
-                        <span class="sport-icon user-icon"></span>
+                        <span title="Guest" class="sport-icon user-icon"></span>
                         {% if session.guestplayer %}
                             <a href="/profile/{{session.guestplayer}}" class="colourless">{{session.guestplayer}}</a>
                         {% else %}
@@ -133,27 +133,27 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="detail-wrap">
-                            <span class="sport-icon location-icon"></span>
+                            <span title="Location" class="sport-icon location-icon"></span>
                             {{ session.city }}<br />
                             {{ session.location }}
                         </div>
                     </div>
                     <div class="row">
                         <div class="detail-wrap">
-                            <span class="sport-icon time-icon"></span>
+                            <span title="Time" class="sport-icon time-icon"></span>
                             {{ session.time }}<br />
                             {{ session.date }}
                         </div>
                     </div>
                     <div class="row">
                         <div class="detail-wrap">
-                            <span class="sport-icon pound-icon"></span>
+                            <span title="Price" class="sport-icon pound-icon"></span>
                             {{ session.price }}
                         </div>
                     </div>
                     <div class="row">
                         <div class="detail-wrap">
-                            <span class="sport-icon offers-icon"></span>
+                            <span title="Offers" class="sport-icon offers-icon"></span>
                             {{ offer_count }} offers
                         </div>
                     </div>
