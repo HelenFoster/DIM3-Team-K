@@ -31,6 +31,9 @@
                 }
             });
 
+            // Allow user type right after the page is loaded
+            $("#username").focus();
+
         });
     </script>
 {% endblock %}
@@ -48,7 +51,7 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <div class="col-sm-4">
-                            <input class="form-control" type="text" placeholder="Username" name="username" />
+                            <input class="form-control" type="text" placeholder="Username" name="username" id="username" />
                         </div>
 
                         <div class="col-sm-4">

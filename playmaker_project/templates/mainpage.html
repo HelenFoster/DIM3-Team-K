@@ -45,7 +45,7 @@
         }
 
     </style>
-    <script>
+    <script type="text/javascript">
         (function( $ ) {
             $.widget( "custom.combobox", {
                 _create: function() {
@@ -154,7 +154,7 @@
         })( jQuery );
 
         $(function() {
-            
+
             // Set up autocomplete combobox
             $("#combobox").combobox();
 
@@ -172,7 +172,6 @@
             });
 
             $(".city-chooser").on("keypress", function(e) {
-                console.log(e);
                 if (e.which == 13) {
                     $("#go-button").click();
                 }
