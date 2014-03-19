@@ -49,6 +49,9 @@
             <div class="splash-right">
                 <form class="form-horizontal" role="form" id="login-form" method="POST" action="/login/">
                     {% csrf_token %}
+                    {% if result %}
+                        <p class="alert alert-warning col-sm-8">{{ result }}</p><div class="clearfix"></div>
+                    {% endif %}
                     <div class="form-group">
                         <div class="col-sm-4">
                             <input class="form-control" type="text" placeholder="Username" name="username" id="username" />
