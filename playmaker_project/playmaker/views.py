@@ -12,6 +12,7 @@ from forms import CreateSessionForm
 from django.contrib.auth import authenticate
 import datetime
 import json
+from django.db.models import Q
 from helpers import get_context_dictionary
 
 def mainpage(request):
@@ -201,7 +202,6 @@ def view_session_by_id(request, session_id):
     if offer_count > 0:
         offers = Offer.objects.filter(session=Session.objects.get(id=session_id))
         context_dict['joined'] = offers.filter(guest=request.user).exists()
-    messages = Message.objects.filter(session=Session.objects.get(id=session_id))
     guestplayer = session.guestplayer
     sports = Sport.objects.all()
 
@@ -219,7 +219,6 @@ def view_session_by_id(request, session_id):
     context_dict['current_viewer'] = username
     context_dict['session'] = session
     context_dict['host_viewing'] = host_viewing
-    context_dict['messages'] = messages
     context_dict['offers'] = offers
     context_dict['offer_count'] = offer_count
     context_dict['offer_accepted'] = offer_accepted
@@ -272,10 +271,10 @@ def add_message_to_session(request):
     # If private, determine who should be able to view it.
     viewer = None
     print session.guestplayer
-    if session.guestplayer is not None:
-        if session.hostplayer is request.user:
+    if session.guestplayer != None:
+        if session.hostplayer == request.user:
             viewer = session.guestplayer
-        elif session.guestplayer is request.user:
+        elif session.guestplayer == request.user:
             viewer = session.hostplayer
         else: # Not host or guest in private session, refuse and return 401 Unauthorized.
             return HttpResponse(status=401)
@@ -290,11 +289,8 @@ def add_message_to_session(request):
 
 def get_messages(request, session_id):
     response = []
-    messages_all = Message.objects.filter(session=session_id)
-    messages_public = messages_all.filter(user_viewer=None)
-    messages_private = messages_all.filter(user_viewer=request.user)
-    messages_filtered = (messages_public | messages_private).order_by('date', 'time')
-    for message in messages_filtered:
+    messages = Message.objects.filter(session=session_id).filter(Q(user_viewer=None) | Q(user_op=request.user) | Q(user_viewer=request.user)).order_by('date', 'time')
+    for message in messages:
         viewer = message.user_viewer
         if viewer is not None:
             viewer = str(viewer)
@@ -305,7 +301,7 @@ def get_messages(request, session_id):
             'time': str(message.time),
             'message': message.message,
         })
-    return HttpResponse(status=200, message=json.dumps(response, indent=4))
+    return HttpResponse(status=200, content=json.dumps(response, indent=4))
 
 def create_session(request):
     context = RequestContext(request)
