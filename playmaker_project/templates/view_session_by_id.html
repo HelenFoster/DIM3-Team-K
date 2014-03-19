@@ -9,10 +9,13 @@
 
         $(document).ready(function(){
 
-            // Send messages via AJAX
-            $(".chat-message-send").click(function() {
+            var $sendButton = $(".chat-message-send");
+            var $messageField = $(".chat-message");
 
-                var message = $(".chat-message").val();
+            // Send messages via AJAX
+            $sendButton.click(function() {
+
+                var message = $messageField.val();
                 var url = "/sendmsg/";
 
                 if (message.trim() != "") {
@@ -21,10 +24,23 @@
                         'session_id': {{ session.id }},
                         'csrfmiddlewaretoken': $('[name="csrfmiddlewaretoken"]').val()
                     }).done(function() {
+                        $messageField.empty();
                         reloadMessages({{ session.id }}, "{{ session.hostplayer }}");
                     });
                 }
             });
+
+            // Send chat message on
+            $messageField.keypress(function(e) {
+                if (e.which == 13) {
+                    $sendButton.trigger();
+                }
+            });
+
+            // Update chat messages every 1 second
+            setInterval(function() {
+                reloadMessages({{ session.id }}, "{{ session.hostplayer }}");
+            }, 1000);
 
             $(".join-button").click(function() {
                 var url = "/make-offer/";
@@ -74,6 +90,7 @@
 
                 });
             });
+
 
         });
 
@@ -193,7 +210,7 @@
             </div>
         {% endif %}
     </div>
-    <div class="clearfix"></div>
+    {% csrf_token %}
 
 
 {% endblock %}
