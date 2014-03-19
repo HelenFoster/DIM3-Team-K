@@ -56,7 +56,7 @@ class Session(models.Model):
     city = models.ForeignKey('City', unique=False, blank=False, null=False, to_field='city', on_delete=models.CASCADE, )
     location = models.CharField(max_length=64, unique=False, blank=False, null=False, )
     price = models.FloatField(unique=False, blank=False, null=False, default=0, )
-    details = models.TextField(unique=False, blank=True, null=False, )
+    details = models.TextField(unique=False, blank=True, null=True, )
 
     def __unicode__(self):
         return unicode(self.id)

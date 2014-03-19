@@ -314,11 +314,12 @@ def create_session(request):
     # Create the session if the method is POST.
     if request.method == "POST":
         form = CreateSessionForm(data = request.POST)
+
         if form.is_valid():
             # Create session object.
-            session = Session.objects.create(sport=Sport.objects.get(sport = request.POST['sport']), hostplayer = request.user, guestplayer = None,
-                                             date = request.POST['date'], time = request.POST['time'], city = City.objects.get(city=request.POST['city']),
-                                             location = request.POST['location'], price = request.POST['price'], details = request.POST.get('details', ""))
+            session = Session.objects.create(sport=Sport.objects.get(sport = form['sport'].data), hostplayer = request.user, guestplayer = None,
+                                             date = form['date'].data, time = form['time'].data, city = City.objects.get(city=form['city'].data),
+                                             location = form['location'].data, price = form['price'].data, details = form['details'].data)
             session.save()
             # Return to the session page if successful.
             return HttpResponseRedirect('/session/' + str(session.id) + '/')

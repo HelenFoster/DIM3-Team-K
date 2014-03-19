@@ -55,6 +55,14 @@ class CreateSessionForm(forms.Form):
     time = forms.TimeField()
     city = forms.CharField()
     location = forms.CharField()
-    price = forms.FloatField()
-    details = forms.CharField()
+    price = forms.FloatField(required=False, initial=0, )
+    details = forms.CharField(required=False, )
 
+    def get_initial(self):
+        return {'price': 0}
+
+    def clean_price(self):
+        if self.cleaned_data['price'] is None:
+            self.cleaned_data['price'] = 0
+            return 0
+        return self.cleaned_data['price']
