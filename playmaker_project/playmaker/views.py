@@ -48,12 +48,12 @@ def attempt_login(request):
     context = RequestContext(request)
 
     # Display the login page.
-    if not request.POST:
+    if request.method != "POST":
         context = RequestContext(request)
         return render_to_response('login.html', context)
 
     # Only accept POST requests.
-    if request.POST:
+    if request.method == "POST":
         # Extract the username and password from the request.
         username = request.POST['username']
         password = request.POST['password']
@@ -62,7 +62,7 @@ def attempt_login(request):
             if user.is_active:
                 # Valid user, credentials stored, signal success.
                 login(request, user)
-                return HttpResponse(status=200)
+                return HttpResponseRedirect('/')
             else:
                 failure_reason = 'Your account is disabled!'
         else:
@@ -72,19 +72,19 @@ def attempt_login(request):
     # Add the failure_reason and render the login_failed page.
     context_dict = get_context_dictionary(request)
     context_dict['result'] = failure_reason
-    return render_to_response('login_failed.html', context_dict, context, )
+    return render_to_response('login.html', context_dict, context, )
 
 def register(request):
     context = RequestContext(request)
     # Only accept POST requests. Return 405 Method Not Allowed if not.
-    if not request.POST and not request.GET:
+    if request.method != "POST" and request.method != "GET":
         return HttpResponse(status=405)
 
     # check if the request contains POST data
     # this happens when a user submits a form
-    if request.POST:
+    if request.method == "POST":
         #create form object
-        form = RegistrationForm(data=request.POST)
+        form = RegistrationForm(data=request.method == "POST")
         if form.is_valid():
             user = User.objects.create_user(username=form.cleaned_data['username'], first_name=form.cleaned_data['first_name'],
                                             last_name=form.cleaned_data['last_name'], password=form.cleaned_data['password'],
@@ -146,7 +146,7 @@ def preferences(request):
         return HttpResponse(status=401)
 
     if request.method == "POST":
-        form = PreferencesForm(data = request.POST)
+        form = PreferencesForm(data = request.method == "POST")
         if form.is_valid():
             user = User.objects.get(username = request.user.username)
             user.last_name = request.POST['last_name']
@@ -263,13 +263,13 @@ def view_sessions_by_city(request, session_city):
 
 def add_message_to_session(request):
     # Only accept POST requests. Return 405 Method Not Allowed if not.
-    if not request.POST:
+    if request.method != "POST":
         return HttpResponse(status=405)
     # Make sure the user is valid. Return 401 Unauthorized if not.
     if not request.user.is_authenticated() or not request.user.is_active:
         return HttpResponse(status=401)
 
-    form = AddMessageToSessionForm(request.POST)
+    form = AddMessageToSessionForm(request.method == "POST")
     if not form.is_valid():
         print "Form error"
         print form.errors
@@ -319,7 +319,7 @@ def get_messages(request, session_id):
 def create_session(request):
     context = RequestContext(request)
     # Only accept POST or GET requests. Return 405 Method Not Allowed if not.
-    if not request.POST and not request.GET:
+    if request.method != "POST" and request.method != "GET":
         return HttpResponse(status=405)
 
     # Make sure the user is valid. Return 401 Unauthorized if not.
@@ -327,8 +327,8 @@ def create_session(request):
         return HttpResponse(status=401)
 
     # Create the session if the method is POST.
-    if request.POST:
-        form = CreateSessionForm(data = request.POST)
+    if request.method == "POST":
+        form = CreateSessionForm(data = request.method == "POST")
         if form.is_valid():
             # Create session object.
             session = Session.objects.create(sport=Sport.objects.get(sport = request.POST['sport']), hostplayer = request.user, guestplayer = None,
@@ -363,7 +363,7 @@ def create_session(request):
 def make_offer(request):
     context = RequestContext(request)
     # Only accept POST requests. Return 405 Method Not Allowed if not.
-    if not request.POST:
+    if request.method != "POST":
         return HttpResponse(status=405)
     # Make sure the user is valid. Return 401 Unauthorized if not.
     if not request.user.is_authenticated() or not request.user.is_active:
@@ -393,7 +393,7 @@ def make_offer(request):
 
 def withdraw_offer(request):
     # Only accept POST requests. Return 405 Method Not Allowed if not.
-    if not request.POST:
+    if request.method != "POST":
         return HttpResponse(status=405)
     # Make sure the user is valid. Return 401 Unauthorized if not.
     if not request.user.is_authenticated() or not request.user.is_active:
@@ -425,7 +425,7 @@ def withdraw_offer(request):
 def accept_offer(request):
     context = RequestContext(request)
     # Only accept POST requests. Return 405 Method Not Allowed if not.
-    if not request.POST:
+    if request.method != "POST":
         return HttpResponse(status=405)
     # Make sure the user is valid. Return 401 Unauthorized if not.
     if not request.user.is_authenticated() or not request.user.is_active:
@@ -449,7 +449,7 @@ def accept_offer(request):
 
 def cancel_session(request):
     # Only accept POST requests. Return 405 Method Not Allowed if not.
-    if not request.POST:
+    if request.method != "POST":
         return HttpResponse(status=405)
     # Make sure the user is valid. Return 401 Unauthorized if not.
     if not request.user.is_authenticated() or not request.user.is_active:
