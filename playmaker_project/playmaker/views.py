@@ -105,7 +105,6 @@ def register(request):
 
     # Show the city selection page if not authenticated.
     cities = []
-    print "Some shit happened"
     all_cities = City.objects.all().order_by('city')
     for city in all_cities:
         cities.append(city)
@@ -153,7 +152,8 @@ def preferences(request):
             user.last_name = request.POST['last_name']
             user.first_name = request.POST['first_name']
             user.email = request.POST['email']
-            user.set_password(request.POST['password'])
+            if len(request.POST['password']) != 0:
+                user.set_password(request.POST['password'])
             user.save()
 
             context_dict['updated'] = True
@@ -261,7 +261,6 @@ def add_message_to_session(request):
 
     form = AddMessageToSessionForm(request.POST)
     if not form.is_valid():
-        print "Form error"
         print form.errors
         return HttpResponse(status=400)
 
@@ -270,7 +269,6 @@ def add_message_to_session(request):
     # Determine if the message is public or private.
     # If private, determine who should be able to view it.
     viewer = None
-    print session.guestplayer
     if session.guestplayer != None:
         if session.hostplayer == request.user:
             viewer = session.guestplayer
@@ -326,7 +324,6 @@ def create_session(request):
             return HttpResponse(status=200)
         else:
             # Display the page if the method is GET.
-            print form.errors
             context_dict = get_context_dictionary(request)
             sports = Sport.objects.all()
             cities = City.objects.all().order_by('city')
