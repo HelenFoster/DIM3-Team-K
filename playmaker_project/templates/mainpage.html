@@ -154,20 +154,30 @@
         })( jQuery );
 
         $(function() {
-
+            
             // Set up autocomplete combobox
-            $( "#combobox" ).combobox();
-            // Put the button within the dynamically generated select
-            $( ".custom-combobox" ).append($("<button type='button' class='btn btn-large btn-success' id='go-button'>GO</button>"));
-            // Focus on the input box on page load
-            $( ".custom-combobox-input").focus();
+            $("#combobox").combobox();
 
-            $( "#go-button").click(function() {
+            // Put the button within the dynamically generated select
+            $(".custom-combobox").append($("<button type='button' class='btn btn-large btn-success' id='go-button'>GO</button>"));
+
+            // Focus on the input box on page load
+            $(".custom-combobox-input").focus();
+
+            $("#go-button").click(function() {
                 var city = $("#combobox").val().trim();
                 if (city != "") {
                     window.location.replace("/sessions/city/" + city);
                 }
             });
+
+            $(".city-chooser").on("keypress", function(e) {
+                console.log(e);
+                if (e.which == 13) {
+                    $("#go-button").click();
+                }
+            });
+
 
         });
     </script>
