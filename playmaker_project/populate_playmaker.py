@@ -35,7 +35,7 @@ def add_superuser(username, email, firstname, lastname, city):
 
 #called from user addition functions
 def add_user_preferred_city(user, city):
-    UserPreferredCities.objects.get_or_create(
+    UserProfile.objects.get_or_create(
         user = User.objects.get(username = user),
         city = City.objects.get(city = city),
     )
@@ -82,7 +82,7 @@ def populate():
     #Delete all rows, so we don't need to delete the database and rerun syncdb unless we changed the models.
     Message.objects.all().delete()
     Offer.objects.all().delete()
-    UserPreferredCities.objects.all().delete()
+    UserProfile.objects.all().delete()
     Session.objects.all().delete()
     Sport.objects.all().delete()
     City.objects.all().delete()

@@ -19,7 +19,7 @@ def mainpage(request):
     context = RequestContext(request)
     if request.user.is_authenticated() and request.user.is_active:
         sports = Sport.objects.all()
-        city = UserPreferredCities.objects.get(user=request.user)
+        city = UserProfile.objects.get(user=request.user)
         edit = city.city.__str__().capitalize()
         city = edit
         today = datetime.datetime.now().date()
@@ -94,7 +94,7 @@ def register(request):
             user.set_password(form.cleaned_data['password'])
             user.save()
 
-            upc = UserPreferredCities.objects.create(user=user,
+            upc = UserProfile.objects.create(user=user,
                                                      city=City.objects.get(city=form.cleaned_data['city']), )
             upc.save()
 
@@ -175,7 +175,7 @@ def user_profile(request, username):
         context_dict['profile_username'] = user.username
         context_dict['first_name'] = user.first_name
         context_dict['last_name'] = user.last_name
-        context_dict['city'] = UserPreferredCities.objects.get(user=user).city
+        context_dict['city'] = UserProfile.objects.get(user=user).city
     return render_to_response('user_profile.html', context_dict, context)
 
 def view_session_by_id(request, session_id):
@@ -327,7 +327,7 @@ def create_session(request):
             context_dict = get_context_dictionary(request)
             sports = Sport.objects.all()
             cities = City.objects.all().order_by('city')
-            user_preferred_city = UserPreferredCities.objects.get(user=request.user)
+            user_preferred_city = UserProfile.objects.get(user=request.user)
             context_dict['sports'] = sports
             context_dict['cities'] = cities
             context_dict['user_preferred_city'] = user_preferred_city
@@ -338,7 +338,7 @@ def create_session(request):
     context_dict = get_context_dictionary(request)
     sports = Sport.objects.all()
     cities = City.objects.all().order_by('city')
-    user_preferred_city = UserPreferredCities.objects.get(user=request.user)
+    user_preferred_city = UserProfile.objects.get(user=request.user)
     context_dict['sports'] = sports
     context_dict['cities'] = cities
     context_dict['user_preferred_city'] = user_preferred_city

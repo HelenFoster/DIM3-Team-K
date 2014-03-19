@@ -74,7 +74,8 @@ class Sport(models.Model):
     def __unicode__(self):
         return unicode(self.sport)
 
-class UserPreferredCities(models.Model):
+class UserProfile(models.Model):
     # id = AutoField(primary_key=True) added automatically.
     user = models.ForeignKey(User, unique=True, blank=False, null=False, on_delete=models.CASCADE, )
     city = models.ForeignKey('City', unique=False, blank=False, null=False, to_field='city', on_delete=models.CASCADE, )
+    about = models.TextField(unique=False, blank=True, null=False, )
