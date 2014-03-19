@@ -30,9 +30,9 @@
     <div class="col-md-1 column logo-wrap">
         <a href="/"><div id="logo"></div></a>
     </div>
-    <div class="col-md-9 column menu-wrap">
+    <div class="col-md-7 column menu-wrap">
         <div id="top-nav">
-            <ul>
+            <ul style="margin-left:50px;">
                 <li><a href="/" title="Title goes here"><span class="glyphicon glyphicon-home"></span>Home</a></li>
                 {% if username %}
                     <li><a href="/bookings/" title="Title goes here"><span class="glyphicon glyphicon-tasks"></span>Bookings</a></li>
@@ -42,14 +42,14 @@
             </ul>
         </div>
     </div>
-    <div class="col-md-2 column cta-wrap">
+    <div class="col-md-4 column cta-wrap">
         <div id="cta">
             {% if username %}
-                <a href="/profile/{{ user.username }}" style="margin-right:20px;vertical-align: middle;">Hi, {{ user.username }}</a>
-                <a class="btn btn-sm btn-primary" href="/logout/">Logout</a>
+                <a href="/profile/{{ user.username }}" class="header-name">{{ user.first_name }} {{ user.last_name }}</a>
+                <a class="btn btn-sm btn-primary btn-header" href="/logout/">Logout</a>
             {% else %}
-                <a class="btn btn-sm btn-success" href="/login/">Login</a>
-                <a class="btn btn-sm btn-primary" href="/register/">Register</a>
+                <a class="btn btn-sm btn-success btn-header" href="/login/">Login</a>
+                <a class="btn btn-sm btn-primary btn-header" href="/register/">Register</a>
             {% endif %}
 
         </div>
