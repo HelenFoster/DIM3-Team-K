@@ -10,6 +10,14 @@
         <b>Name:</b> {{ first_name }} {{ last_name }}<br>
         <b>City:</b> {{ city }}<br>
         <b>About:</b> {{ about }}<br>
+        <b>Sessions created:</b> {{ num_sessions_created }}
+            ({{ num_sessions_created_offers }}
+            offer{% if num_sessions_created_offers != 1%}s{% endif%};
+            accepted {{ num_sessions_created_accepted }}
+            guest{% if num_sessions_created_accepted != 1%}s{% endif%})<br>
+        <b>Offers made:</b> {{ num_sessions_offered }}
+            ({{ num_sessions_offered_accepted }}
+            offer{% if num_sessions_offered_accepted != 1%}s{% endif%} accepted)<br>
 
     {% else %}
 

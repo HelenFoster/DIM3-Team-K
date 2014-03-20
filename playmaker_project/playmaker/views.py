@@ -180,6 +180,16 @@ def user_profile(request, username):
         profile = UserProfile.objects.get(user=user)
         context_dict['city'] = profile.city
         context_dict['about'] = profile.about
+        sessions_created = Session.objects.filter(hostplayer=user)
+        sessions_created_offers = Offer.objects.filter(session__hostplayer__exact=user)
+        sessions_created_accepted = sessions_created.exclude(guestplayer=None)
+        sessions_offered = Session.objects.filter(offer__guest__exact=user)
+        sessions_offered_accepted = Session.objects.filter(guestplayer=user)
+        context_dict['num_sessions_created'] = sessions_created.count()
+        context_dict['num_sessions_created_offers'] = sessions_created_offers.count()
+        context_dict['num_sessions_created_accepted'] = sessions_created_accepted.count()
+        context_dict['num_sessions_offered'] = sessions_offered.count()
+        context_dict['num_sessions_offered_accepted'] = sessions_offered_accepted.count()
     return render_to_response('user_profile.html', context_dict, context)
 
 def view_session_by_id(request, session_id):
