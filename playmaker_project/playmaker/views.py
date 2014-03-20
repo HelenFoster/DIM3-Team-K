@@ -77,9 +77,6 @@ def attempt_login(request):
 
 def register(request):
     context = RequestContext(request)
-    # Only accept POST requests. Return 405 Method Not Allowed if not.
-    if request.method != "POST" and request.method != "GET":
-        return HttpResponse(status=405)
 
     # check if the request contains POST data
     # this happens when a user submits a form
@@ -143,7 +140,7 @@ def preferences(request):
     context_dict['sports'] = sports
     # Make sure the user is valid. Return 401 Unauthorized if not.
     if not request.user.is_authenticated() or not request.user.is_active:
-        return HttpResponse(status=401)
+        return HttpResponseRedirect('/login/')
 
     if request.method == "POST":
         form = PreferencesForm(data = request.POST)
@@ -254,17 +251,19 @@ def view_sessions_by_city(request, session_city):
     return render_to_response('view_sessions_by_city.html', context_dict, context)
 
 def add_message_to_session(request):
-    # Only accept POST requests. Return 405 Method Not Allowed if not.
+    #AJAX from session page
+    
+    # Only accept POST requests.
     if request.method != "POST":
-        return HttpResponse(status=405)
+        return HttpResponse("POST required", status=405)
     # Make sure the user is valid. Return 401 Unauthorized if not.
     if not request.user.is_authenticated() or not request.user.is_active:
-        return HttpResponse(status=401)
+        return HttpResponse("Not logged in", status=401)
 
     form = AddMessageToSessionForm(request.POST)
     if not form.is_valid():
         print form.errors
-        return HttpResponse(status=400)
+        return HttpResponse("Form errors", status=400)
 
     session = Session.objects.get(id=form.cleaned_data['session_id'])
 
@@ -277,7 +276,7 @@ def add_message_to_session(request):
         elif session.guestplayer == request.user:
             viewer = session.hostplayer
         else: # Not host or guest in private session, refuse and return 401 Unauthorized.
-            return HttpResponse(status=401)
+            return HttpResponse("Access denied", status=401)
 
     # Store the message to the database.
     message = Message.objects.create(session=session, user_op=request.user, user_viewer=viewer,
@@ -285,9 +284,11 @@ def add_message_to_session(request):
     message.save()
 
     # Confirm addition.
-    return HttpResponse(status=200)
+    return HttpResponse("Message added", status=200)
 
 def get_messages(request, session_id):
+    #AJAX from session page
+    
     response = []
     messages = Message.objects.filter(session=session_id).filter(Q(user_viewer=None) | Q(user_op=request.user) | Q(user_viewer=request.user)).order_by('date', 'time')
     for message in messages:
@@ -305,16 +306,12 @@ def get_messages(request, session_id):
 
 def create_session(request):
     context = RequestContext(request)
-    # Only accept POST or GET requests. Return 405 Method Not Allowed if not.
-    if request.method != "POST" and request.method != "GET":
-        return HttpResponse(status=405)
-
-    # Make sure the user is valid. Return 401 Unauthorized if not.
-    if not request.user.is_authenticated() or not request.user.is_active:
-        return HttpResponse(status=401)
 
     # Create the session if the method is POST.
     if request.method == "POST":
+        # Make sure the user is valid. Return 401 Unauthorized if not.
+        if not request.user.is_authenticated() or not request.user.is_active:
+            return HttpResponse("Not logged in", status=401) #TODO proper error page
         form = CreateSessionForm(data = request.POST)
         if form.is_valid():
             # Create session object.
@@ -328,6 +325,9 @@ def create_session(request):
             # Return to the session page if successful.
             return HttpResponseRedirect('/session/' + str(session.id) + '/')
         else:
+            # Make sure the user is valid. Redirect to login if not.
+            if not request.user.is_authenticated() or not request.user.is_active:
+                return HttpResponseRedirect('/login/')
             # Display the page if the method is GET.
             context_dict = get_context_dictionary(request)
             sports = Sport.objects.all()
@@ -350,21 +350,23 @@ def create_session(request):
     return render_to_response('create_session.html', context_dict, context)
 
 def make_offer(request):
+    #AJAX from session page
+    
     context = RequestContext(request)
     # Only accept POST requests. Return 405 Method Not Allowed if not.
     if request.method != "POST":
-        return HttpResponse(status=405)
+        return HttpResponse("POST required", status=405)
     # Make sure the user is valid. Return 401 Unauthorized if not.
     if not request.user.is_authenticated() or not request.user.is_active:
-        return HttpResponse(status=401)
+        return HttpResponse("Not logged in", status=401)
 
     # Fetch the session. Return 400 Bad Request if invalid.
     session_id = request.POST['session']
     if session_id is None:
-        return HttpResponse(status=400)
+        return HttpResponse("Session ID not specified", status=400)
     session = Session.objects.get(id=session_id)
     if session is None:
-        return HttpResponse(status=400)
+        return HttpResponse("Session not found", status=400)
 
     # Check that the user has not made an offer for this session before. Return 409 if he did.
     if Offer.objects.filter(session=session, guest=request.user).count() is not 0:
@@ -374,32 +376,32 @@ def make_offer(request):
 
     # Save the offer.
     Offer.objects.create(session=session, guest=request.user).save()
-    # Show the confirmation page.
-    context_dict = get_context_dictionary(request)
-    context_dict['result'] = 'Your offer has been placed!'
 
-    return render_to_response('view_session_by_id.html', context_dict, context)
+    # Return 200 OK to signal success.
+    return HttpResponse("Offer successfully made", status=200)
 
 def withdraw_offer(request):
+    #AJAX from session page
+    
     # Only accept POST requests. Return 405 Method Not Allowed if not.
     if request.method != "POST":
-        return HttpResponse(status=405)
+        return HttpResponse("POST required", status=405)
     # Make sure the user is valid. Return 401 Unauthorized if not.
     if not request.user.is_authenticated() or not request.user.is_active:
-        return HttpResponse(status=401)
+        return HttpResponse("Not logged in", status=401)
 
     # Fetch the session. Return 400 Bad Request if invalid.
     session_id = request.POST['session']
     if session_id is None:
-        return HttpResponse(status=400)
+        return HttpResponse("Session ID not specified", status=400)
     session = Session.objects.get(id=session_id)
     if session is None:
-        return HttpResponse(status=400)
+        return HttpResponse("Session not found", status=400)
 
-    # Get the offer. If null, reload the page.
+    # Get the offer.
     offer = Offer.objects.get(session=session, guest=request.user)
     if offer is None:
-        return HttpResponse(status=400)
+        return HttpResponse("Offer not found", status=400)
 
     # Remove the guest from the session.
     session.guestplayer = None
@@ -409,52 +411,56 @@ def withdraw_offer(request):
     offer.delete()
 
     # Return 200 OK to signal success.
-    return HttpResponse(status=200)
+    return HttpResponse("Offer successfully withdrawn", status=200)
 
 def accept_offer(request):
+    #AJAX from session page
+    
     context = RequestContext(request)
     # Only accept POST requests. Return 405 Method Not Allowed if not.
     if request.method != "POST":
-        return HttpResponse(status=405)
+        return HttpResponse("POST required", status=405)
     # Make sure the user is valid. Return 401 Unauthorized if not.
     if not request.user.is_authenticated() or not request.user.is_active:
-        return HttpResponse(status=401)
+        return HttpResponse("Not logged in", status=401)
 
     # If no offer id submitted, return 400 Bad Request.
     offer_id = request.POST['offer']
     if offer_id is None:
-        return HttpResponse(status=400)
+        return HttpResponse("Offer ID not specified", status=400)
 
     # If the user is not the op, return a 400 Bad Request.
     offer = Offer.objects.get(id=offer_id)
     if request.user != offer.session.hostplayer:
-        return HttpResponse(status=400)
+        return HttpResponse("This is not your session", status=400)
 
     offer.session.guestplayer = offer.guest
     offer.session.save()
 
-    # Reload the page.
-    return render_to_response('view_session_by_id.html', context)
+    # Return 200 OK to signal success.
+    return HttpResponse("Offer successfully accepted", status=200)
 
 def cancel_session(request):
+    #AJAX from session page
+    
     # Only accept POST requests. Return 405 Method Not Allowed if not.
     if request.method != "POST":
-        return HttpResponse(status=405)
+        return HttpResponse("POST required", status=405)
     # Make sure the user is valid. Return 401 Unauthorized if not.
     if not request.user.is_authenticated() or not request.user.is_active:
-        return HttpResponse(status=401)
+        return HttpResponse("Not logged in", status=401)
 
     # Fetch the session. Return 400 Bad Request if invalid.
     session_id = request.POST['session']
     if session_id is None:
-        return HttpResponse(status=400)
+        return HttpResponse("Session ID not specified", status=400)
     session = Session.objects.get(id=session_id)
     if session is None:
-        return HttpResponse(status=400)
+        return HttpResponse("Session not found", status=400)
 
     # If the user is not the host, return 400 Bad Request.
     if request.user != session.hostplayer:
-        return HttpResponse(status=400)
+        return HttpResponse("This is not your session", status=400)
 
     # Remove the offers.
     Offer.objects.filter(session=session).delete()
@@ -463,7 +469,7 @@ def cancel_session(request):
     session.delete()
 
     # Return 200 OK to signal success.
-    return HttpResponse(status=200)
+    return HttpResponse("Session succesfully cancelled", status=200)
 
 def attempt_logout(request):
     logout(request)
