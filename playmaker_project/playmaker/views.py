@@ -147,6 +147,9 @@ def preferences(request):
     if not request.user.is_authenticated() or not request.user.is_active:
         return HttpResponseRedirect('/login/')
 
+    profile = UserProfile.objects.get(user=request.user)
+    context_dict['profile'] = profile
+
     if request.method == "POST":
         form = PreferencesForm(data = request.POST)
         if form.is_valid():
@@ -157,6 +160,9 @@ def preferences(request):
             if len(request.POST['password']) != 0:
                 user.set_password(request.POST['password'])
             user.save()
+
+            profile.about = request.POST['about']
+            profile.save()
 
             context_dict['updated'] = True
             # Form is invalid, return 400 Bad Request.

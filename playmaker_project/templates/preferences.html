@@ -91,7 +91,13 @@
                 <input class="form-control" type="password" placeholder="New password (confirm)" name="password_confirm" />
             </div>
         </div>
-
+        
+        <div class="form-group">
+            <div class="col-sm-3">
+                <textarea class="form-control" cols="40" rows="5" placeholder="Say a little about yourself!" name="about">{{ profile.about }}</textarea>
+            </div>
+        </div>
+        
         <div class="form-group">
             <div class="col-sm-3">
                 <button type="submit" class="btn btn-large btn-primary btn-block" id="submit">Update</button>
