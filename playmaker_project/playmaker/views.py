@@ -95,10 +95,15 @@ def register(request):
                                                      city=City.objects.get(city=form.cleaned_data['city']), )
             upc.save()
 
-            if authenticate(username=user.username, password=form.cleaned_data['password']) is None:
-                print 'Could not authenticate after registering.'
-            # Redirect to mainpage if successful.
-            HttpResponseRedirect('/')
+            #if authenticate(username=user.username, password=form.cleaned_data['password']) is None:
+            #    print 'Could not authenticate after registering.'
+            
+            #login(request, user)
+            
+            # Can't make it log in automatically, so redirect to login page.
+            return HttpResponseRedirect('/login/')
+        else:
+            return HttpResponse('Form error', status=400)
 
     # Show the city selection page if not authenticated.
     cities = []
