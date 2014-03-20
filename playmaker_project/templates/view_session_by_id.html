@@ -195,10 +195,16 @@
                         </tr>
                         {% for offer in offers %}
                             <tr>
-                                <td>{{ offer.guest.username  }}</td>
+                                <td><a class="colourless" href="/profile/{{ offer.guest.username }}">{{ offer.guest.username  }}</a></td>
                                 <td>{{ offer.guest.first_name  }}</td>
                                 <td>{{ offer.guest.last_name  }}</td>
-                                <td><button type="button" class="btn btn-group-sm btn-primary accept-button" data-id="{{ offer.id }}">Accept</button></td>
+                                <td>
+                                    {% if offer.guest.username == session.guestplayer.username %}
+                                    Accepted
+                                    {% else %}
+                                    <button type="button" class="btn btn-group-sm btn-primary accept-button" data-id="{{ offer.id }}">Accept</button>
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                     </table>
