@@ -93,6 +93,16 @@
         </div>
         
         <div class="form-group">
+          <select class="form-control" name="city">
+              {% for city in cities %}
+                  <option value="{{ city.city }}"
+            {% if city == profile.city %}selected{% endif %}
+          >{{ city.city }}</option>
+              {% endfor %}
+          </select>
+        </div>
+        
+        <div class="form-group">
             <div class="col-sm-3">
                 <textarea class="form-control" cols="40" rows="5" placeholder="Say a little about yourself!" name="about">{{ profile.about }}</textarea>
             </div>

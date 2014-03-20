@@ -149,8 +149,10 @@ def preferences(request):
 
     profile = UserProfile.objects.get(user=request.user)
     context_dict['profile'] = profile
+    context_dict['cities'] = City.objects.all().order_by('city')
 
     if request.method == "POST":
+        context_dict['updated'] = False
         form = PreferencesForm(data = request.POST)
         if form.is_valid():
             user = request.user
@@ -159,16 +161,13 @@ def preferences(request):
             user.email = request.POST['email']
             if len(request.POST['password']) != 0:
                 user.set_password(request.POST['password'])
-            user.save()
-
             profile.about = request.POST['about']
-            profile.save()
-
-            context_dict['updated'] = True
-            # Form is invalid, return 400 Bad Request.
-            return render_to_response('preferences.html', context_dict, context)
-        else:
-            context_dict['updated'] = False
+            cities = City.objects.filter(city=request.POST['city'])
+            if cities.exists():
+                profile.city = cities[0]
+                user.save()
+                profile.save()
+                context_dict['updated'] = True
 
     return render_to_response('preferences.html', context_dict, context)
 
