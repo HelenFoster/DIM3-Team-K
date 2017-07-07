@@ -1,6 +1,12 @@
 DIM3 Team K - PlayMaker
 ====
 
+PlayMaker is an online platform where users who are looking for a sports partner can post announcements and offer to take part in games that require two players.
+
+This was an exercise to design and build a Django web application as a team.
+
+See the file Documents/Team-K-PlayMaker_updated.ppt for details.
+
 Setup
 ----
 
